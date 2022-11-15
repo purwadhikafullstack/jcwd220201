@@ -5,6 +5,7 @@ import "./styles/globals.css"
 import { useEffect, useState } from "react"
 import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
+import Footer from "./pages/layout/Footer"
 
 function App() {
   const [message, setMessage] = useState("")
@@ -21,6 +22,7 @@ function App() {
     <>
       <Navbar />
       <MainContent />
+      <Footer />
     </>
   )
 }
