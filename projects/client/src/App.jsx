@@ -3,6 +3,7 @@ import logo from "./logo.svg"
 import "./App.css"
 import { useEffect, useState } from "react"
 import Navbar from "./pages/layout/Navbar"
+import MainContent from "./pages/layout/MainContent"
 
 function App() {
   const [message, setMessage] = useState("")
@@ -15,7 +16,12 @@ function App() {
       setMessage(data?.message || "")
     })()
   }, [])
-  return <Navbar />
+  return (
+    <>
+      <Navbar />
+      <MainContent />
+    </>
+  )
 }
 
 export default App
