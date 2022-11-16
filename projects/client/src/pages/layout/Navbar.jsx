@@ -15,21 +15,26 @@ import {
 } from "@chakra-ui/react"
 import { SearchIcon } from "@chakra-ui/icons"
 import { HamburgerIcon } from "@chakra-ui/icons"
-
+import { Outlet } from "react-router-dom"
 const Navbar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const handleToggle = () => (isOpen ? onClose() : onOpen())
   return (
     <>
       <Flex
+        px="1"
         as="nav"
         align="center"
         justify="space-between"
         wrap="wrap"
-        padding={6}
+        mb="6"
+        p="6"
         {...props}
-        boxShadow="base"
-        rounded="2xl"
+        boxShadow="md"
+        position="sticky"
+        top="0"
+        bg="white"
+        zIndex="2"
       >
         <Flex align="center" mr={5}>
           <Heading as="h1" size="lg" letterSpacing={"tighter"}>
@@ -56,7 +61,7 @@ const Navbar = (props) => {
             <Input
               size="md"
               rounded="lg"
-              placeholder="Cari Handhpone,Laptop,Tablet,SmartTV, dan Rumah Tangga"
+              placeholder="Cari Handhpone,Laptop,SmartTV, dan Alat Rumah Tangga"
             />
             <InputRightElement children={<SearchIcon />} />
           </InputGroup>
@@ -81,6 +86,7 @@ const Navbar = (props) => {
           </ButtonGroup>
         </Box>
       </Flex>
+      <Outlet />
     </>
   )
 }
