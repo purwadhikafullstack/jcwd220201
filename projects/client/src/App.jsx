@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
 import Footer from "./pages/layout/Footer"
+import { Route, Routes } from "react-router-dom"
 
 function App() {
   const [message, setMessage] = useState("")
@@ -20,9 +21,15 @@ function App() {
   }, [])
   return (
     <>
-      <Navbar />
+      {/* <Navbar />
       <MainContent />
-      <Footer />
+      <Footer /> */}
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<MainContent />} />
+          <Route index element={<Footer />} />
+        </Route>
+      </Routes>
     </>
   )
 }
