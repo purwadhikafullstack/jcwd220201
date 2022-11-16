@@ -1,6 +1,4 @@
 import axios from "axios"
-import logo from "./logo.svg"
-import "./App.css"
 import "./styles/globals.css"
 import { useEffect, useState } from "react"
 import Navbar from "./pages/layout/Navbar"
