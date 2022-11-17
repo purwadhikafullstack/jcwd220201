@@ -1,22 +1,18 @@
 import {
   Box,
-  Container,
   Flex,
   Heading,
   HStack,
   Text,
-  Textarea,
-  useBreakpointValue,
-  VStack,
-  IconButton,
-  Stack,
-  transition,
   Image,
+  SimpleGrid,
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi"
 import Footer from "./Footer"
-import Slider from "react-slick"
 const arrowStyles = {
   cursor: "pointer",
   pos: "absolute",
@@ -65,6 +61,7 @@ const MainContent = () => {
 
   const carouselStyle = {
     transition: "all .5s",
+    autoplay: true,
     ml: `-${currentSlide * 100}%`,
   }
 
@@ -72,82 +69,132 @@ const MainContent = () => {
     <>
       <Box
         px="10rem"
-        height={{ lg: "150vh", base: "150vh" }}
-        display="flex"
+        height={{ lg: "100rem", base: "150vh" }}
+        // display="flex"
         py="auto"
         mt="3"
         mx="10"
         position="relative"
         // border="1px solid"
       >
+        {/* <Flex
+          // w="full"
+          // _dark={{
+          //   bg: "#3e3e3e",
+          // }}
+          // p={10}
+          // alignItems="center"
+          // justifyContent="center"
+          border="1px solid"
+        > */}
         <Flex
           w="full"
-          _dark={{
-            bg: "#3e3e3e",
-          }}
-          p={10}
-          alignItems="center"
-          justifyContent="center"
+          overflow="hidden"
+          pos="relative"
+          zIndex="1"
+          borderRadius="16px"
+          mb="auto"
         >
-          <Flex
-            w="full"
-            overflow="hidden"
-            pos="relative"
-            zIndex="1"
-            borderRadius="16px"
-            mb="auto"
-          >
-            <Flex h="auto" pos="relative" w="full" {...carouselStyle}>
-              {slides.map((slide, sid) => (
-                <Box
-                  key={`slide-${sid}`}
-                  boxSize="full"
-                  shadow="md"
-                  flex="none"
-                >
-                  <Text
-                    color="white"
-                    fontSize="xs"
-                    p="8px 12px"
-                    pos="absolute"
-                    top="0"
-                  ></Text>
-                  <Image src={slide.img} alt="carousel image" boxSize="full" />
-                </Box>
-              ))}
-            </Flex>
-
-            <Text {...arrowStyles} left="0" onClick={prevSlide}>
-              &#10094;
-            </Text>
-            <Text {...arrowStyles} right="0" onClick={nextSlide}>
-              &#10095;
-            </Text>
-            <HStack justify="center" pos="absolute" bottom="8px" w="full">
-              {Array.from({
-                length: slidesCount,
-              }).map((_, slide) => (
-                <Box
-                  key={`dots-${slide}`}
-                  cursor="pointer"
-                  boxSize={["7px", null, "15px"]}
-                  m="0 2px"
-                  bg={
-                    currentSlide === slide ? "blackAlpha.800" : "blackAlpha.500"
-                  }
-                  rounded="50%"
-                  display="inline-block"
-                  transition="background-color 0.6s ease"
-                  _hover={{
-                    bg: "blackAlpha.800",
-                  }}
-                  onClick={() => setSlide(slide)}
-                ></Box>
-              ))}
-            </HStack>
+          <Flex h="auto" pos="relative" w="full" {...carouselStyle}>
+            {slides.map((slide, sid) => (
+              <Box key={`slide-${sid}`} boxSize="full" shadow="md" flex="none">
+                <Text
+                  color="white"
+                  fontSize="xs"
+                  p="8px 12px"
+                  pos="absolute"
+                  top="0"
+                ></Text>
+                <Image src={slide.img} alt="carousel image" boxSize="full" />
+              </Box>
+            ))}
           </Flex>
+
+          <Text {...arrowStyles} left="0" onClick={prevSlide}>
+            &#10094;
+          </Text>
+          <Text {...arrowStyles} right="0" onClick={nextSlide}>
+            &#10095;
+          </Text>
+          <HStack justify="center" pos="absolute" bottom="8px" w="full">
+            {Array.from({
+              length: slidesCount,
+            }).map((_, slide) => (
+              <Box
+                key={`dots-${slide}`}
+                cursor="pointer"
+                boxSize={["7px", null, "15px"]}
+                m="0 2px"
+                bg={
+                  currentSlide === slide ? "blackAlpha.800" : "blackAlpha.500"
+                }
+                rounded="50%"
+                display="inline-block"
+                transition="background-color 0.6s ease"
+                _hover={{
+                  bg: "blackAlpha.800",
+                }}
+                onClick={() => setSlide(slide)}
+              ></Box>
+            ))}
+          </HStack>
         </Flex>
+        {/* </Flex> */}
+        <Text fontSize="24px" fontStyle="normal" mt="5" color="#213360">
+          Kategori
+        </Text>
+        <SimpleGrid
+          spacing="5"
+          templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
+          align="center"
+          background="white"
+          // px={{ base: "4", md: "8", lg: "12" }}
+          // py={{ base: "6", md: "8", lg: "12" }}
+          mx="auto"
+          maxW="auto"
+        >
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px" fontWeight="700">
+                Category 1
+              </Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px">Category 2</Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px">Category 3</Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px">Category 4</Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px">Category 5</Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px">Category 6</Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
+        </SimpleGrid>
+        <Divider mt="5" border="1px solid" />
       </Box>
+
       <Footer />
     </>
   )
