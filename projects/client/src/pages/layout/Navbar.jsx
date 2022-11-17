@@ -22,14 +22,12 @@ const Navbar = (props) => {
   return (
     <>
       <Flex
-        px="1"
-        as="nav"
+        {...props}
         align="center"
         justify="space-between"
         wrap="wrap"
         mb="6"
-        p="6"
-        {...props}
+        p="8"
         boxShadow="md"
         position="sticky"
         top="0"
@@ -72,11 +70,12 @@ const Navbar = (props) => {
           mt={{ base: 4, md: 0 }}
         >
           <ButtonGroup gap="2">
-            <Button variant="outline" colorScheme="teal">
+            <Button variant="outline" colorScheme="teal" size="md">
               Masuk
             </Button>
             <Button
               variant="solid"
+              size="md"
               color="white"
               _hover={{ bg: "teal.300" }}
               bg="teal.400"
