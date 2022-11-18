@@ -28,11 +28,11 @@ const Navbar = (props) => {
         wrap="wrap"
         mb="6"
         p="8"
-        boxShadow="md"
+        boxShadow="0px 2px 3px 2px rgba(33, 51, 96, 0.02), 0px 4px 12px 4px rgba(0, 155, 144, 0.08)"
         position="sticky"
         top="0"
         bg="white"
-        zIndex="2"
+        zIndex="3"
       >
         <Flex align="center" mr={5}>
           <Heading as="h1" size="lg" letterSpacing={"tighter"}>
