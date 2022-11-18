@@ -10,144 +10,57 @@ import {
   CardHeader,
   CardBody,
   Divider,
+  Grid,
+  GridItem,
+  Center,
+  Link,
+  chakra,
+  Stack,
+  Button,
+  ButtonGroup,
+  CardFooter,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import SlideBanner from "../../components/SlideBanner"
 import Footer from "./Footer"
-const arrowStyles = {
-  cursor: "pointer",
-  pos: "absolute",
-  top: "50%",
-  w: "auto",
-  mt: "-22px",
-  p: "16px",
-  color: "white",
-  fontWeight: "bold",
-  fontSize: "18px",
-  transition: "0.6s ease",
-  borderRadius: "0 3px 3px 0",
-  userSelect: "none",
-  _hover: {
-    opacity: 0.8,
-    bg: "black",
-  },
-}
+import "../../styles/globals.css"
+
 const MainContent = () => {
-  const slides = [
+  const product = [
     {
-      img: "https://images.tokopedia.net/img/NsjrJu/2020/9/25/ea701ee6-f36b-473d-b429-4d2a1da0713d.jpg?ect=4g",
-    },
-    {
-      img: "https://images.tokopedia.net/img/cache/1208/NsjrJu/2022/11/15/9c137fc1-fd20-47c2-83ea-3ad71c094b21.jpg.webp?ect=4g",
-    },
-    {
-      img: "https://www.static-src.com/siva/asset//11_2022/desktop-16nov-tefal-car3.jpg?w=960",
+      img: "",
+      name: "",
+      desc: "",
+      price: "",
     },
   ]
-
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const slidesCount = slides.length
-
-  const prevSlide = () => {
-    setCurrentSlide((val) => (val === 0 ? slidesCount - 1 : val - 1))
-  }
-
-  const nextSlide = () => {
-    setCurrentSlide((val) => (val === slidesCount - 1 ? 0 : val + 1))
-  }
-
-  const setSlide = (slide) => {
-    setCurrentSlide(slide)
-  }
-
-  const carouselStyle = {
-    transition: "all .5s",
-    autoplay: true,
-    ml: `-${currentSlide * 100}%`,
-  }
-
   return (
     <>
       <Box
-        px="10rem"
-        height={{ lg: "100rem", base: "150vh" }}
-        // display="flex"
+        // p="auto"
+        mt="50px"
+        h={{ lg: "200vh", base: "100vh" }}
         py="auto"
-        mt="3"
-        mx="10"
+        px={{ lg: "80px", base: "16px" }}
+        // mx="10"
+        // m={[2, 3]}
+        // w="100%"
         position="relative"
         // border="1px solid"
       >
-        {/* <Flex
-          // w="full"
-          // _dark={{
-          //   bg: "#3e3e3e",
-          // }}
-          // p={10}
-          // alignItems="center"
-          // justifyContent="center"
-          border="1px solid"
-        > */}
-        <Flex
-          w="full"
-          overflow="hidden"
-          pos="relative"
-          zIndex="1"
-          borderRadius="16px"
-          mb="auto"
-        >
-          <Flex h="auto" pos="relative" w="full" {...carouselStyle}>
-            {slides.map((slide, sid) => (
-              <Box key={`slide-${sid}`} boxSize="full" shadow="md" flex="none">
-                <Text
-                  color="white"
-                  fontSize="xs"
-                  p="8px 12px"
-                  pos="absolute"
-                  top="0"
-                ></Text>
-                <Image src={slide.img} alt="carousel image" boxSize="full" />
-              </Box>
-            ))}
-          </Flex>
+        {/* Promotional Banner */}
+        <SlideBanner />
 
-          <Text {...arrowStyles} left="0" onClick={prevSlide}>
-            &#10094;
-          </Text>
-          <Text {...arrowStyles} right="0" onClick={nextSlide}>
-            &#10095;
-          </Text>
-          <HStack justify="center" pos="absolute" bottom="8px" w="full">
-            {Array.from({
-              length: slidesCount,
-            }).map((_, slide) => (
-              <Box
-                key={`dots-${slide}`}
-                cursor="pointer"
-                boxSize={["7px", null, "15px"]}
-                m="0 2px"
-                bg={
-                  currentSlide === slide ? "blackAlpha.800" : "blackAlpha.500"
-                }
-                rounded="50%"
-                display="inline-block"
-                transition="background-color 0.6s ease"
-                _hover={{
-                  bg: "blackAlpha.800",
-                }}
-                onClick={() => setSlide(slide)}
-              ></Box>
-            ))}
-          </HStack>
-        </Flex>
-        {/* </Flex> */}
+        {/* Kategori Card */}
         <Text fontSize="24px" fontStyle="normal" mt="5" color="#213360">
-          Kategori
+          Kategori Pilihan
         </Text>
         <SimpleGrid
-          spacing="5"
+          spacing="15"
           templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
           align="center"
           background="white"
+          gap="6"
+          pos="relative"
           // px={{ base: "4", md: "8", lg: "12" }}
           // py={{ base: "6", md: "8", lg: "12" }}
           mx="auto"
@@ -185,16 +98,137 @@ const MainContent = () => {
             </CardHeader>
             <CardBody>ICON/LOGO</CardBody>
           </Card>
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px">Category 6</Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
         </SimpleGrid>
-        <Divider mt="5" border="1px solid" />
+
+        <Divider mt="7vh" border="1px solid #D5D7DD" />
+
+        <Box
+          mt="3"
+          p={4}
+          display={{ md: "flex" }}
+          justifyContent="center"
+          gap="50"
+        >
+          <Box flexShrink={0}>
+            <Image
+              borderRadius="lg"
+              width={{ md: 30, lg: "2xl" }}
+              h={{ base: "30vh" }}
+              src="https://t3.ftcdn.net/jpg/01/67/14/56/240_F_167145659_vnGRSdZDS3n3VMrLxJ3VRV68ExCUrjed.jpg"
+              alt="information1"
+            />
+          </Box>
+          <Box flexShrink={0}>
+            <Image
+              borderRadius="lg"
+              width={{ md: 30, lg: "2xl" }}
+              h={{ base: "30vh" }}
+              src="https://t3.ftcdn.net/jpg/02/27/20/72/240_F_227207295_XnYyYPECxoQPcOTID1v3B5CFMjchJ0Ph.jpg"
+              alt="information1"
+            />
+          </Box>
+        </Box>
+        <Divider mt="5" border="1px solid #D5D7DD" mb="5" />
+
+        {/* Product Card */}
+        <Text fontSize="24px" fontStyle="normal" mt="5" color="#213360" mb="2">
+          Produk Populer (Route to all Product)
+        </Text>
+        <Flex flexDirection="row" gap="4">
+          <Card maxW="sm">
+            <CardBody>
+              <Image
+                src="https://t4.ftcdn.net/jpg/05/29/47/27/240_F_529472773_u6uKNUsbouFJ4V9mJouTJb31OFHaAhtF.jpg"
+                alt="Iphone 14"
+                borderRadius="lg"
+              />
+              <Stack mt="6" spacing="3">
+                <Heading size="md">Iphone 14 Pro</Heading>
+                <Text>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Praesentium non rerum, sit inventore deserunt nihil?
+                </Text>
+                <Text color="blue.600" fontSize="md">
+                  IDR {(21_999_000).toLocaleString()}
+                </Text>
+              </Stack>
+            </CardBody>
+            <Divider />
+            <CardFooter>
+              <ButtonGroup spacing="2">
+                <Button variant="solid" colorScheme="teal">
+                  Beli Sekarang
+                </Button>
+                <Button variant="ghost" colorScheme="teal">
+                  Keranjang
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+          <Card maxW="sm">
+            <CardBody>
+              <Image
+                src="https://t3.ftcdn.net/jpg/04/95/54/52/240_F_495545222_yoR3alEQjWsPbDcclWEdjask7Ww6j2sS.jpg"
+                alt="Iphone 14"
+                borderRadius="lg"
+              />
+              <Stack mt="6" spacing="3">
+                <Heading size="md">Smart TV</Heading>
+                <Text>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Praesentium non rerum, sit inventore deserunt nihil?
+                </Text>
+                <Text color="blue.600" fontSize="md">
+                  IDR {(21_999_000).toLocaleString()}
+                </Text>
+              </Stack>
+            </CardBody>
+            <Divider />
+            <CardFooter>
+              <ButtonGroup spacing="2">
+                <Button variant="solid" colorScheme="teal">
+                  Beli Sekarang
+                </Button>
+                <Button variant="ghost" colorScheme="teal">
+                  Keranjang
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+          <Card maxW="sm">
+            <CardBody>
+              <Image
+                src="https://t3.ftcdn.net/jpg/00/49/11/66/240_F_49116622_Jcqds9q666zT5eBJwdlmJqANipC803fA.jpg"
+                alt="Iphone 14"
+                borderRadius="lg"
+              />
+              <Stack mt="6" spacing="3">
+                <Heading size="md">Kulkas</Heading>
+                <Text>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Praesentium non rerum, sit inventore deserunt nihil?
+                </Text>
+                <Text color="blue.600" fontSize="md">
+                  IDR {(21_999_000).toLocaleString()}
+                </Text>
+              </Stack>
+            </CardBody>
+            <Divider />
+            <CardFooter>
+              <ButtonGroup spacing="2">
+                <Button variant="solid" colorScheme="teal">
+                  Beli Sekarang
+                </Button>
+                <Button variant="ghost" colorScheme="teal">
+                  Keranjang
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        </Flex>
       </Box>
 
+      {/* Footer Component */}
       <Footer />
     </>
   )
