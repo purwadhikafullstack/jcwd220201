@@ -1,37 +1,27 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Text,
-  Image,
-  SimpleGrid,
-  Card,
-  CardHeader,
-  CardBody,
-  Divider,
-} from "@chakra-ui/react"
+import { Box, Flex, HStack, Text, Image, Center } from "@chakra-ui/react"
+import React from "react"
 import { useState } from "react"
-const arrowStyles = {
-  cursor: "pointer",
-  pos: "absolute",
-  top: "50%",
-  w: "auto",
-  mt: "-22px",
-  p: "16px",
-  color: "white",
-  fontWeight: "bold",
-  fontSize: "18px",
-  transition: "0.6s ease",
-  borderRadius: "0 3px 3px 0",
-  userSelect: "none",
-  _hover: {
-    opacity: 0.8,
-    bg: "black",
-  },
-}
 
 const SlideBanner = () => {
+  const arrowStyles = {
+    cursor: "pointer",
+    pos: "absolute",
+    top: "50%",
+    w: "auto",
+    mt: "-22px",
+    p: "16px",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "18px",
+    transition: "0.6s ease",
+    borderRadius: "0 3px 3px 0",
+    userSelect: "none",
+    _hover: {
+      opacity: 0.8,
+      bg: "black",
+    },
+  }
+
   const slides = [
     {
       img: "https://images.tokopedia.net/img/NsjrJu/2020/9/25/ea701ee6-f36b-473d-b429-4d2a1da0713d.jpg?ect=4g",
@@ -67,23 +57,16 @@ const SlideBanner = () => {
   return (
     <>
       <Flex
-        w="full"
+        // w="100%"
         overflow="hidden"
         pos="relative"
         zIndex="1"
-        borderRadius="16px"
+        borderRadius="14px"
         mb="auto"
       >
-        <Flex h="auto" pos="relative" w="full" {...carouselStyle}>
+        <Flex pos="static" w="full" {...carouselStyle}>
           {slides.map((slide, sid) => (
             <Box key={`slide-${sid}`} boxSize="full" shadow="md" flex="none">
-              <Text
-                color="white"
-                fontSize="xs"
-                p="8px 12px"
-                pos="absolute"
-                top="0"
-              ></Text>
               <Image src={slide.img} alt="carousel image" boxSize="full" />
             </Box>
           ))}
