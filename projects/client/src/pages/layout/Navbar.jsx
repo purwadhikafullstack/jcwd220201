@@ -58,7 +58,7 @@ const Navbar = (props) => {
           <InputGroup>
             <Input
               size="md"
-              rounded="lg"
+              borderRadius="8px"
               placeholder="Cari Handhpone,Laptop,SmartTV, dan Alat Rumah Tangga"
             />
             <InputRightElement children={<SearchIcon />} />
