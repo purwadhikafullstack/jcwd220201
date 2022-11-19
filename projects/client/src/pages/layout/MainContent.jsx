@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Heading,
-  HStack,
   Text,
   Image,
   SimpleGrid,
@@ -19,35 +18,26 @@ import {
   Button,
   ButtonGroup,
   CardFooter,
+  Spacer,
 } from "@chakra-ui/react"
 import SlideBanner from "../../components/SlideBanner"
 import Footer from "./Footer"
 import "../../styles/globals.css"
+import Features from "../../components/Features"
 
 const MainContent = () => {
-  const product = [
-    {
-      img: "",
-      name: "",
-      desc: "",
-      price: "",
-    },
-  ]
   return (
     <>
       <Box
-        // p="auto"
-        mt="50px"
         h={{ lg: "200vh", base: "100vh" }}
+        px={{ lg: "5%", base: "5%" }}
         py="auto"
-        px={{ lg: "80px", base: "16px" }}
-        // mx="10"
-        // m={[2, 3]}
-        // w="100%"
+        mt="50px"
         position="relative"
+
         // border="1px solid"
       >
-        {/* Promotional Banner */}
+        {/* Carousel Component */}
         <SlideBanner />
 
         {/* Kategori Card */}
@@ -55,14 +45,11 @@ const MainContent = () => {
           Kategori Pilihan
         </Text>
         <SimpleGrid
-          spacing="15"
           templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
           align="center"
           background="white"
-          gap="6"
+          gap="58px"
           pos="relative"
-          // px={{ base: "4", md: "8", lg: "12" }}
-          // py={{ base: "6", md: "8", lg: "12" }}
           mx="auto"
           maxW="auto"
         >
@@ -98,6 +85,12 @@ const MainContent = () => {
             </CardHeader>
             <CardBody>ICON/LOGO</CardBody>
           </Card>
+          <Card boxShadow="lg">
+            <CardHeader>
+              <Heading size="16px">Category 6</Heading>
+            </CardHeader>
+            <CardBody>ICON/LOGO</CardBody>
+          </Card>
         </SimpleGrid>
 
         <Divider mt="7vh" border="1px solid #D5D7DD" />
@@ -108,6 +101,10 @@ const MainContent = () => {
           display={{ md: "flex" }}
           justifyContent="center"
           gap="50"
+          left="0"
+          right="0"
+          top="0"
+          bottom="0"
         >
           <Box flexShrink={0}>
             <Image
@@ -118,6 +115,7 @@ const MainContent = () => {
               alt="information1"
             />
           </Box>
+          <Spacer />
           <Box flexShrink={0}>
             <Image
               borderRadius="lg"
@@ -128,13 +126,14 @@ const MainContent = () => {
             />
           </Box>
         </Box>
+
         <Divider mt="5" border="1px solid #D5D7DD" mb="5" />
 
         {/* Product Card */}
         <Text fontSize="24px" fontStyle="normal" mt="5" color="#213360" mb="2">
           Produk Populer (Route to all Product)
         </Text>
-        <Flex flexDirection="row" gap="4">
+        <Flex flexDirection="row" flexWrap="wrap" gap="14">
           <Card maxW="sm">
             <CardBody>
               <Image
@@ -225,7 +224,40 @@ const MainContent = () => {
               </ButtonGroup>
             </CardFooter>
           </Card>
+          <Card maxW="sm">
+            <CardBody>
+              <Image
+                src="https://t3.ftcdn.net/jpg/00/49/11/66/240_F_49116622_Jcqds9q666zT5eBJwdlmJqANipC803fA.jpg"
+                alt="Iphone 14"
+                borderRadius="lg"
+              />
+              <Stack mt="6" spacing="3">
+                <Heading size="md">Kulkas</Heading>
+                <Text>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Praesentium non rerum, sit inventore deserunt nihil?
+                </Text>
+                <Text color="blue.600" fontSize="md">
+                  IDR {(21_999_000).toLocaleString()}
+                </Text>
+              </Stack>
+            </CardBody>
+            <Divider />
+            <CardFooter>
+              <ButtonGroup spacing="2">
+                <Button variant="solid" colorScheme="teal">
+                  Beli Sekarang
+                </Button>
+                <Button variant="ghost" colorScheme="teal">
+                  Keranjang
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
         </Flex>
+
+        <Divider mt="7" border="1px solid #D5D7DD" mb="8" />
+        <Features />
       </Box>
 
       {/* Footer Component */}
