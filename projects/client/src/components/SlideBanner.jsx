@@ -63,6 +63,10 @@ const SlideBanner = () => {
         zIndex="1"
         borderRadius="14px"
         mb="auto"
+        left="0"
+        right="0"
+        top="0"
+        bottom="0"
       >
         <Flex pos="static" w="full" {...carouselStyle}>
           {slides.map((slide, sid) => (
