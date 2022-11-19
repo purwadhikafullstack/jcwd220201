@@ -7,9 +7,6 @@ import { Routes, Route, Link } from "react-router-dom";
 import { axiosInstance } from "./api";
 import Dashboard from "./pages/admin/Dashboard";
 
-import User from "./pages/User";
-import Product from "./pages/Product";
-
 const App = () => {
   // const [message, setMessage] = useState("");
 
@@ -65,8 +62,6 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/user" element={<User />} />
-      <Route path="/product" element={<Product />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
