@@ -2,6 +2,7 @@ require("dotenv/config")
 const express = require("express")
 const cors = require("cors")
 const { join } = require("path")
+const adminRoute = require("../routes/adminRoute")
 
 const PORT = process.env.PORT || 8000
 const app = express()
@@ -13,6 +14,8 @@ app.use(express.json())
 
 // ===========================
 // NOTE : Add your routes here
+
+app.use("/admin", adminRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)
