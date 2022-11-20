@@ -49,6 +49,7 @@ const LoginPage = () => {
             username: response.data.data.username,
             email: response.data.data.email,
             id: response.data.data.id,
+            profile_picture: response.data.data.profile_picture,
           })
         );
         toast({
