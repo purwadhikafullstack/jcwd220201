@@ -17,15 +17,19 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { axiosInstance } from "../api";
 import { login } from "../redux/features/authSlice";
+import { useEffect } from "react";
 
 const LoginPage = () => {
+  const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -52,7 +56,19 @@ const LoginPage = () => {
           description: response.data.message,
           status: "success",
         });
+
+        if (authSelector.role === "user") {
+          navigate(-1);
+          // console.log("user")
+        } else if (authSelector.role === "admin") {
+          navigate("/dashboard"); // cross check with fidel works
+          // console.log("admin")
+        } else if (authSelector.role === "warehouse_admin") {
+          navigate("/dashboard"); // cross check with fidel works
+        }
+
         window.history.back();
+
         formik.setFieldValue("email", "");
         formik.setFieldValue("password", "");
       } catch (err) {
@@ -66,7 +82,7 @@ const LoginPage = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string().required(),
-      password: Yup.string().required().min(8),
+      password: Yup.string().required(),
     }),
     validateOnChange: false,
   });
