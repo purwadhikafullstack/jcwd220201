@@ -6,20 +6,34 @@ const HeroArea = () => {
     <Flex
       direction="column"
       align="center"
-      justify="center"
       pr="5rem"
       display={isLargerThanLg ? "default" : "none"}
     >
       <Image
-        src="https://ecs7.tokopedia.net/img/content/register_new.png"
+        src="assets/register-hero-1.png"
         alt="Ilustrasi"
-        maxW="22.5rem"
+        width="22.5rem"
+        height="18.9375rem"
+        objectFit="contain"
+        maxW="100%"
       />
-      <Text as="b" fontSize="1.4rem">
-        Jual Beli Mudah Hanya di Tokopedia
+      <Text
+        as="b"
+        fontSize="1.4rem"
+        display="block"
+        width="22.5rem"
+        textAlign="center"
+      >
+        Belanja Mudah Hanya di Wired!
       </Text>
-      <Text fontSize="0.8125rem" color="rgb(109, 117, 136)" textAlign="center">
-        Gabung dan rasakan kemudahan bertransaksi di Tokopedia
+      <Text
+        fontSize="0.8125rem"
+        color="rgb(109, 117, 136)"
+        display="block"
+        width="22.5rem"
+        textAlign="center"
+      >
+        Gabung dan rasakan kemudahan bertransaksi di Wired!
       </Text>
     </Flex>
   );

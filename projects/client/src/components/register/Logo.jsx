@@ -13,7 +13,6 @@ const Logo = () => {
       }
       maxW="100%"
       py="1.25rem"
-      position="static"
     />
   );
 };

@@ -19,13 +19,17 @@ import {
   ModalFooter,
   ModalBody,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { submit } from "../../redux/features/register/registerSlice";
 
 const RegisterForm = () => {
-  // Media Query
+  // Global state access
+  const dispatch = useDispatch();
+
+  // Media query
   const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
   const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
 
@@ -42,13 +46,6 @@ const RegisterForm = () => {
         .email("Format email salah")
         .required("Email harus diisi"),
     }),
-    onSubmit: () => {
-      if (isError) {
-        return;
-      }
-
-      onOpen();
-    },
   });
 
   // Modal functionality
@@ -69,7 +66,13 @@ const RegisterForm = () => {
         align="center"
         justify="center"
         boxShadow="0px 0px 10px 0px rgba(0, 0, 0, 0.1)"
-        padding="24px 40px 32px"
+        p={
+          isLargerThanMd
+            ? "1.5rem 2.5rem 2rem"
+            : isLargerThanSm
+            ? "1.303rem 2.173rem 1.738rem"
+            : "1.132rem 1.888rem 1.510rem"
+        }
         maxW="25rem"
       >
         <Text
@@ -87,17 +90,18 @@ const RegisterForm = () => {
           Daftar Sekarang
         </Text>
         <Text
+          color="rgba(0, 0, 0, 0.54)"
           fontSize={
             isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
           }
         >
-          Sudah punya akun Tokopedia?{" "}
+          Sudah punya akun Wired?{" "}
           <Link
             href=""
             fontSize={
               isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
             }
-            color="rgb(3, 142, 14)"
+            color="teal"
           >
             Masuk
           </Link>
@@ -146,7 +150,16 @@ const RegisterForm = () => {
                 ? "0.723rem"
                 : "0.597rem"
             }
-            focusBorderColor={isError ? "rgb(229, 62, 62)" : "rgb(66, 181, 73)"}
+            height={
+              isLargerThanMd
+                ? "2.5rem"
+                : isLargerThanSm
+                ? "2.065rem"
+                : "1.706rem"
+            }
+            focusBorderColor={
+              isError ? "rgb(229, 62, 62)" : "rgb(62, 191, 184)"
+            }
             transition="border-width 200ms linear"
           />
           {isError ? (
@@ -174,13 +187,16 @@ const RegisterForm = () => {
               lineHeight="1.125"
               color="rgba(0, 0, 0, 0.54)"
             >
-              Example: email@tokopedia.com
+              Example: email@wired.com
             </FormHelperText>
           )}
         </FormControl>
         <Button
           my="1rem"
           w="100%"
+          h={
+            isLargerThanMd ? "2.5rem" : isLargerThanSm ? "2.065rem" : "1.706rem"
+          }
           color={
             isError || !formik.values.email
               ? "rgb(108, 114, 124)"
@@ -191,10 +207,8 @@ const RegisterForm = () => {
           }
           fontWeight="700"
           cursor={isError || !formik.values.email ? "not-allowed" : "pointer"}
-          backgroundColor={
-            isError || !formik.values.email ? "default" : "rgb(3, 172, 14)"
-          }
-          onClick={formik.handleSubmit}
+          colorScheme={isError || !formik.values.email ? "gray" : "teal"}
+          onClick={onOpen}
         >
           Daftar
         </Button>
@@ -223,7 +237,7 @@ const RegisterForm = () => {
                 ? "0.62rem"
                 : "0.512rem"
             }
-            color="rgb(3, 142, 14)"
+            color="teal"
           >
             Syarat dan Ketentuan
           </Link>{" "}
@@ -237,7 +251,7 @@ const RegisterForm = () => {
                 ? "0.62rem"
                 : "0.512rem"
             }
-            color="rgb(3, 142, 14)"
+            color="teal"
           >
             Kebijakan Privasi
           </Link>
@@ -322,8 +336,8 @@ const RegisterForm = () => {
                   : "0.682rem"
               }
               fontWeight="700"
-              colorScheme="whiteAlpha"
-              color="rgb(3, 172, 14)"
+              colorScheme="white"
+              color="teal"
               lineHeight="22px"
               whiteSpace="nowrap"
             >
@@ -347,10 +361,12 @@ const RegisterForm = () => {
                   : "0.682rem"
               }
               fontWeight="700"
-              color="rgb(255, 255, 255)"
-              backgroundColor="rgb(3, 172, 14)"
+              colorScheme="teal"
               lineHeight="22px"
               whiteSpace="nowrap"
+              onClick={() => {
+                dispatch(submit());
+              }}
             >
               Ya, Benar
             </Button>

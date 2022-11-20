@@ -10,13 +10,14 @@ const Footer = () => {
       fontSize={
         isLargerThanMd ? "0.812rem" : isLargerThanSm ? "0.67rem" : "0.553rem"
       }
-      ml="4px"
-      mb="2px"
       mt="7.5rem"
+      mb="0.125rem"
       lineHeight="1.375rem"
       whiteSpace="nowrap"
+      display="block"
+      textAlign="center"
     >
-      &#169; 2009-2022,PT Tokopedia
+      &#169; 2009-2022,PT Wired
     </Text>
   );
 };
