@@ -22,7 +22,6 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { axiosInstance } from "../api";
 import { login } from "../redux/features/authSlice";
-import { useEffect } from "react";
 
 const LoginPage = () => {
   const authSelector = useSelector((state) => state.auth);
@@ -46,10 +45,9 @@ const LoginPage = () => {
         localStorage.setItem("auth_token", response.data.token);
         dispatch(
           login({
-            username: response.data.data.username,
+            name: response.data.data.name,
             email: response.data.data.email,
             id: response.data.data.id,
-            profile_picture: response.data.data.profile_picture,
           })
         );
         toast({

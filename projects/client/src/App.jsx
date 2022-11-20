@@ -5,20 +5,8 @@ import LoginPage from "./pages/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, Link } from "react-router-dom";
 import { axiosInstance } from "./api";
-import Dashboard from "./pages/admin/Dashboard";
 
 const App = () => {
-  // const [message, setMessage] = useState("");
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const { data } = await axios.get(
-  //       `${process.env.REACT_APP_API_BASE_URL}/greetings`
-  //     );
-  //     setMessage(data?.message || "");
-  //   })();
-  // }, []);
-
   const [authCheck, setAuthCheck] = useState(false);
 
   const authSelector = useSelector((state) => state.auth);
@@ -42,18 +30,6 @@ const App = () => {
       console.log(err);
       setAuthCheck(true);
     }
-  };
-
-  const renderAdminRoutes = () => {
-    if (authSelector.role === "admin") {
-      return (
-        <>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-        </>
-      );
-    }
-
-    return null;
   };
 
   useEffect(() => {
