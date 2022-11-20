@@ -31,7 +31,7 @@ const authSlice = createSlice({
       state.id = 0;
       state.email = "";
       state.role = "";
-      state.username = "";
+      state.name = "";
       state.profile_picture = "";
     },
   },
