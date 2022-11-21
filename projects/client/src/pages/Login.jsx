@@ -96,9 +96,9 @@ const LoginPage = () => {
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
         <Stack spacing={4} w={"full"} maxW={"md"}>
           <Stack align={"center"}>
-            <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+            <Heading fontSize={"4xl"}>Masuk ke akun anda</Heading>
             <Text fontSize={"lg"} color={"gray.600"}>
-              to shopping all our awesome products ✌️
+              Untuk berbelanja semua produk kami ✌️
             </Text>
           </Stack>
 
@@ -137,12 +137,12 @@ const LoginPage = () => {
                 <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
               </FormControl>
               <Button type="submit" colorScheme="teal">
-                Login
+                Masuk
               </Button>
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Don't have acount? <Link color={"teal"}>Register</Link>
+                Belum punya akun? <Link color={"teal"}>Daftar</Link>
               </Text>
             </Stack>
           </form>
