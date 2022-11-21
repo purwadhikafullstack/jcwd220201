@@ -55,27 +55,18 @@ const Footer = () => {
       color={useColorModeValue("gray.700", "gray.200")}
       pos="relative"
     >
-      <Container as={Stack} maxW={"6xl"} py={10} top="0" bottom="0">
+      <Container as={Stack} maxW={"6xl"} py={10} left="100%">
         <SimpleGrid
           templateColumns={{ sm: "1fr 1fr", md: "2fr 1fr 1fr 2fr" }}
           spacing={8}
         >
           <Stack spacing={6}>
             <Box>
-              <Heading>WAREHOUSE CO.</Heading>
+              <Heading>WIRED!</Heading>
             </Box>
-            <Text fontSize={"sm"}>© 2022 Warehouse Co. Made With 💗</Text>
-            {/* <Stack direction={"row"} spacing={6}>
-              <SocialButton label={"Twitter"} href={"#"}>
-                <FaTwitter />
-              </SocialButton>
-              <SocialButton label={"YouTube"} href={"#"}>
-                <FaYoutube />
-              </SocialButton>
-              <SocialButton label={"Instagram"} href={"#"}>
-                <FaInstagram />
-              </SocialButton>
-            </Stack> */}
+            <Text fontSize={"sm"}>
+              © 2022 PT WIRED! Indonesia. Made With 💗
+            </Text>
           </Stack>
           <Stack align={"flex-start"}>
             <ListHeader>Company</ListHeader>

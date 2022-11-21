@@ -29,13 +29,11 @@ const MainContent = () => {
   return (
     <>
       <Box
-        h={{ lg: "200vh", base: "100vh" }}
-        px={{ lg: "5%", base: "5%" }}
+        h={{ lg: "205vh", md: "100vh", base: "100vh" }}
+        px={{ lg: "5%", md: "5%", base: "5%" }}
         py="auto"
         mt="50px"
         position="relative"
-
-        // border="1px solid"
       >
         {/* Carousel Component */}
         <SlideBanner />
@@ -258,10 +256,9 @@ const MainContent = () => {
 
         <Divider mt="7" border="1px solid #D5D7DD" mb="8" />
         <Features />
+        {/* Footer Component */}
+        <Footer />
       </Box>
-
-      {/* Footer Component */}
-      <Footer />
     </>
   )
 }
