@@ -37,10 +37,17 @@ const App = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-    </Routes>
-  );
-};
+    <>
+      {/*  */}
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<MainContent />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route index element={<Footer />} />
+        </Route>
+      </Routes>
+    </>
+  )
+}
 
-export default App;
+export default App
