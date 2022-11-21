@@ -19,6 +19,7 @@ function App() {
   }, [])
   return (
     <>
+      {/*  */}
       <Routes>
         <Route path="/" element={<Navbar />}>
           <Route index element={<MainContent />} />
