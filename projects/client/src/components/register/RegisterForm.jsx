@@ -22,13 +22,8 @@ import {
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
-import { submit } from "../../redux/features/register/registerSlice";
 
-const RegisterForm = () => {
-  // Global state access
-  const dispatch = useDispatch();
-
+const RegisterForm = ({ props: { submit } }) => {
   // Media query
   const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
   const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
@@ -46,6 +41,9 @@ const RegisterForm = () => {
         .email("Format email salah")
         .required("Email harus diisi"),
     }),
+    onSubmit: ({ email }) => {
+      submit(email);
+    },
   });
 
   // Modal functionality
@@ -364,9 +362,7 @@ const RegisterForm = () => {
               colorScheme="teal"
               lineHeight="22px"
               whiteSpace="nowrap"
-              onClick={() => {
-                dispatch(submit());
-              }}
+              onClick={formik.handleSubmit}
             >
               Ya, Benar
             </Button>

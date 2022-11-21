@@ -10,10 +10,13 @@ import {
   Button,
   Link,
   useMediaQuery,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import TogglePasswordIcon from "./TogglePasswordIcon";
 
 const FinishRegistrationForm = () => {
   // Media query
@@ -23,6 +26,9 @@ const FinishRegistrationForm = () => {
   // Monitor user input
   const [nameError, setNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  // Toggle password functionality
+  const [show, setShow] = useState(false);
 
   // Form functionality
   const formik = useFormik({
@@ -54,7 +60,7 @@ const FinishRegistrationForm = () => {
     } else {
       setNameError(false);
     }
-  }, [formik.values.name, formik.errors.name]);
+  }, [formik.values.name, formik.touched.name, formik.errors.name]);
 
   // Trigger password error effect
   useEffect(() => {
@@ -65,9 +71,7 @@ const FinishRegistrationForm = () => {
     } else {
       setPasswordError(false);
     }
-  }, [formik.values.password, formik.errors.password]);
-
-  console.log();
+  }, [formik.values.password, formik.touched.password, formik.errors.password]);
 
   return (
     <Box>
@@ -111,7 +115,7 @@ const FinishRegistrationForm = () => {
             isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
           }
         >
-          test.arielclement@gmail.com
+          {}
         </Text>
         <FormControl mt="1.25rem" mb="0.5rem" isInvalid={nameError}>
           <FormLabel
@@ -179,29 +183,40 @@ const FinishRegistrationForm = () => {
           >
             Kata Sandi
           </FormLabel>
-          <Input
-            type="password"
-            id="password"
-            {...formik.getFieldProps("password")}
-            fontSize={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.723rem"
-                : "0.597rem"
-            }
-            height={
-              isLargerThanMd
-                ? "2.5rem"
-                : isLargerThanSm
-                ? "2.065rem"
-                : "1.706rem"
-            }
-            focusBorderColor={
-              passwordError ? "rgb(229, 62, 62)" : "rgb(62, 191, 184)"
-            }
-            transition="border-width 200ms linear"
-          />
+          <InputGroup>
+            <Input
+              type={show ? "text" : "password"}
+              id="password"
+              {...formik.getFieldProps("password")}
+              fontSize={
+                isLargerThanMd
+                  ? "0.875rem"
+                  : isLargerThanSm
+                  ? "0.723rem"
+                  : "0.597rem"
+              }
+              height={
+                isLargerThanMd
+                  ? "2.5rem"
+                  : isLargerThanSm
+                  ? "2.065rem"
+                  : "1.706rem"
+              }
+              focusBorderColor={
+                passwordError ? "rgb(229, 62, 62)" : "rgb(62, 191, 184)"
+              }
+              transition="border-width 200ms linear"
+            />
+            <InputRightElement
+              children={
+                <TogglePasswordIcon
+                  callback={() => {
+                    setShow(!show);
+                  }}
+                />
+              }
+            />
+          </InputGroup>
           {passwordError ? (
             <FormErrorMessage
               fontSize={

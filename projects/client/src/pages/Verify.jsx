@@ -1,7 +1,7 @@
 import { Box, Flex, Link, Text } from "@chakra-ui/react";
 import { MdOutlineMail } from "react-icons/md";
 
-const Verify = ({ email }) => {
+const Verify = ({ props: { email } }) => {
   return (
     <Flex direction="column" align="center" maxW="100%">
       <Text
