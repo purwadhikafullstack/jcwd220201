@@ -1,20 +1,27 @@
-require("dotenv/config");
+// require("dotenv/config");
+const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const db = require("./models");
+
+dotenv.config();
 
 const PORT = process.env.PORT || 8000;
+
+const authRoute = require("./routes/authRoute");
 const app = express();
 app.use(
-  cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
-  })
+  cors()
+  // origin: [
+  //   process.env.WHITELISTED_DOMAIN &&
+  //     process.env.WHITELISTED_DOMAIN.split(","),
+  // ],
 );
 
 app.use(express.json());
+
+app.use("/auth", authRoute);
 
 //#region API ROUTES
 
@@ -25,11 +32,11 @@ app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });
 
-app.get("/api/greetings", (req, res, next) => {
-  res.status(200).json({
-    message: "Hello, Student !",
-  });
-});
+// app.get("/api/greetings", (req, res, next) => {
+//   res.status(200).json({
+//     message: "Hello, Student !",
+//   });
+// });
 
 // ===========================
 
@@ -65,7 +72,8 @@ app.get("*", (req, res) => {
 
 //#endregion
 
-app.listen(PORT, (err) => {
+app.listen(PORT, async (err) => {
+  db.sequelize.sync({ alter: true });
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
