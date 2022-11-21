@@ -3,13 +3,13 @@ const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const db = require("./models");
+const db = require("../models");
 
 dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 
-const authRoute = require("./routes/authRoute");
+const authRoute = require("../routes/authRoute");
 const app = express();
 app.use(
   cors()
