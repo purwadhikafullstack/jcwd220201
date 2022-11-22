@@ -1,14 +1,28 @@
-require("dotenv/config")
+// require("dotenv/config");
+const dotenv = require("dotenv")
 const express = require("express")
 const cors = require("cors")
 const { join } = require("path")
+const db = require("../models")
 const adminRoute = require("../routes/adminRoute")
+const authRoute = require("../routes/authRoute")
+
+dotenv.config()
 
 const PORT = process.env.PORT || 8000
+
 const app = express()
-app.use(cors({}))
+app.use(
+  cors()
+  // origin: [
+  //   process.env.WHITELISTED_DOMAIN &&
+  //     process.env.WHITELISTED_DOMAIN.split(","),
+  // ],
+)
 
 app.use(express.json())
+
+
 
 //#region API ROUTES
 //
@@ -16,16 +30,18 @@ app.use(express.json())
 // NOTE : Add your routes here
 
 app.use("/admin", adminRoute)
+app.use("/auth", authRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)
 })
 
-app.get("/api/greetings", (req, res, next) => {
-  res.status(200).json({
-    message: "Hello, Student !",
-  })
-})
+
+// app.get("/api/greetings", (req, res, next) => {
+//   res.status(200).json({
+//     message: "Hello, Student !",
+//   });
+// });
 
 // ===========================
 
@@ -61,7 +77,8 @@ app.get("*", (req, res) => {
 
 //#endregion
 
-app.listen(PORT, (err) => {
+app.listen(PORT, async (err) => {
+  db.sequelize.sync({ alter: true })
   if (err) {
     console.log(`ERROR: ${err}`)
   } else {
