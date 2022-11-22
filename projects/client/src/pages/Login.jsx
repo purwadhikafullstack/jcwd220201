@@ -13,22 +13,22 @@ import {
   Stack,
   Text,
   useToast,
-} from "@chakra-ui/react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useState } from "react";
-import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import * as Yup from "yup";
-import { axiosInstance } from "../api";
-import { login } from "../redux/features/authSlice";
+} from "@chakra-ui/react"
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
+import { useState } from "react"
+import { useFormik } from "formik"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import * as Yup from "yup"
+import { axiosInstance } from "../api"
+import { login } from "../redux/features/authSlice"
 
 const LoginPage = () => {
-  const authSelector = useSelector((state) => state.auth);
-  const toast = useToast();
-  const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const authSelector = useSelector((state) => state.auth)
+  const toast = useToast()
+  const dispatch = useDispatch()
+  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: {
@@ -40,9 +40,9 @@ const LoginPage = () => {
         const response = await axiosInstance.post("/auth/login", {
           email,
           password,
-        });
+        })
 
-        localStorage.setItem("auth_token", response.data.token);
+        localStorage.setItem("auth_token", response.data.token)
         dispatch(
           login({
             name: response.data.data.name,
@@ -53,32 +53,32 @@ const LoginPage = () => {
             gender: response.data.data.gender,
             date_of_birth: response.data.data.date_of_birth,
           })
-        );
+        )
         toast({
           title: "Login success",
           description: response.data.message,
           status: "success",
-        });
+        })
 
         if (authSelector.role === 3) {
-          navigate("/profile");
+          navigate("/profile")
         } else if (authSelector.role === 2) {
-          navigate("/dashboard"); // cross check with fidel works
+          navigate("/dashboard") // cross check with fidel works
         } else if (authSelector.role === 1) {
-          navigate("/dashboard"); // cross check with fidel works
+          navigate("/dashboard") // cross check with fidel works
         }
 
-        window.history.back();
+        window.history.back()
 
-        formik.setFieldValue("email", "");
-        formik.setFieldValue("password", "");
+        formik.setFieldValue("email", "")
+        formik.setFieldValue("password", "")
       } catch (err) {
-        console.log(err);
+        console.log(err)
         toast({
           status: "error",
           title: "Login failed",
           description: err.response.data.message,
-        });
+        })
       }
     },
     validationSchema: Yup.object({
@@ -86,12 +86,12 @@ const LoginPage = () => {
       password: Yup.string().required(),
     }),
     validateOnChange: false,
-  });
+  })
 
   const formChangeHandler = ({ target }) => {
-    const { name, value } = target;
-    formik.setFieldValue(name, value);
-  };
+    const { name, value } = target
+    formik.setFieldValue(name, value)
+  }
 
   return (
     <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
@@ -160,7 +160,7 @@ const LoginPage = () => {
         />
       </Flex>
     </Stack>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

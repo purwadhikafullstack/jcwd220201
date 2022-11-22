@@ -1,27 +1,27 @@
 // require("dotenv/config");
-const dotenv = require("dotenv");
-const express = require("express");
-const cors = require("cors");
-const { join } = require("path");
-const db = require("../models");
+const dotenv = require("dotenv")
+const express = require("express")
+const cors = require("cors")
+const { join } = require("path")
+const db = require("../models")
 
-dotenv.config();
+dotenv.config()
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000
 
-const authRoute = require("../routes/authRoute");
-const app = express();
+const authRoute = require("../routes/authRoute")
+const app = express()
 app.use(
   cors()
   // origin: [
   //   process.env.WHITELISTED_DOMAIN &&
   //     process.env.WHITELISTED_DOMAIN.split(","),
   // ],
-);
+)
 
-app.use(express.json());
+app.use(express.json())
 
-app.use("/auth", authRoute);
+app.use("/auth", authRoute)
 
 //#region API ROUTES
 
@@ -29,8 +29,8 @@ app.use("/auth", authRoute);
 // NOTE : Add your routes here
 
 app.get("/api", (req, res) => {
-  res.send(`Hello, this is my API`);
-});
+  res.send(`Hello, this is my API`)
+})
 
 // app.get("/api/greetings", (req, res, next) => {
 //   res.status(200).json({
@@ -43,40 +43,40 @@ app.get("/api", (req, res) => {
 // not found
 app.use((req, res, next) => {
   if (req.path.includes("/api/")) {
-    res.status(404).send("Not found !");
+    res.status(404).send("Not found !")
   } else {
-    next();
+    next()
   }
-});
+})
 
 // error
 app.use((err, req, res, next) => {
   if (req.path.includes("/api/")) {
-    console.error("Error : ", err.stack);
-    res.status(500).send("Error !");
+    console.error("Error : ", err.stack)
+    res.status(500).send("Error !")
   } else {
-    next();
+    next()
   }
-});
+})
 
 //#endregion
 
 //#region CLIENT
-const clientPath = "../../client/build";
-app.use(express.static(join(__dirname, clientPath)));
+const clientPath = "../../client/build"
+app.use(express.static(join(__dirname, clientPath)))
 
 // Serve the HTML page
 app.get("*", (req, res) => {
-  res.sendFile(join(__dirname, clientPath, "index.html"));
-});
+  res.sendFile(join(__dirname, clientPath, "index.html"))
+})
 
 //#endregion
 
 app.listen(PORT, async (err) => {
-  db.sequelize.sync({ alter: true });
+  db.sequelize.sync({ alter: true })
   if (err) {
-    console.log(`ERROR: ${err}`);
+    console.log(`ERROR: ${err}`)
   } else {
-    console.log(`APP RUNNING at ${PORT} ✅`);
+    console.log(`APP RUNNING at ${PORT} ✅`)
   }
-});
+})
