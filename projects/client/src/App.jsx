@@ -6,6 +6,8 @@ import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
 import Footer from "./pages/layout/Footer"
 import Dashboard from "./pages/admin/Dashboard"
+import ProtectedRoute from "./components/ProtectedRoute"
+import GuestRoute from "./components/GuestRoute"
 import { useDispatch, useSelector } from "react-redux"
 import { Routes, Route, Link } from "react-router-dom"
 import { axiosInstance } from "./api"
@@ -47,8 +49,23 @@ const App = () => {
         <Route path="/" element={<Navbar />}>
           <Route index element={<MainContent />} />
           <Route index element={<Footer />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/login"
+            element={
+              <GuestRoute>
+                <LoginPage />
+              </GuestRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </>
