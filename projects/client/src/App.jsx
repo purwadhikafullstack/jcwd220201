@@ -5,6 +5,7 @@ import LoginPage from "./pages/Login"
 import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
 import Footer from "./pages/layout/Footer"
+import Dashboard from "./pages/admin/Dashboard"
 import { useDispatch, useSelector } from "react-redux"
 import { Routes, Route, Link } from "react-router-dom"
 import { axiosInstance } from "./api"
@@ -15,29 +16,29 @@ const App = () => {
   const authSelector = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
-  const keepUserLoggedIn = async () => {
-    try {
-      const auth_token = localStorage.getItem("auth_token")
+  // const keepUserLoggedIn = async () => {
+  //   try {
+  //     const auth_token = localStorage.getItem("auth_token")
 
-      if (!auth_token) {
-        setAuthCheck(true)
-        return
-      }
+  //     if (!auth_token) {
+  //       setAuthCheck(true)
+  //       return
+  //     }
 
-      const response = await axiosInstance.get("/auth/refresh-token")
+  //     const response = await axiosInstance.get("/auth/refresh-token")
 
-      dispatch(login(response.data.data))
-      localStorage.setItem("auth_token", response.data.token)
-      setAuthCheck(true)
-    } catch (err) {
-      console.log(err)
-      setAuthCheck(true)
-    }
-  }
+  //     dispatch(login(response.data.data))
+  //     localStorage.setItem("auth_token", response.data.token)
+  //     setAuthCheck(true)
+  //   } catch (err) {
+  //     console.log(err)
+  //     setAuthCheck(true)
+  //   }
+  // }
 
-  useEffect(() => {
-    keepUserLoggedIn()
-  }, [])
+  // useEffect(() => {
+  //   keepUserLoggedIn()
+  // }, [])
 
   return (
     <>
@@ -45,12 +46,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navbar />}>
           <Route index element={<MainContent />} />
-          <Route path="/login" element={<LoginPage />} />
           <Route index element={<Footer />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </>
-
   )
 }
 
