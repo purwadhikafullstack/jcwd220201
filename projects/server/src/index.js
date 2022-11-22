@@ -4,12 +4,13 @@ const express = require("express")
 const cors = require("cors")
 const { join } = require("path")
 const db = require("../models")
+const adminRoute = require("../routes/adminRoute")
+const authRoute = require("../routes/authRoute")
 
 dotenv.config()
 
 const PORT = process.env.PORT || 8000
 
-const authRoute = require("../routes/authRoute")
 const app = express()
 app.use(
   cors()
@@ -21,16 +22,20 @@ app.use(
 
 app.use(express.json())
 
-app.use("/auth", authRoute)
+
 
 //#region API ROUTES
-
+//
 // ===========================
 // NOTE : Add your routes here
+
+app.use("/admin", adminRoute)
+app.use("/auth", authRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)
 })
+
 
 // app.get("/api/greetings", (req, res, next) => {
 //   res.status(200).json({
