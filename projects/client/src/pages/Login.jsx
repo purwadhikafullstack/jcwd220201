@@ -49,7 +49,7 @@ const LoginPage = () => {
             name: response.data.data.name,
             email: response.data.data.email,
             id: response.data.data.id,
-            role: response.data.data.role_id,
+            role_id: response.data.data.role_id,
             phone: response.data.data.phone,
             gender: response.data.data.gender,
             date_of_birth: response.data.data.date_of_birth,
@@ -61,13 +61,8 @@ const LoginPage = () => {
           status: "success",
         })
 
-        if (authSelector.role_id === 1) {
-          navigate("/dashboard")
-        }
-        // else if (authSelector.role === 2) {
-        //   navigate("/dashboard") // cross check with fidel works
-        // } else if (authSelector.role === 3) {
-        //   navigate(-1) // cross check with fidel works
+        // else if (authSelector.role_id === 3) {
+        //   navigate(-1)
         // }
 
         window.history.back()
@@ -84,7 +79,7 @@ const LoginPage = () => {
       }
     },
     validationSchema: Yup.object({
-      nameOrEmail: Yup.string().required(),
+      email: Yup.string().required(),
       password: Yup.string().required(),
     }),
     validateOnChange: false,
