@@ -41,6 +41,7 @@ const LoginPage = () => {
           email,
           password,
         })
+        console.log(response)
 
         localStorage.setItem("auth_token", response.data.token)
         dispatch(
@@ -60,13 +61,14 @@ const LoginPage = () => {
           status: "success",
         })
 
-        if (authSelector.role === 3) {
-          navigate("/profile")
-        } else if (authSelector.role === 2) {
-          navigate("/dashboard") // cross check with fidel works
-        } else if (authSelector.role === 1) {
-          navigate("/dashboard") // cross check with fidel works
+        if (authSelector.role_id === 1) {
+          navigate("/dashboard")
         }
+        // else if (authSelector.role === 2) {
+        //   navigate("/dashboard") // cross check with fidel works
+        // } else if (authSelector.role === 3) {
+        //   navigate(-1) // cross check with fidel works
+        // }
 
         window.history.back()
 
@@ -82,7 +84,7 @@ const LoginPage = () => {
       }
     },
     validationSchema: Yup.object({
-      email: Yup.string().required(),
+      nameOrEmail: Yup.string().required(),
       password: Yup.string().required(),
     }),
     validateOnChange: false,
@@ -111,8 +113,8 @@ const LoginPage = () => {
                 <Input
                   value={formik.values.email}
                   name="email"
-                  onChange={formChangeHandler}
                   type="email"
+                  onChange={formChangeHandler}
                 />
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
               </FormControl>
