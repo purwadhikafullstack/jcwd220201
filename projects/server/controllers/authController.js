@@ -1,5 +1,5 @@
 const db = require("../models");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const { signToken } = require("../lib/jwt");
 
 const User = db.User;
