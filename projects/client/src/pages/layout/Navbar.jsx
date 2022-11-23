@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react"
 import { SearchIcon } from "@chakra-ui/icons"
 import { HamburgerIcon } from "@chakra-ui/icons"
-import { Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 const Navbar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const handleToggle = () => (isOpen ? onClose() : onOpen())
@@ -70,9 +70,11 @@ const Navbar = (props) => {
           mt={{ base: 4, md: 0 }}
         >
           <ButtonGroup gap="2">
-            <Button variant="outline" colorScheme="teal" size="md">
-              Masuk
-            </Button>
+            <Link to="/login">
+              <Button variant="outline" colorScheme="teal" size="md">
+                Masuk
+              </Button>
+            </Link>
             <Button
               variant="solid"
               size="md"
