@@ -1,6 +1,7 @@
 const db = require("../models")
 // const bcrypt = require("bcrypt");
 const { signToken } = require("../lib/jwt")
+const { Op } = require("sequelize")
 
 const User = db.User
 
@@ -12,11 +13,12 @@ const authController = {
       const findUserByEmail = await User.findOne({
         where: {
           email,
+          password,
         },
       })
       if (!findUserByEmail) {
         return res.status(400).json({
-          message: "Email not found",
+          message: "Email or Password not found",
         })
       }
 
@@ -51,47 +53,107 @@ const authController = {
       })
     }
   },
-  // adminLogin: async (req, res) => {
-  //   try {
-  //     const { nameOrEmail, password } = req.body
 
-  //     const findUserAdmin = await db.User.findOne({
-  //       where: {
-  //         [Op.or]: {
-  //           name: nameOrEmail,
-  //           email: nameOrEmail,
-  //           password: password,
-  //         },
-  //       },
-  //     })
-  //     if (findUserAdmin.role_id == 3 || findUserAdmin.is_verified == false) {
-  //       return res.status(400).json({
-  //         msg: "User Unauthorized !",
-  //       })
-  //     }
+  editUserProfile: async (req, res) => {
+    try {
+      if (req.file) {
+        req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
+      }
 
-  //     // later use this to compare hashed password
+      const findUserByNameOrEmail = await User.findOne({
+        where: {
+          [Op.or]: {
+            name: req.body.name || "",
+            email: req.body.email || "",
+          },
+        },
+      })
 
-  //     // const validatePassword = bcrypt.compareSync(
-  //     //   password,
-  //     //   findUserAdmin.password
-  //     // )
+      if (findUserByNameOrEmail) {
+        return res.status(400).json({
+          message: "Name or email has been taken",
+        })
+      }
 
-  //     if (!findUserAdmin.role_id == 1 || !findUserAdmin.role_id == 2) {
-  //       return res.status(400).json({
-  //         msg: "Role Admin Not Found ❌",
-  //       })
-  //     }
+      await User.update(
+        { ...req.body },
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      )
 
-  //     return res.status(201).json({
-  //       msg: "Admin Logged in ✅",
-  //       data: findUserAdmin,
-  //     })
-  //   } catch (err) {
-  //     console.log(err)
-  //     return res.status(500).json({ msg: "Server Error !" })
-  //   }
-  // },
+      const findUserById = await User.findByPk(req.user.id)
+
+      return res.status(200).json({
+        message: "Edited user data",
+        data: findUserById,
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: "Server error",
+      })
+    }
+  },
+  refreshToken: async (req, res) => {
+    try {
+      const findUserById = await User.findByPk(req.user.id)
+
+      const renewedToken = signToken({
+        id: req.user.id,
+      })
+
+      return res.status(200).json({
+        message: "Renewed user token",
+        data: findUserById,
+        token: renewedToken,
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: "Server error",
+      })
+    }
+  },
+  getUserById: async (req, res) => {
+    try {
+      const findUserById = await db.User.findOne({
+        while: {
+          id: req.params.id,
+        },
+      })
+
+      return res.status(200).json({
+        message: "Get user By ID",
+        data: findUserById,
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: "Server error",
+      })
+    }
+  },
+  getAllUser: async (req, res) => {
+    try {
+      const findAllUser = await db.User.findAll({
+        where: {
+          ...req.query,
+        },
+      })
+      return res.status(200).json({
+        message: "Get All User",
+        data: findAllUser,
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: "Server error",
+      })
+    }
+  },
 }
 
 module.exports = authController

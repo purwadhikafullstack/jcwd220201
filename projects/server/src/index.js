@@ -11,6 +11,7 @@ dotenv.config()
 
 const PORT = process.env.PORT || 8000
 
+const authRoute = require("../routes/authRoute")
 const app = express()
 app.use(
   cors()
@@ -21,6 +22,9 @@ app.use(
 )
 
 app.use(express.json())
+
+app.use("/auth", authRoute)
+app.use("/public", express.static("public"))
 
 //#region API ROUTES
 //
@@ -68,9 +72,9 @@ const clientPath = "../../client/build"
 app.use(express.static(join(__dirname, clientPath)))
 
 // Serve the HTML page
-// app.get("*", (req, res) => {
-//   res.sendFile(join(__dirname, clientPath, "index.html"))
-// })
+app.get("*", (req, res) => {
+  res.sendFile(join(__dirname, clientPath, "index.html"))
+})
 
 //#endregion
 
