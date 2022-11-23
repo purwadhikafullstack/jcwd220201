@@ -41,7 +41,7 @@ const LoginPage = () => {
           email,
           password,
         })
-
+        console.log(response)
 
         localStorage.setItem("auth_token", response.data.token)
         dispatch(
@@ -49,7 +49,7 @@ const LoginPage = () => {
             name: response.data.data.name,
             email: response.data.data.email,
             id: response.data.data.id,
-            role: response.data.data.role_id,
+            role_id: response.data.data.role_id,
             phone: response.data.data.phone,
             gender: response.data.data.gender,
             date_of_birth: response.data.data.date_of_birth,
@@ -63,10 +63,6 @@ const LoginPage = () => {
 
         if (authSelector.role === 3) {
           navigate(-1)
-        } else if (authSelector.role === 2) {
-          navigate("/dashboard") // cross check with fidel works
-        } else if (authSelector.role === 1) {
-          navigate("/dashboard") // cross check with fidel works
         }
 
         window.history.back()
