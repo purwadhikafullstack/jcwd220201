@@ -27,8 +27,9 @@ app.use(express.json())
 // ===========================
 // NOTE : Add your routes here
 
-app.use("/admin", adminRoute)
 app.use("/auth", authRoute)
+app.use("/public", express.static("public"))
+app.use("/admin", adminRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)

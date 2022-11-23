@@ -61,9 +61,9 @@ const LoginPage = () => {
           status: "success",
         })
 
-        // else if (authSelector.role_id === 3) {
-        //   navigate(-1)
-        // }
+        if (authSelector.role === 3) {
+          navigate(-1)
+        }
 
         window.history.back()
 
