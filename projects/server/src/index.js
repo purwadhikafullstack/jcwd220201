@@ -11,7 +11,6 @@ dotenv.config()
 
 const PORT = process.env.PORT || 8000
 
-const authRoute = require("../routes/authRoute")
 const app = express()
 app.use(
   cors()
@@ -23,16 +22,14 @@ app.use(
 
 app.use(express.json())
 
-app.use("/auth", authRoute)
-app.use("/public", express.static("public"))
-
 //#region API ROUTES
 //
 // ===========================
 // NOTE : Add your routes here
 
-app.use("/admin", adminRoute)
 app.use("/auth", authRoute)
+app.use("/public", express.static("public"))
+app.use("/admin", adminRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)

@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { Routes, Route, Link } from "react-router-dom"
 import { axiosInstance } from "./api"
 import EditProfile from "./pages/EditProfile"
+import Navbar from "./pages/layout/Navbar"
+import MainContent from "./pages/layout/MainContent"
+import Footer from "./pages/layout/Footer"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
@@ -38,12 +41,25 @@ const App = () => {
   }, [])
 
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/profile" element={<EditProfile />} />
-    </Routes>
+
+    <>
+      {/*  */}
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<MainContent />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<EditProfile />} />
+          <Route index element={<Footer />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
+
+
+
+
+
 
 
 

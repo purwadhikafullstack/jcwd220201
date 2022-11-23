@@ -62,7 +62,7 @@ const LoginPage = () => {
         })
 
         if (authSelector.role === 3) {
-          navigate("/profile")
+          navigate(-1)
         } else if (authSelector.role === 2) {
           navigate("/dashboard") // cross check with fidel works
         } else if (authSelector.role === 1) {
