@@ -9,6 +9,9 @@ import EditProfile from "./pages/EditProfile"
 import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
 import Footer from "./pages/layout/Footer"
+import Dashboard from "./pages/admin/Dashboard"
+import ProtectedRoute from "./components/ProtectedRoute"
+import GuestRoute from "./components/GuestRoute"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
@@ -51,9 +54,9 @@ const App = () => {
         <Route
           path="/profile"
           element={
-            <GuestRoute>
+            <ProtectedRoute>
               <EditProfile />
-            </GuestRoute>
+            </ProtectedRoute>
           }
         />
         <Route
