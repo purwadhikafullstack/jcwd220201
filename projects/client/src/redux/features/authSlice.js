@@ -20,11 +20,7 @@ const authSlice = createSlice({
       state.id = action.payload.id
       state.email = action.payload.email
       state.name = action.payload.name
-<<<<<<< HEAD
-      state.role = action.payload.role
-=======
-      state.role_id = action.payload.role_id
->>>>>>> a24ae4fbf4f48d3f33fa17b6ca7d666196b2410e
+      state.role = action.payload.role_id
       state.profile_picture = action.payload.profile_picture
       state.gender = action.payload.gender
       state.phone = action.payload.phone
@@ -34,11 +30,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.id = 0
       state.email = ""
-<<<<<<< HEAD
-      state.role = ""
-=======
       state.role_id = 0
->>>>>>> a24ae4fbf4f48d3f33fa17b6ca7d666196b2410e
       state.name = ""
       state.profile_picture = ""
     },

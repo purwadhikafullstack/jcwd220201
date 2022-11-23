@@ -41,10 +41,7 @@ const LoginPage = () => {
           email,
           password,
         })
-<<<<<<< HEAD
-=======
-        console.log(response)
->>>>>>> a24ae4fbf4f48d3f33fa17b6ca7d666196b2410e
+
 
         localStorage.setItem("auth_token", response.data.token)
         dispatch(
@@ -52,11 +49,7 @@ const LoginPage = () => {
             name: response.data.data.name,
             email: response.data.data.email,
             id: response.data.data.id,
-<<<<<<< HEAD
             role: response.data.data.role_id,
-=======
-            role_id: response.data.data.role_id,
->>>>>>> a24ae4fbf4f48d3f33fa17b6ca7d666196b2410e
             phone: response.data.data.phone,
             gender: response.data.data.gender,
             date_of_birth: response.data.data.date_of_birth,
@@ -68,7 +61,6 @@ const LoginPage = () => {
           status: "success",
         })
 
-<<<<<<< HEAD
         if (authSelector.role === 3) {
           navigate("/profile")
         } else if (authSelector.role === 2) {
@@ -76,11 +68,6 @@ const LoginPage = () => {
         } else if (authSelector.role === 1) {
           navigate("/dashboard") // cross check with fidel works
         }
-=======
-        // else if (authSelector.role_id === 3) {
-        //   navigate(-1)
-        // }
->>>>>>> a24ae4fbf4f48d3f33fa17b6ca7d666196b2410e
 
         window.history.back()
 
