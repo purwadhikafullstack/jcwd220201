@@ -12,24 +12,38 @@ import {
   Button,
   useMediaQuery,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
+  // Modal,
+  // ModalOverlay,
+  // ModalContent,
+  // ModalHeader,
+  // ModalFooter,
+  // ModalBody,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const RegisterForm = ({ props: { submit } }) => {
+// Own library imports
+import checkDuplicate from "../../lib/register/checkDuplicate";
+import AvailableModal from "./AvailableModal";
+import DuplicateModal from "./DuplicateModal";
+
+const RegisterForm = ({ props: { UserContext } }) => {
   // Media query
   const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
   const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
 
-  // Monitor user input
+  // Get user context
+  const user = useContext(UserContext);
+
+  // Create register form context
+  const RegisterContext = createContext();
+
+  // States based on user input
   const [isError, setIsError] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Form functionality
   const formik = useFormik({
@@ -41,13 +55,13 @@ const RegisterForm = ({ props: { submit } }) => {
         .email("Format email salah")
         .required("Email harus diisi"),
     }),
-    onSubmit: ({ email }) => {
-      submit(email);
-    },
   });
 
   // Modal functionality
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // Redirects functionality
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (formik.errors.email) {
@@ -100,6 +114,9 @@ const RegisterForm = ({ props: { submit } }) => {
               isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
             }
             color="teal"
+            onClick={() => {
+              navigate("/login");
+            }}
           >
             Masuk
           </Link>
@@ -206,7 +223,27 @@ const RegisterForm = ({ props: { submit } }) => {
           fontWeight="700"
           cursor={isError || !formik.values.email ? "not-allowed" : "pointer"}
           colorScheme={isError || !formik.values.email ? "gray" : "teal"}
-          onClick={onOpen}
+          isLoading={isLoading}
+          onClick={async () => {
+            // Disable button if no input is found
+            if (!formik.values.email || isError) {
+              return;
+            }
+
+            // Change button style
+            setIsLoading(true);
+
+            // Check duplicate email address
+            const res = await checkDuplicate(formik.values.email);
+
+            if (res.status === 200) {
+              setIsAvailable(true);
+            } else if (res.status === 400) {
+              setIsAvailable(false);
+            }
+            // Display appropriate modal
+            onOpen();
+          }}
         >
           Daftar
         </Button>
@@ -255,120 +292,23 @@ const RegisterForm = ({ props: { submit } }) => {
           </Link>
         </Text>
       </Flex>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={isLargerThanMd ? "lg" : isLargerThanSm ? "md" : "sm"}
-        isCentered
-      >
-        <ModalOverlay />
-        <ModalContent p="2rem 2rem 1.5rem">
-          <ModalHeader
-            textAlign="center"
-            fontSize={
-              isLargerThanMd
-                ? "1.714rem"
-                : isLargerThanSm
-                ? "1.116rem"
-                : "0.726rem"
-            }
-            fontWeight="700"
-            mb={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.504rem"
-                : "0.290rem"
-            }
-            p="0"
-          >
-            {formik.values.email}
-          </ModalHeader>
-          <ModalBody
-            color="rgb(108, 114, 124)"
-            textAlign="center"
-            fontSize={
-              isLargerThanMd
-                ? "0.989rem"
-                : isLargerThanSm
-                ? "0.644rem"
-                : "0.419rem"
-            }
-            lineHeight="1.5rem"
-            m={
-              isLargerThanMd
-                ? "0 1rem 1rem"
-                : isLargerThanSm
-                ? "0 1rem 0.577rem"
-                : "0 1rem 0.332rem"
-            }
-            p="0"
-          >
-            Apakah email yang anda masukkan sudah benar?
-          </ModalBody>
-          <ModalFooter
-            display="flex"
-            justifyContent="center"
-            py={
-              isLargerThanMd ? "1rem" : isLargerThanSm ? "0.577rem" : "0.332rem"
-            }
-          >
-            <Button
-              onClick={onClose}
-              mr="0.375rem"
-              width={
-                isLargerThanMd
-                  ? "10.25rem"
-                  : isLargerThanSm
-                  ? "6.673rem"
-                  : "4.341rem"
-              }
-              height="3rem"
-              maxW="100%"
-              border="1px solid"
-              fontSize={
-                isLargerThanMd
-                  ? "1rem"
-                  : isLargerThanSm
-                  ? "0.826rem"
-                  : "0.682rem"
-              }
-              fontWeight="700"
-              colorScheme="white"
-              color="teal"
-              lineHeight="22px"
-              whiteSpace="nowrap"
-            >
-              Ubah
-            </Button>
-            <Button
-              width={
-                isLargerThanMd
-                  ? "10.25rem"
-                  : isLargerThanSm
-                  ? "6.673rem"
-                  : "4.341rem"
-              }
-              height="3rem"
-              maxW="100%"
-              fontSize={
-                isLargerThanMd
-                  ? "1rem"
-                  : isLargerThanSm
-                  ? "0.826rem"
-                  : "0.682rem"
-              }
-              fontWeight="700"
-              colorScheme="teal"
-              lineHeight="22px"
-              whiteSpace="nowrap"
-              onClick={formik.handleSubmit}
-            >
-              Ya, Benar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {isAvailable ? (
+        <RegisterContext.Provider value={{ isOpen, onClose, setIsLoading }}>
+          <AvailableModal
+            props={{
+              email: formik.values.email,
+              RegisterContext,
+              UserContext,
+            }}
+          />
+        </RegisterContext.Provider>
+      ) : (
+        <RegisterContext.Provider value={{ isOpen, onClose, setIsLoading }}>
+          <DuplicateModal
+            props={{ email: formik.values.email, RegisterContext }}
+          />
+        </RegisterContext.Provider>
+      )}
     </Box>
   );
 };

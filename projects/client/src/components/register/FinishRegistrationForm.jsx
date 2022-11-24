@@ -12,23 +12,40 @@ import {
   useMediaQuery,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+
+// Own library imports
+import axiosInstance from "../../api";
+
+// Component imports
 import TogglePasswordIcon from "./TogglePasswordIcon";
 
-const FinishRegistrationForm = () => {
+const FinishRegistrationForm = ({ props: { UserContext } }) => {
   // Media query
   const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
   const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
 
+  // Get user context
+  const { email } = useContext(UserContext);
+
   // Monitor user input
   const [nameError, setNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Toggle password functionality
   const [show, setShow] = useState(false);
+
+  // Alert functionality
+  const toast = useToast();
+
+  // Redirects functionality
+  const navigate = useNavigate();
 
   // Form functionality
   const formik = useFormik({
@@ -44,9 +61,30 @@ const FinishRegistrationForm = () => {
         .required("Kata sandi harus diisi")
         .min(8, "Kata sandi terlalu pendek, minimum 8 karakter"),
     }),
-    onSubmit: () => {
-      if (nameError || passwordError) {
-        return;
+    onSubmit: async ({ name, password }) => {
+      try {
+        // Disable on error
+        if (nameError || passwordError) {
+          return;
+        }
+
+        setIsLoading(true);
+
+        // Update user credentials
+        const response = await axiosInstance.post(`/api/register/account`, {
+          name,
+          email,
+          password,
+        });
+        // Alert success
+        toast({
+          title: `${response.data.message}`,
+          status: "success",
+          duration: 2000,
+        });
+        navigate("/login");
+      } catch (err) {
+        console.log(err);
       }
     },
   });
@@ -115,7 +153,7 @@ const FinishRegistrationForm = () => {
             isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
           }
         >
-          {}
+          {email}
         </Text>
         <FormControl mt="1.25rem" mb="0.5rem" isInvalid={nameError}>
           <FormLabel
@@ -280,6 +318,8 @@ const FinishRegistrationForm = () => {
             isLargerThanMd ? "2.5rem" : isLargerThanSm ? "2.065rem" : "1.706rem"
           }
           mt="2rem"
+          isLoading={isLoading}
+          onClick={formik.handleSubmit}
         >
           Selesai
         </Button>
