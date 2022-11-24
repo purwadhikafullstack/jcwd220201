@@ -46,13 +46,14 @@ const LoginPage = () => {
         localStorage.setItem("auth_token", response.data.token)
         dispatch(
           login({
-            name: response.data.data.name,
-            email: response.data.data.email,
             id: response.data.data.id,
             role_id: response.data.data.role_id,
+            name: response.data.data.name,
+            email: response.data.data.email,
             phone: response.data.data.phone,
             gender: response.data.data.gender,
             date_of_birth: response.data.data.date_of_birth,
+            profile_picture: response.data.data.profile_picture,
           })
         )
         toast({

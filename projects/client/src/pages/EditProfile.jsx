@@ -10,11 +10,14 @@ import {
   HStack,
   Input,
   Select,
+  InputRightElement,
   Stack,
   Text,
   useToast,
+  InputGroup,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
+import { useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { axiosInstance } from "../api"
 import { useFormik } from "formik"
@@ -25,7 +28,10 @@ import * as Yup from "yup"
 const EditProfile = () => {
   const authSelector = useSelector((state) => state.auth)
   const [editMode, setEditMode] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPW, setShowConfirmPW] = useState(false)
   const [users, setUsers] = useState([])
+  const inputFileRef = useRef()
 
   const dispatch = useDispatch()
   const token = localStorage.getItem("auth_token")
@@ -153,16 +159,21 @@ const EditProfile = () => {
 
               <FormControl>
                 <FormLabel>Foto Profil</FormLabel>
+                <Button w="full" onClick={() => inputFileRef.current.click()}>
+                  Pilih Foto
+                </Button>
                 <Input
                   accept="image/*"
                   type="file"
+                  name="profile_picture"
+                  ref={inputFileRef}
+                  display="none"
                   onChange={(event) =>
                     formik.setFieldValue(
                       "profile_picture",
                       event.target.files[0]
                     )
                   }
-                  name="profile_picture"
                 />
               </FormControl>
               <FormControl>
@@ -195,6 +206,7 @@ const EditProfile = () => {
               </FormControl>
               <FormControl>
                 <FormLabel>Tanggal Lahir</FormLabel>
+
                 <Input
                   onChange={formChangeHandler}
                   name="date_of_birth"
@@ -204,19 +216,44 @@ const EditProfile = () => {
               </FormControl>
               <FormControl isInvalid={formik.errors.password}>
                 <FormLabel>Kata Sandi</FormLabel>
-                <Input
-                  onChange={formChangeHandler}
-                  name="password"
-                  type="password"
-                />
+                <InputGroup>
+                  <Input
+                    onChange={formChangeHandler}
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
               </FormControl>
+
               <FormControl isInvalid={formik.errors.confirm_password}>
                 <FormLabel>Konfirmasi Kata Sandi</FormLabel>
+                {/* <InputGroup> */}
                 <Input
                   onChange={formChangeHandler}
                   name="confirm_password"
-                  type="password"
+                  type="confirm_password"
                 />
+                {/* <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement> */}
+                {/* </InputGroup> */}
               </FormControl>
             </Stack>
           ) : (
@@ -238,7 +275,7 @@ const EditProfile = () => {
               <Button
                 mt="8"
                 width="75%"
-                colorScheme="green"
+                colorScheme="teal"
                 onClick={formik.handleSubmit}
               >
                 Simpan

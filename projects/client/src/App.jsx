@@ -12,47 +12,49 @@ import Footer from "./pages/layout/Footer"
 import Dashboard from "./pages/admin/Dashboard"
 import ProtectedRoute from "./components/ProtectedRoute"
 import GuestRoute from "./components/GuestRoute"
+import NotFound from "./pages/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 
+
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
+  const authSelector = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
 
-  // const keepUserLoggedIn = async () => {
-  //   try {
-  //     const auth_token = localStorage.getItem("auth_token")
+  const keepUserLogin = async () => {
+    try {
+      const auth_token = localStorage.getItem("auth_token")
 
-  //     if (!auth_token) {
-  //       setAuthCheck(true)
-  //       return
-  //     }
+      if (!auth_token) {
+        setAuthCheck(true)
+        return
+      }
 
-  //     const response = await axiosInstance.get("/auth/refresh-token")
+      const response = await axiosInstance.get("/auth/refresh-token")
 
-  //     dispatch(login(response.data.data))
-  //     localStorage.setItem("auth_token", response.data.token)
-  //     setAuthCheck(true)
-  //   } catch (err) {
-  //     console.log(err)
-  //     setAuthCheck(true)
-  //   }
-  // }
+      dispatch(login(response.data.data))
+      localStorage.setItem("auth_token", response.data.token)
+      setAuthCheck(true)
+    } catch (err) {
+      console.log(err)
+      setAuthCheck(true)
+    }
+  }
 
-  // useEffect(() => {
-  //   keepUserLoggedIn()
-  // }, [])
+  useEffect(() => {
+    keepUserLogin()
+  }, [])
 
   return (
     <>
-      {/*  */}
       <Routes>
         <Route path="/" element={<Navbar />}>
           <Route index element={<MainContent />} />
           <Route index element={<Footer />} />
         </Route>
-
+        <Route path="/404" element={<NotFound />} />
         <Route
           path="/profile"
           element={
@@ -70,9 +72,14 @@ const App = () => {
           }
         />
 
-        <Route path="/admin/dashboard" element={<AdminHome />} />
 
+        <Route
+          path="/admin/dashboard"
+          element={authSelector.role_id === 1 ? <Dashboard /> : <NotFound />}
+        />
+        <Route path="/admin/dashboard" element={<AdminHome />} />
         <Route path="/admin/warehouseData" element={<ManageWarehouseData />} />
+
       </Routes>
     </>
   )
