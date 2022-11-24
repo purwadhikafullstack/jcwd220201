@@ -27,19 +27,25 @@ app.use(express.json())
 // ===========================
 // NOTE : Add your routes here
 
-app.use("/auth", authRoute)
+const { warehousesRoute, citiesRoute, provincesRoute } = require("../routes")
+
 app.use("/public", express.static("public"))
+
+app.use("/warehouses", warehousesRoute)
+app.use("/cities", citiesRoute)
+app.use("/provinces", provincesRoute)
+app.use("/auth", authRoute)
 app.use("/admin", adminRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)
 })
 
-// app.get("/api/greetings", (req, res, next) => {
-//   res.status(200).json({
-//     message: "Hello, Student !",
-//   });
-// });
+app.get("/api/greetings", (req, res, next) => {
+  res.status(200).json({
+    message: "Hello, Student !",
+  })
+})
 
 // ===========================
 

@@ -12,6 +12,8 @@ import Footer from "./pages/layout/Footer"
 import Dashboard from "./pages/admin/Dashboard"
 import ProtectedRoute from "./components/ProtectedRoute"
 import GuestRoute from "./components/GuestRoute"
+import AdminHome from "./pages/admin/home.jsx"
+import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
@@ -68,14 +70,9 @@ const App = () => {
           }
         />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/admin/dashboard" element={<AdminHome />} />
+
+        <Route path="/admin/warehouseData" element={<ManageWarehouseData />} />
       </Routes>
     </>
   )
