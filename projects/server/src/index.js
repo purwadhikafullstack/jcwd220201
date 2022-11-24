@@ -3,16 +3,12 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 
+//Route imports
+const registerRoute = require("./routes/registerRoute");
+
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use(
-  cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 
@@ -20,6 +16,9 @@ app.use(express.json());
 
 // ===========================
 // NOTE : Add your routes here
+
+// Register middleware
+app.use("/api/register", registerRoute);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
