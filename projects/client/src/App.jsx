@@ -15,6 +15,7 @@ import GuestRoute from "./components/GuestRoute"
 import NotFound from "./pages/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
+import GeneralRoute from "./components/GeneralRoute"
 
 
 const App = () => {
@@ -58,9 +59,9 @@ const App = () => {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
+            <GeneralRoute>
               <EditProfile />
-            </ProtectedRoute>
+            </GeneralRoute>
           }
         />
         <Route
@@ -73,12 +74,24 @@ const App = () => {
         />
 
 
+        {/* Admin Route */}
         <Route
           path="/admin/dashboard"
-          element={authSelector.role_id === 1 ? <Dashboard /> : <NotFound />}
+          element={
+            <ProtectedRoute>
+              <AdminHome />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/admin/dashboard" element={<AdminHome />} />
-        <Route path="/admin/warehouseData" element={<ManageWarehouseData />} />
+
+        <Route
+          path="/admin/warehouseData"
+          element={
+            <ProtectedRoute>
+              <ManageWarehouseData />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </>

@@ -60,21 +60,6 @@ const authController = {
         req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
       }
 
-      const findUserByNameOrEmail = await User.findOne({
-        where: {
-          [Op.or]: {
-            name: req.body.name || "",
-            email: req.body.email || "",
-          },
-        },
-      })
-
-      if (findUserByNameOrEmail) {
-        return res.status(400).json({
-          message: "Name or email has been taken",
-        })
-      }
-
       await User.update(
         { ...req.body },
         {

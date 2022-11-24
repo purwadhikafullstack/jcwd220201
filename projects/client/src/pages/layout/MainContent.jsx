@@ -256,6 +256,7 @@ const MainContent = () => {
 
         <Divider mt="7" border="1px solid #D5D7DD" mb="8" />
         <Features />
+
         {/* Footer Component */}
         <Footer />
       </Box>

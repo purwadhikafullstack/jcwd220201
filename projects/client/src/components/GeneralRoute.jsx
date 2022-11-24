@@ -1,16 +1,14 @@
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
-const GuestRoute = ({ children }) => {
+const GeneralRoute = ({ children }) => {
   const authSelector = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  if (authSelector.role_id === 1 || authSelector.role_id === 2) {
-    navigate("/admin/dashboard")
-  } else {
-    navigate("/")
+  if (!authSelector.role_id) {
+    navigate("/login")
   }
   return children
 }
 
-export default GuestRoute
+export default GeneralRoute

@@ -1,21 +1,76 @@
-import { Box, ButtonGroup, Spacer, Button, Stack } from "@chakra-ui/react"
-import { NavLink } from "react-router-dom"
+import {
+  Box,
+  ButtonGroup,
+  Spacer,
+  Button,
+  Stack,
+  Heading,
+  Divider,
+  Flex,
+  Avatar,
+  Text,
+} from "@chakra-ui/react"
+import { useNavigate, NavLink, Link } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { logout } from "../../redux/features/authSlice"
 
-const sidebarAdmin = () => {
+const SidebarAdmin = () => {
+  const authSelector = useSelector((state) => state.auth)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const btnLogout = () => {
+    localStorage.removeItem("auth_token")
+    dispatch(logout())
+    navigate("/")
+  }
   return (
     <>
-      <Box border="1px" w="60%" h="100px" mt="10" mb="10">
-        Logo
-      </Box>
+      <Heading textAlign="center" as="h1" size="lg" letterSpacing={"tighter"}>
+        WIRED!
+        <br />
+        Admin Dashboard
+      </Heading>
+      <Divider border="1px solid" />
+      <Flex>
+        <Avatar
+          size="lg"
+          name={authSelector.profile_picture}
+          src={authSelector.profile_picture}
+        />
+        <Text borderRight="2px solid" my="auto" p="8px">
+          {authSelector.name}
+        </Text>
 
+        <Button
+          my="4"
+          p="8px"
+          fontWeight="semibold"
+          color="black"
+          variant="link"
+        >
+          <Link to="/profile">Edit Profile</Link>
+        </Button>
+      </Flex>
+      <Spacer />
       <Stack color="white" w="full" direction="column">
         <ButtonGroup flexDirection="column" spacing="0" variant="unstyled">
           <NavLink
-            // to="/admin/warehouseData" ISI INI YA TEMAN2
+            to="/admin/dashboard"
             style={({ isActive }) => ({
               backgroundColor: isActive ? "#005e9d" : "#008deb",
             })}
           >
+            <Button
+              whiteSpace="initial"
+              w="100%"
+              pl="10%"
+              textAlign="left"
+              borderRadius="0px"
+              _hover={{ bg: "#005e9d" }}
+            >
+              Dashboard
+            </Button>
             <Button
               whiteSpace="initial"
               w="100%"
@@ -143,8 +198,9 @@ const sidebarAdmin = () => {
           borderRadius="0px"
           border="1px solid"
           _hover={{ bg: "#005e9d" }}
+          onClick={btnLogout}
         >
-          Logout
+          LOGOUT
         </Button>
       </Box>
       <Box h="4%" w="full"></Box>
@@ -152,4 +208,4 @@ const sidebarAdmin = () => {
   )
 }
 
-export default sidebarAdmin
+export default SidebarAdmin

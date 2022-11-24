@@ -1,13 +1,13 @@
 import { Box, Container, Flex, Spacer, Text, VStack } from "@chakra-ui/react"
 
-import sidebarAdmin from "../../components/admin/sidebarAdminDashboard.jsx"
+import SidebarAdmin from "../../components/admin/sidebarAdminDashboard"
 
 const AdminHome = () => {
   return (
     <Container bg="#e0e7eb" maxW="vw" p="0">
       <Flex h="100vh" p="0">
         <VStack h="full" w="30%" minW="220px" bg="#008deb">
-          {sidebarAdmin()}
+          {SidebarAdmin()}
         </VStack>
 
         <VStack h="full" w="full" overflowX="scroll">

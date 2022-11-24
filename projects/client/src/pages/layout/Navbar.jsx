@@ -58,7 +58,8 @@ const Navbar = () => {
   const [authCheck, setAuthCheck] = useState(false)
   const authSelector = useSelector((state) => state.auth)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const navigate = useNavigate
+
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const keepUserLogin = async () => {
@@ -230,7 +231,16 @@ const Navbar = () => {
                 <MenuItem>Transaction</MenuItem>
                 <MenuDivider />
                 <MenuItem>
-                  <LinkRouterDom onClick={btnLogout}>Logout</LinkRouterDom>
+                  <Button
+                    w="full"
+                    variant="unstyled"
+                    textAlign="left"
+                    fontWeight="semibold"
+                  >
+                    <LinkRouterDom onClick={() => btnLogout()}>
+                      Logout
+                    </LinkRouterDom>
+                  </Button>
                 </MenuItem>
               </MenuList>
             </Menu>

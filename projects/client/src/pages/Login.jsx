@@ -66,8 +66,6 @@ const LoginPage = () => {
           navigate(-1)
         }
 
-        window.history.back()
-
         formik.setFieldValue("email", "")
         formik.setFieldValue("password", "")
       } catch (err) {
