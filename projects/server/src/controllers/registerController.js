@@ -143,6 +143,7 @@ const registerController = {
       const user = await User.findOne({
         where: {
           email,
+          is_verified: null,
         },
         attributes: ["id"],
       });
@@ -155,14 +156,30 @@ const registerController = {
       });
 
       // Persist sent OTP
-      await Otp.update(
-        { otp },
-        {
-          where: {
-            user_id: user.id,
-          },
-        }
+      const result = await sequelize.transaction(async (t) => {
+        const update = await Otp.update(
+          { otp },
+          {
+            where: {
+              user_id: user.id,
+            },
+            transaction: t,
+          }
+        );
+      });
+
+      // Send new verification email
+      const file = fs.readFileSync(
+        "./templates/verification/email_verification.html",
+        "utf-8"
       );
+      const template = handlebars.compile(file);
+      const verificationEmail = template({ email, otp });
+      await emailer({
+        to: email,
+        subject: "Aktivasi Akun Wired!",
+        html: verificationEmail,
+      });
 
       // Send successful response
       return res.status(200).json({
@@ -209,6 +226,8 @@ const registerController = {
         .as("minutes");
       const maxDuration = 30;
 
+      console.log(issuedOtp.otp);
+
       // Validate OTP
       if (otp !== issuedOtp.otp) {
         return res.status(401).json({
@@ -220,12 +239,14 @@ const registerController = {
         });
       }
 
-      // Delete OTP
-      await Otp.destroy({
-        where: {
-          id: issuedOtp.id,
-        },
-      });
+      if (otp === issuedOtp.otp) {
+        // Delete OTP
+        await Otp.destroy({
+          where: {
+            id: issuedOtp.id,
+          },
+        });
+      }
 
       // Send successful response
       return res.status(202).json({
