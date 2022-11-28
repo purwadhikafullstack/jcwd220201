@@ -119,7 +119,7 @@ const RegisterForm = ({ props: { UserContext } }) => {
           </Link>
         </Text>
         <Flex align="center" width="100%" py="2">
-          <Divider flexBasis="25%" />
+          <Divider flexBasis="23%" />
           <Text
             fontSize={
               isLargerThanMd
@@ -130,12 +130,12 @@ const RegisterForm = ({ props: { UserContext } }) => {
             }
             color="rgb(108, 114, 124)"
             textAlign="center"
-            flexBasis="50%"
+            flexBasis="54%"
             pb="5px"
           >
             atau daftar dengan
           </Text>
-          <Divider flexBasis="25%" />
+          <Divider flexBasis="23%" />
         </Flex>
         <FormControl mt="0.8rem" mb="0.5rem" isInvalid={isError}>
           <FormLabel
