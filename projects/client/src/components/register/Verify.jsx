@@ -9,7 +9,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { MdOutlineMail } from "react-icons/md";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 
 // Own library imports
@@ -26,6 +26,9 @@ const Verify = ({ props: { UserContext } }) => {
       otp: "",
     },
   });
+
+  // Disable re-send OTP functionality
+  const [isBeingSent, setIsBeingSent] = useState(false);
 
   // Alert functionality
   const toast = useToast();
@@ -96,12 +99,15 @@ const Verify = ({ props: { UserContext } }) => {
           color="teal"
           fontWeight="600"
           onClick={async () => {
+            setIsBeingSent(true);
             await requestOtp(email);
             toast({
               title: "Kode OTP berhasil dikirimkan.",
               status: "success",
             });
+            setIsBeingSent(false);
           }}
+          pointerEvents={isBeingSent ? "none" : "auto"}
         >
           Kirim ulang
         </Link>

@@ -34,10 +34,7 @@ const RegisterForm = ({ props: { UserContext } }) => {
   const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
   const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
 
-  // Get user context
-  const user = useContext(UserContext);
-
-  // Create register form context
+  // Create form context
   const RegisterContext = createContext();
 
   // States based on user input

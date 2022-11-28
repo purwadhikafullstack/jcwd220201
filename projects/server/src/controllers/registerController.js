@@ -7,10 +7,6 @@ const moment = require("moment");
 
 // Own library imports
 const { User, Otp, sequelize } = require("../../models");
-const {
-  createVerificationToken,
-  validateVerificationToken,
-} = require("../../lib/verification");
 const emailer = require("../../lib/emailer");
 
 const registerController = {
