@@ -25,7 +25,10 @@ const DuplicateModal = ({ props: { email, RegisterContext } }) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        setIsLoading(false);
+        onClose();
+      }}
       size={isLargerThanMd ? "md" : isLargerThanSm ? "sm" : "xs"}
       isCentered
     >

@@ -30,7 +30,10 @@ const AvailableModal = ({ props: { email, RegisterContext, UserContext } }) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        setIsLoading(false);
+        onClose();
+      }}
       size={isLargerThanMd ? "lg" : isLargerThanSm ? "md" : "sm"}
       isCentered
     >
