@@ -1,4 +1,4 @@
-import axiosInstance from "../../api";
+import { axiosInstance } from "../../api/index";
 
 const verifyOtp = async (email, otp, toast, submit) => {
   try {

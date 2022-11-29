@@ -20,7 +20,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 // Own library imports
-import axiosInstance from "../../api";
+import { axiosInstance } from "../../api/index";
 
 // Component imports
 import TogglePasswordIcon from "./TogglePasswordIcon";

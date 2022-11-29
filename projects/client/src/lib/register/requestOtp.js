@@ -1,4 +1,4 @@
-import axiosInstance from "../../api";
+import { axiosInstance } from "../../api/index";
 
 const requestOtp = async (email) => {
   try {
