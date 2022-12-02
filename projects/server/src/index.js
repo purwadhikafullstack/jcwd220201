@@ -5,7 +5,7 @@ const { join } = require("path")
 const db = require("../models")
 const adminRoute = require("../routes/adminRoute")
 const authRoute = require("../routes/authRoute")
-const registerRoute = require("./routes/registerRoute");
+const registerRoute = require("./routes/registerRoute")
 
 dotenv.config()
 
@@ -28,9 +28,14 @@ app.use(express.json())
 // NOTE : Add your routes here
 
 // Register middleware
-app.use("/api/register", registerRoute);
+app.use("/api/register", registerRoute)
 
-const { warehousesRoute, citiesRoute, provincesRoute } = require("../routes")
+const {
+  warehousesRoute,
+  citiesRoute,
+  provincesRoute,
+  categoriesRoute,
+} = require("../routes")
 
 app.use("/public", express.static("public"))
 
@@ -39,6 +44,7 @@ app.use("/cities", citiesRoute)
 app.use("/provinces", provincesRoute)
 app.use("/auth", authRoute)
 app.use("/admin", adminRoute)
+app.use("/categories", categoriesRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)

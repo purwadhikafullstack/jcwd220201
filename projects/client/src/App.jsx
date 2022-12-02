@@ -16,8 +16,8 @@ import NotFound from "./pages/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 import GeneralRoute from "./components/GeneralRoute"
-import Register from "./pages/Register";
-
+import ManageProduct from "./pages/admin/manageProduct.jsx"
+import Register from "./pages/Register"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
@@ -74,7 +74,6 @@ const App = () => {
           }
         />
 
-
         {/* Admin Route */}
         <Route
           path="/admin/dashboard"
@@ -94,9 +93,17 @@ const App = () => {
           }
         />
 
-        {/* Register Route */}
-        <Route path="/register" element={<Register />}/>
+        <Route
+          path="/admin/product"
+          element={
+            <ProtectedRoute>
+              <ManageProduct />
+            </ProtectedRoute>
+          }
+        />
 
+        {/* Register Route */}
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   )
