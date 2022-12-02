@@ -222,8 +222,6 @@ const registerController = {
         .as("minutes");
       const maxDuration = 30;
 
-      console.log(issuedOtp.otp);
-
       // Validate OTP
       if (otp !== issuedOtp.otp) {
         return res.status(401).json({

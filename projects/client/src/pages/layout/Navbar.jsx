@@ -28,16 +28,16 @@ import {
   PopoverBody,
   Image,
   Divider,
-} from "@chakra-ui/react"
-import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons"
-import { IoMdCart } from "react-icons/io"
-import { Link as LinkRouterDom, Outlet, useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from "react-redux"
-import { logout, login } from "../../redux/features/authSlice"
-import { axiosInstance } from "../../api"
-import { useEffect, useState } from "react"
+} from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
+import { IoMdCart } from "react-icons/io";
+import { Link as LinkRouterDom, Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, login } from "../../redux/features/authSlice";
+import { axiosInstance } from "../../api";
+import { useEffect, useState } from "react";
 
-const Links = ["Dashboard"]
+const Links = ["Dashboard"];
 
 const NavLink = ({ children }) => (
   <LinkChakra
@@ -52,45 +52,45 @@ const NavLink = ({ children }) => (
   >
     {children}
   </LinkChakra>
-)
+);
 
 const Navbar = () => {
-  const [authCheck, setAuthCheck] = useState(false)
-  const authSelector = useSelector((state) => state.auth)
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [authCheck, setAuthCheck] = useState(false);
+  const authSelector = useSelector((state) => state.auth);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const keepUserLogin = async () => {
     try {
-      const auth_token = localStorage.getItem("auth_token")
+      const auth_token = localStorage.getItem("auth_token");
 
       if (!auth_token) {
-        setAuthCheck(true)
-        return
+        setAuthCheck(true);
+        return;
       }
 
-      const response = await axiosInstance.get("/auth/refresh-token")
+      const response = await axiosInstance.get("/auth/refresh-token");
 
-      dispatch(login(response.data.data))
-      localStorage.setItem("auth_token", response.data.token)
-      setAuthCheck(true)
+      dispatch(login(response.data.data));
+      localStorage.setItem("auth_token", response.data.token);
+      setAuthCheck(true);
     } catch (err) {
-      console.log(err)
-      setAuthCheck(true)
+      console.log(err);
+      setAuthCheck(true);
     }
-  }
+  };
 
   useEffect(() => {
-    keepUserLogin()
-  }, [])
+    keepUserLogin();
+  }, []);
 
   const btnLogout = () => {
-    localStorage.removeItem("auth_token")
-    dispatch(logout())
-    navigate("/")
-  }
+    localStorage.removeItem("auth_token");
+    dispatch(logout());
+    navigate("/");
+  };
   return (
     <>
       <Box
@@ -212,15 +212,17 @@ const Navbar = () => {
                       Masuk
                     </Button>
                   </LinkRouterDom>
-                  <Button
-                    variant="solid"
-                    size="md"
-                    color="white"
-                    _hover={{ bg: "teal.300" }}
-                    bg="teal.400"
-                  >
-                    Daftar
-                  </Button>
+                  <LinkRouterDom to="/register">
+                    <Button
+                      variant="solid"
+                      size="md"
+                      color="white"
+                      _hover={{ bg: "teal.300" }}
+                      bg="teal.400"
+                    >
+                      Daftar
+                    </Button>
+                  </LinkRouterDom>
                 </ButtonGroup>
               )}
 
@@ -290,7 +292,7 @@ const Navbar = () => {
       </Box>
       <Outlet />
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
