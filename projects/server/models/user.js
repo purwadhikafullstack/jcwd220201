@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize")
+const Sequelize = require("sequelize");
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     "User",
@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
       },
       role_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "roles",
           key: "id",
@@ -24,9 +24,10 @@ module.exports = function (sequelize, DataTypes) {
       email: {
         type: DataTypes.STRING(50),
         allowNull: false,
+        unique: true,
       },
       password: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.STRING(255),
         allowNull: true,
       },
       phone: {
@@ -68,5 +69,5 @@ module.exports = function (sequelize, DataTypes) {
         },
       ],
     }
-  )
-}
+  );
+};

@@ -16,6 +16,7 @@ import NotFound from "./pages/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 import GeneralRoute from "./components/GeneralRoute"
+import Register from "./pages/Register";
 
 
 const App = () => {
@@ -92,6 +93,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Register Route */}
+        <Route path="/register" element={<Register />}/>
 
       </Routes>
     </>

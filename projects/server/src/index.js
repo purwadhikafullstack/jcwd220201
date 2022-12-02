@@ -1,4 +1,3 @@
-// require("dotenv/config");
 const dotenv = require("dotenv")
 const express = require("express")
 const cors = require("cors")
@@ -6,6 +5,7 @@ const { join } = require("path")
 const db = require("../models")
 const adminRoute = require("../routes/adminRoute")
 const authRoute = require("../routes/authRoute")
+const registerRoute = require("./routes/registerRoute");
 
 dotenv.config()
 
@@ -26,6 +26,9 @@ app.use(express.json())
 //
 // ===========================
 // NOTE : Add your routes here
+
+// Register middleware
+app.use("/api/register", registerRoute);
 
 const { warehousesRoute, citiesRoute, provincesRoute } = require("../routes")
 
