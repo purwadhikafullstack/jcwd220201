@@ -12,7 +12,6 @@ import {
   Grid,
   GridItem,
   Center,
-  Link,
   chakra,
   Stack,
   Button,
@@ -24,8 +23,18 @@ import SlideBanner from "../../components/SlideBanner"
 import Footer from "./Footer"
 import "../../styles/globals.css"
 import Features from "../../components/Features"
+import { Link } from "react-router-dom"
+import { useState } from "react"
 
 const MainContent = () => {
+  const [products, setProducts] = useState([])
+
+  const fetchProducts = async () => {
+    try {
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <>
       <Box
@@ -39,9 +48,21 @@ const MainContent = () => {
         <SlideBanner />
 
         {/* Kategori Card */}
-        <Text fontSize="24px" fontStyle="normal" mt="5" color="#213360">
-          Kategori Pilihan
-        </Text>
+        <Flex fontSize="18px" mt="2" fontWeight="semibold" color="#213360">
+          <Box p="3">Kategori</Box>
+          <Spacer />
+          <Link to="#kategori">
+            <Button
+              p="3"
+              bgColor="white"
+              variant="solid"
+              borderRadius="none"
+              _hover={{ borderBottom: "2px solid #dfe1e3" }}
+            >
+              Lihat Semua
+            </Button>
+          </Link>
+        </Flex>
         <SimpleGrid
           templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
           align="center"
@@ -125,13 +146,30 @@ const MainContent = () => {
           </Box>
         </Box>
 
-        <Divider mt="5" border="1px solid #D5D7DD" mb="5" />
+        <Divider mt="5" border="1px solid #D5D7DD" mb="2" />
 
-        {/* Product Card */}
-        <Text fontSize="24px" fontStyle="normal" mt="5" color="#213360" mb="2">
-          Produk Populer (Route to all Product)
-        </Text>
-        <Flex flexDirection="row" flexWrap="wrap" gap="14">
+        {/* Product Card Popular */}
+        <Flex fontSize="18px" fontWeight="semibold" color="#213360">
+          <Box p="3">Produk Populer</Box>
+          <Spacer />
+          <Link to="/product">
+            <Button
+              p="3"
+              bgColor="white"
+              variant="solid"
+              borderRadius="none"
+              _hover={{ borderBottom: "2px solid #dfe1e3" }}
+            >
+              Lihat Semua
+            </Button>
+          </Link>
+        </Flex>
+        <Flex
+          flexDirection="row"
+          flexWrap="wrap"
+          gap="10"
+          background="radial-gradient(50% 50% at 50% 50%, rgba(0, 155, 144, 0.1) 0%, rgba(33, 205, 192, 0) 100%);"
+        >
           <Card maxW="sm">
             <CardBody>
               <Image

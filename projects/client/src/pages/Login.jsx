@@ -60,11 +60,8 @@ const LoginPage = () => {
           title: "Login success",
           description: response.data.message,
           status: "success",
+          duration: 1000,
         })
-
-        if (authSelector.role === 3) {
-          navigate(-1)
-        }
 
         formik.setFieldValue("email", "")
         formik.setFieldValue("password", "")

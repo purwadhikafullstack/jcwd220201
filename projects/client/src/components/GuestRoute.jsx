@@ -8,7 +8,7 @@ const GuestRoute = ({ children }) => {
   if (authSelector.role_id === 1 || authSelector.role_id === 2) {
     navigate("/admin/dashboard")
   } else {
-    navigate("/")
+    navigate(-1)
   }
   return children
 }

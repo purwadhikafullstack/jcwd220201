@@ -5,6 +5,7 @@ const { join } = require("path")
 const db = require("../models")
 const adminRoute = require("../routes/adminRoute")
 const authRoute = require("../routes/authRoute")
+const productsRoute = require("../routes/productsRoute")
 const registerRoute = require("./routes/registerRoute")
 
 dotenv.config()
@@ -44,6 +45,7 @@ app.use("/cities", citiesRoute)
 app.use("/provinces", provincesRoute)
 app.use("/auth", authRoute)
 app.use("/admin", adminRoute)
+app.use("/products", productsRoute)
 app.use("/categories", categoriesRoute)
 
 app.get("/api", (req, res) => {

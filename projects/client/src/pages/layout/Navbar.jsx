@@ -28,69 +28,102 @@ import {
   PopoverBody,
   Image,
   Divider,
-} from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
-import { IoMdCart } from "react-icons/io";
-import { Link as LinkRouterDom, Outlet, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, login } from "../../redux/features/authSlice";
-import { axiosInstance } from "../../api";
-import { useEffect, useState } from "react";
+} from "@chakra-ui/react"
+import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons"
+import { IoMdCart } from "react-icons/io"
+import {
+  Link,
+  Link as LinkRouterDom,
+  Outlet,
+  useNavigate,
+  useLocation,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { logout, login } from "../../redux/features/authSlice"
+import { axiosInstance } from "../../api"
+import { useEffect, useState } from "react"
 
-const Links = ["Dashboard"];
+const Navbar = ({ onChange, onClick, onKeyDown }) => {
+  const authSelector = useSelector((state) => state.auth)
 
-const NavLink = ({ children }) => (
-  <LinkChakra
-    px={2}
-    py={1}
-    rounded={"md"}
-    _hover={{
-      textDecoration: "none",
-      bg: useColorModeValue("gray.200", "gray.700"),
-    }}
-    href={"#"}
-  >
-    {children}
-  </LinkChakra>
-);
+  const [authCheck, setAuthCheck] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-const Navbar = () => {
-  const [authCheck, setAuthCheck] = useState(false);
-  const authSelector = useSelector((state) => state.auth);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [searchValue, setSearchValue] = useState("")
+  const [searchQuery, setSearchQuery] = useSearchParams()
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  // const location = useLocation()
 
   const keepUserLogin = async () => {
     try {
-      const auth_token = localStorage.getItem("auth_token");
+      const auth_token = localStorage.getItem("auth_token")
 
       if (!auth_token) {
-        setAuthCheck(true);
-        return;
+        setAuthCheck(true)
+        return
       }
 
-      const response = await axiosInstance.get("/auth/refresh-token");
+      const response = await axiosInstance.get("/auth/refresh-token")
 
-      dispatch(login(response.data.data));
-      localStorage.setItem("auth_token", response.data.token);
-      setAuthCheck(true);
+      dispatch(login(response.data.data))
+      localStorage.setItem("auth_token", response.data.token)
+      setAuthCheck(true)
     } catch (err) {
-      console.log(err);
-      setAuthCheck(true);
+      console.log(err)
+      setAuthCheck(true)
     }
-  };
-
-  useEffect(() => {
-    keepUserLogin();
-  }, []);
+  }
 
   const btnLogout = () => {
-    localStorage.removeItem("auth_token");
-    dispatch(logout());
-    navigate("/");
-  };
+    localStorage.removeItem("auth_token")
+    dispatch(logout())
+    navigate("/")
+  }
+
+  const handleOnChange = (e) => {
+    setSearchValue(e.target.value)
+    onChange(e)
+    // ==============================
+    // if (location.pathname === "/") {
+    //   setSearchValue(e.target.value)
+    // } else {
+    //   onChange(e)
+    // }
+  }
+
+  const handleOnKeyDown = (e) => {
+    if (e.key === "Enter") {
+      navigate({
+        pathname: "/product",
+        search: createSearchParams({ search: searchValue }).toString(),
+      })
+      onKeyDown(e)
+    }
+
+    // ===================================================
+    // if (location.pathname === "/") {
+    //   if (e.key === "Enter") {
+    //     navigate({
+    //       pathname: "/product",
+    //       search: createSearchParams({ search: searchValue }).toString(),
+    //     })
+    //   }
+    // } else {
+    //   onKeyDown(e)
+    // }
+  }
+
+  useEffect(() => {
+    keepUserLogin()
+  }, [])
+
+  useEffect(() => {
+    setSearchValue(searchQuery.get("search"))
+  }, [])
   return (
     <>
       <Box
@@ -131,15 +164,20 @@ const Navbar = () => {
             >
               <InputGroup maxW="93%">
                 <Input
-                  float="right"
+                  // float="right"
                   borderRadius="8px"
-                  border="1px solid #CCCCCC"
+                  // border="1px solid #CCCCCC"
                   placeholder="Cari di WIRED!"
                   _placeholder={{ fontSize: "14px" }}
                   bgColor="white"
+                  type="text"
+                  id="search"
+                  onChange={handleOnChange}
+                  onKeyDown={handleOnKeyDown}
+                  value={searchValue}
                 />
                 <InputRightElement>
-                  <Button variant="solid" borderRadius="8px">
+                  <Button variant="solid" borderRadius="8px" onClick={onClick}>
                     <SearchIcon />
                   </Button>
                 </InputRightElement>
@@ -164,9 +202,9 @@ const Navbar = () => {
                       display="flex"
                       justifyContent="space-between"
                     >
-                      <Text>Cart</Text>
+                      <Text>Keranjang (0)</Text>
                       <LinkRouterDom to="/cart">
-                        <Text>See Cart</Text>
+                        <Text>Lihat Keranjang</Text>
                       </LinkRouterDom>
                     </PopoverHeader>
                     <PopoverBody>
@@ -178,11 +216,13 @@ const Navbar = () => {
                   </PopoverContent>
                 </Popover>
               </Box>
+              {/* ====================================================================================== */}
             </HStack>
             <Center>
               <Divider orientation="vertical" border="1 px" />
             </Center>
           </HStack>
+
           {/* Profile Popup */}
           <Flex alignItems={"center"}>
             <Menu>
@@ -249,20 +289,25 @@ const Navbar = () => {
           </Flex>
         </Flex>
 
+        {/* Mobile View */}
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               <InputGroup maxW="100%">
                 <Input
+                  // id="search"
                   float="right"
                   borderRadius="8px"
                   border="1px solid #CCCCCC"
                   placeholder="Cari di WIRED!"
                   _placeholder={{ fontSize: "14px" }}
                   bgColor="white"
+                  onChange={handleOnChange}
+                  onKeyDown={handleOnKeyDown}
+                  value={searchValue}
                 />
                 <InputRightElement>
-                  <Button variant="solid" borderRadius="5">
+                  <Button variant="solid" borderRadius="5" onClick={onClick}>
                     <SearchIcon />
                   </Button>
                 </InputRightElement>
@@ -292,7 +337,7 @@ const Navbar = () => {
       </Box>
       <Outlet />
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

@@ -28,24 +28,18 @@ const Features = () => {
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
         <Feature
           icon={<Icon as={FcAssistant} w={10} h={10} />}
-          title={"CS Support"}
-          text={
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-          }
+          title="CS Support"
+          text="Jika anda mempunyai keluhan terkait produk yang ingin disampaikan, Customer Service kami siap menyambut anda dengan sepenuh hati ."
         />
         <Feature
           icon={<Icon as={FcDonate} w={10} h={10} />}
-          title={"Payment Support"}
-          text={
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-          }
+          title="Pembayaran Bank"
+          text="Saat ini kami hanya menyediakan pembayaran melalui Transfer Bank, sertakan Bukti Pembayaran anda lalu akan kami proses secepat kilat ."
         />
         <Feature
           icon={<Icon as={FcInTransit} w={10} h={10} />}
-          title={"Instant Delivery"}
-          text={
-            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-          }
+          title="Pilih Kurir"
+          text="Pilih Kurir yang anda inginkan, kami menyediakan beberapa pilihan kurir terbaik untuk anda ."
         />
       </SimpleGrid>
     </Box>
