@@ -9,6 +9,7 @@ var _JournalType = require("./journal_type")
 var _Journal = require("./journal")
 var _OrderItem = require("./order_item")
 var _Order = require("./order")
+var _Otp = require("./otp")
 var _ProductPicture = require("./product_picture")
 var _ProductStock = require("./product_stock")
 var _Product = require("./product")
@@ -31,6 +32,7 @@ function initModels(sequelize) {
   var Journal = _Journal(sequelize, DataTypes)
   var OrderItem = _OrderItem(sequelize, DataTypes)
   var Order = _Order(sequelize, DataTypes)
+  var Otp = _Otp(sequelize, DataTypes)
   var ProductPicture = _ProductPicture(sequelize, DataTypes)
   var ProductStock = _ProductStock(sequelize, DataTypes)
   var Product = _Product(sequelize, DataTypes)
@@ -82,6 +84,8 @@ function initModels(sequelize) {
     as: "product_pictures",
     foreignKey: "product_id",
   })
+  Otp.belongsTo(User, { as: "user", foreignKey: "user_id" })
+  User.hasMany(Otp, { as: "otps", foreignKey: "user_id" })
   ProductStock.belongsTo(Product, { as: "product", foreignKey: "product_id" })
   Product.hasMany(ProductStock, {
     as: "product_stocks",
