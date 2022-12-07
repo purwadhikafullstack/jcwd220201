@@ -6,8 +6,8 @@ const otpGenerator = require("otp-generator");
 const moment = require("moment");
 
 // Own library imports
-const { User, Otp, sequelize } = require("../../models");
-const emailer = require("../../lib/emailer");
+const { User, Otp, Role, sequelize } = require("../models");
+const emailer = require("../lib/emailer");
 
 const registerController = {
   duplicateCheck: async (req, res) => {
@@ -263,9 +263,15 @@ const registerController = {
       }
       // Update user credentials
       const { name, email, password } = req.body;
+      const role = await Role.findOne({
+        where: {
+          role: "user",
+        },
+      });
+
       const hash = bcrypt.hashSync(password, 10);
       await User.update(
-        { name, password: hash, is_verified: true },
+        { role_id: role.id, name, password: hash, is_verified: true },
         {
           where: {
             email,
