@@ -16,7 +16,8 @@ import NotFound from "./pages/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 import GeneralRoute from "./components/GeneralRoute"
-
+import ProductImage from "./components/admin/postImage"
+import ManageProduct from "./pages/admin/manageProduct"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
@@ -72,7 +73,14 @@ const App = () => {
             </GuestRoute>
           }
         />
-
+        <Route
+          path="/dash"
+          element={
+            // <GuestRoute>
+            <Dashboard />
+            // </GuestRoute>
+          }
+        />
 
         {/* Admin Route */}
         <Route
@@ -92,7 +100,22 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/admin/product"
+          element={
+            <ProtectedRoute>
+              <ManageProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-image/:id"
+          element={
+            // <ProtectedRoute>
+            <ProductImage />
+            // {/* </ProtectedRoute> */}
+          }
+        />
       </Routes>
     </>
   )

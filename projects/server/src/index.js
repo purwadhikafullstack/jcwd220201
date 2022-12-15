@@ -9,7 +9,7 @@ const authRoute = require("../routes/authRoute")
 
 dotenv.config()
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT
 
 const app = express()
 app.use(
@@ -28,6 +28,7 @@ app.use(express.json())
 // NOTE : Add your routes here
 
 const { warehousesRoute, citiesRoute, provincesRoute } = require("../routes")
+const productsAdminRoute = require("../routes/productsAdminRoute")
 
 app.use("/public", express.static("public"))
 
@@ -36,6 +37,7 @@ app.use("/cities", citiesRoute)
 app.use("/provinces", provincesRoute)
 app.use("/auth", authRoute)
 app.use("/admin", adminRoute)
+app.use("/product-admin", productsAdminRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)

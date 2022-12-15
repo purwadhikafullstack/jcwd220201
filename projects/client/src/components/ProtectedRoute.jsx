@@ -5,7 +5,7 @@ const ProtectedRoute = ({ children }) => {
   const authSelector = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  if (authSelector.role_id === 3 || !authSelector.role_id) {
+  if (authSelector.RoleId === 3 || !authSelector.RoleId) {
     navigate("/404")
   }
   return children

@@ -1,29 +1,26 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Courier', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    courier_name: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+"use strict"
+const { Model } = require("sequelize")
+module.exports = function (sequelize, DataTypes) {
+  class Courier extends Model {
+    static associate(models) {
+      Courier.hasMany(models.Order, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
     }
-  }, {
-    sequelize,
-    tableName: 'couriers',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
+  }
+  Courier.init(
+    {
+      courier_name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
       },
-    ]
-  });
-};
+    },
+    {
+      sequelize,
+      modelName: "Courier",
+      timestamps: false,
+    }
+  )
+  return Courier
+}

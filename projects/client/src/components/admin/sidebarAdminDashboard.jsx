@@ -100,7 +100,7 @@ const SidebarAdmin = () => {
             </Button>
           </NavLink>
           <NavLink
-            // to="/admin/warehouseData" ISI INI YA TEMAN2
+            to="/admin/product"
             style={({ isActive }) => ({
               backgroundColor: isActive ? "#005e9d" : "#008deb",
             })}
@@ -114,7 +114,7 @@ const SidebarAdmin = () => {
               _hover={{ bg: "#005e9d" }}
             >
               Manage Product
-            </Button>{" "}
+            </Button>
           </NavLink>
           <NavLink
             // to="/admin/warehouseData" ISI INI YA TEMAN2

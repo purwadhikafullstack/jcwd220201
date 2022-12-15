@@ -1,22 +1,40 @@
-const Sequelize = require("sequelize")
-module.exports = function (sequelize, DataTypes) {
-  return sequelize.define(
-    "User",
+"use strict"
+const { Model } = require("sequelize")
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {
+    static associate(models) {
+      User.hasMany(models.Cart, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      User.hasMany(models.Otp, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      User.hasMany(models.Order, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      User.hasMany(models.Address, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      User.hasMany(models.StockRequest, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      User.hasMany(models.WarehousesUser, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      User.belongsTo(models.Role, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+    }
+  }
+  User.init(
     {
-      id: {
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-      },
-      role_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "roles",
-          key: "id",
-        },
-      },
       name: {
         type: DataTypes.STRING(50),
         allowNull: true,
@@ -24,9 +42,10 @@ module.exports = function (sequelize, DataTypes) {
       email: {
         type: DataTypes.STRING(50),
         allowNull: false,
+        unique: true,
       },
       password: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.STRING(255),
         allowNull: true,
       },
       phone: {
@@ -52,21 +71,15 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       sequelize,
-      tableName: "users",
+      modelName: "User",
       timestamps: false,
       indexes: [
         {
-          name: "PRIMARY",
           unique: true,
-          using: "BTREE",
-          fields: [{ name: "id" }],
-        },
-        {
-          name: "fk_users_role_id_idx",
-          using: "BTREE",
-          fields: [{ name: "role_id" }],
+          fields: ["email"],
         },
       ],
     }
   )
+  return User
 }

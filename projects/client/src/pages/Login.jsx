@@ -1,8 +1,10 @@
 import {
   Button,
+  Center,
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Image,
@@ -47,7 +49,7 @@ const LoginPage = () => {
         dispatch(
           login({
             id: response.data.data.id,
-            role_id: response.data.data.role_id,
+            RoleId: response.data.data.RoleId,
             name: response.data.data.name,
             email: response.data.data.email,
             phone: response.data.data.phone,
@@ -62,12 +64,14 @@ const LoginPage = () => {
           status: "success",
         })
 
-        if (authSelector.role === 3) {
-          navigate(-1)
-        }
+        // if (authSelector.role === 3) {
+        //   // window.history.back()
+        //   // navigate("/", { replace: true })
+        // }
 
         formik.setFieldValue("email", "")
         formik.setFieldValue("password", "")
+        // formik.setSubmitting(false)
       } catch (err) {
         console.log(err)
         toast({
@@ -91,6 +95,9 @@ const LoginPage = () => {
 
   return (
     <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
+      <Heading align={"right"} as="h1" size="2xl" letterSpacing={"tighter"}>
+        WIRED!
+      </Heading>
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
         <Stack spacing={4} w={"full"} maxW={"md"}>
           <Stack align={"center"}>
@@ -132,9 +139,16 @@ const LoginPage = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                <FormHelperText mt="5" mb="5" textAlign="right">
+                  <Link>Lupa Password?</Link>
+                </FormHelperText>
                 <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
               </FormControl>
-              <Button type="submit" colorScheme="teal">
+              <Button
+                onClick={navigate.goBack}
+                type="submit"
+                colorScheme="teal"
+              >
                 Masuk
               </Button>
             </Stack>
@@ -144,6 +158,7 @@ const LoginPage = () => {
               </Text>
             </Stack>
           </form>
+          <Text align={"center"}>© 2022 PT WIRED! Indonesia</Text>
         </Stack>
       </Flex>
       <Flex flex={1}>
