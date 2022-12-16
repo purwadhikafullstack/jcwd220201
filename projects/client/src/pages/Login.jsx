@@ -65,14 +65,9 @@ const LoginPage = () => {
           status: "success",
         })
 
-        // if (authSelector.role === 3) {
-        //   // window.history.back()
-        //   // navigate("/", { replace: true })
-        // }
-
         formik.setFieldValue("email", "")
         formik.setFieldValue("password", "")
-        // formik.setSubmitting(false)
+        formik.setSubmitting(false)
       } catch (err) {
         console.log(err)
         toast({
