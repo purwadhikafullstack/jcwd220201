@@ -1,24 +1,28 @@
-import "./App.css"
+// import "./styles/globals.css"
 import { useEffect, useState } from "react"
 import { login, logout } from "./redux/features/authSlice"
-import LoginPage from "./pages/Login"
 import { useDispatch, useSelector } from "react-redux"
 import { Routes, Route, Link } from "react-router-dom"
 import { axiosInstance } from "./api"
+import LoginPage from "./pages/Login"
 import EditProfile from "./pages/EditProfile"
 import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
 import Footer from "./pages/layout/Footer"
 import ProtectedRoute from "./components/ProtectedRoute"
 import GuestRoute from "./components/GuestRoute"
-import NotFound from "./pages/404"
+import NotFound from "./components/404Page/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 import GeneralRoute from "./components/GeneralRoute"
-import ManageProduct from "./pages/admin/manageProduct"
+import ProductList from "./pages/products/ProductList"
+import ProductDetail from "./pages/products/ProductDetail"
+import ManageProduct from "./pages/admin/manageProduct.jsx"
+import Register from "./pages/Register"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
+
   const authSelector = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
@@ -54,6 +58,12 @@ const App = () => {
           <Route index element={<MainContent />} />
           <Route index element={<Footer />} />
         </Route>
+        <Route path="/product" element={<ProductList />} />
+
+        <Route
+          path="/product-detail/:id/:product_name"
+          element={<ProductDetail />}
+        />
         <Route path="/404" element={<NotFound />} />
         <Route
           path="/profile"
@@ -98,6 +108,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Register Route */}
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   )

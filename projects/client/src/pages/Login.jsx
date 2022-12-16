@@ -63,6 +63,7 @@ const LoginPage = () => {
           title: "Login success",
           description: response.data.message,
           status: "success",
+          duration: 1000,
         })
 
         formik.setFieldValue("email", "")
