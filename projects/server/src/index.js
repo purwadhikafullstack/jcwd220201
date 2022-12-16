@@ -10,7 +10,7 @@ const registerRoute = require("../routes/registerRoute")
 
 dotenv.config()
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8000
 
 const app = express()
 app.use(
@@ -28,7 +28,6 @@ app.use(express.json())
 // ===========================
 // NOTE : Add your routes here
 
-const { warehousesRoute, citiesRoute, provincesRoute } = require("../routes")
 const productsAdminRoute = require("../routes/productsAdminRoute")
 // Register middleware
 app.use("/api/register", registerRoute)
@@ -49,6 +48,7 @@ app.use("/auth", authRoute)
 app.use("/admin", adminRoute)
 app.use("/products", productsRoute)
 app.use("/categories", categoriesRoute)
+app.use("/product-admin", productsAdminRoute)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`)

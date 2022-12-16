@@ -99,21 +99,6 @@ const productAdminController = {
     }
   },
 
-  getAllCategories: async (req, res) => {
-    try {
-      const allCategory = await db.Category.findAll()
-
-      return res.status(200).json({
-        data: allCategory,
-      })
-    } catch (err) {
-      console.log(err)
-      res.status(500).json({
-        message: err.message,
-      })
-    }
-  },
-
   updateProductsByAdmin: async (req, res) => {
     try {
       const findAdmin = await db.User.findByPk(req.user.id)

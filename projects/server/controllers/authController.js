@@ -57,6 +57,30 @@ const authController = {
         req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
       }
 
+      await User.update(
+        { ...req.body },
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      )
+
+      const findUserById = await User.findByPk(req.user.id)
+
+      return res.status(200).json({
+        message: "Edited user data",
+        data: findUserById,
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: "Server error",
+      })
+    }
+  },
+  editUserPassword: async (req, res) => {
+    try {
       const { password } = req.body
 
       const hashedPassword = bcrypt.hashSync(password, 5)
@@ -74,7 +98,6 @@ const authController = {
 
       return res.status(200).json({
         message: "Edited user data",
-        data: findUserById,
       })
     } catch (err) {
       console.log(err)

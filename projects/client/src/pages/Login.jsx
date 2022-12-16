@@ -151,7 +151,10 @@ const LoginPage = () => {
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Belum punya akun? <Link color={"teal"}>Daftar</Link>
+                Belum punya akun?{" "}
+                <Link to="/register" color={"teal"}>
+                  Daftar
+                </Link>
               </Text>
             </Stack>
           </form>

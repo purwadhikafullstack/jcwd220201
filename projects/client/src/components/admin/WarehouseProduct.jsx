@@ -91,7 +91,7 @@ const WarehouseProduct = () => {
 
   const getCategories = async () => {
     try {
-      const responCat = await axiosInstance.get(`product-admin/category`)
+      const responCat = await axiosInstance.get(`/categories`)
 
       setCategories(responCat.data.data)
     } catch (err) {
@@ -351,9 +351,7 @@ const WarehouseProduct = () => {
                   >
                     <option value="">Select Category</option>
                     {categories.map((val) => (
-                      <option value={val.id}>
-                        {val.id}. {val.category}
-                      </option>
+                      <option value={val.id}>{val.category}</option>
                     ))}
                   </Select>
                   <FormErrorMessage>
