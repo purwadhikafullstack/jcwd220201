@@ -397,7 +397,7 @@ const WarehouseProduct = () => {
                     }}
                   />
                   <FormHelperText>
-                    Besar file: maksimum 2 MB. Ekstensi file yang diperbolehkan:
+                    Besar file: maksimum 1 MB. Ekstensi file yang diperbolehkan:
                     .JPG .JPEG .PNG
                   </FormHelperText>
                 </FormControl>

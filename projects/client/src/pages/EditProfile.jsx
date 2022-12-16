@@ -212,7 +212,7 @@ const EditProfile = () => {
                       {formik.errors.profile_picture}
                     </FormErrorMessage>
                     <FormHelperText>
-                      Besar file: maksimum 2 MB. Ekstensi file yang
+                      Besar file: maksimum 1 MB. Ekstensi file yang
                       diperbolehkan: .JPG .JPEG .PNG
                     </FormHelperText>
                   </FormControl>
