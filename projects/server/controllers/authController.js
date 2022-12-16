@@ -13,7 +13,6 @@ const authController = {
       const findUserByEmail = await User.findOne({
         where: {
           email,
-          password,
         },
       })
       if (!findUserByEmail) {
