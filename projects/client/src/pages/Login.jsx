@@ -1,8 +1,11 @@
 import {
   Button,
+  Center,
+  Container,
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Image,
@@ -47,7 +50,7 @@ const LoginPage = () => {
         dispatch(
           login({
             id: response.data.data.id,
-            role_id: response.data.data.role_id,
+            RoleId: response.data.data.RoleId,
             name: response.data.data.name,
             email: response.data.data.email,
             phone: response.data.data.phone,
@@ -65,6 +68,7 @@ const LoginPage = () => {
 
         formik.setFieldValue("email", "")
         formik.setFieldValue("password", "")
+        formik.setSubmitting(false)
       } catch (err) {
         console.log(err)
         toast({
@@ -88,6 +92,9 @@ const LoginPage = () => {
 
   return (
     <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
+      <Heading align={"right"} as="h1" size="2xl" letterSpacing={"tighter"}>
+        WIRED!
+      </Heading>
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
         <Stack spacing={4} w={"full"} maxW={"md"}>
           <Stack align={"center"}>
@@ -129,24 +136,37 @@ const LoginPage = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                <FormHelperText mt="5" mb="5" textAlign="right">
+                  <Link>Lupa Password?</Link>
+                </FormHelperText>
                 <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
               </FormControl>
-              <Button type="submit" colorScheme="teal">
+              <Button
+                onClick={navigate.goBack}
+                type="submit"
+                colorScheme="teal"
+              >
                 Masuk
               </Button>
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Belum punya akun? <Link color={"teal"}>Daftar</Link>
+                Belum punya akun?{" "}
+                <Link to="/register" color={"teal"}>
+                  Daftar
+                </Link>
               </Text>
             </Stack>
           </form>
+          <Text align={"center"}>© 2022 PT WIRED! Indonesia</Text>
         </Stack>
       </Flex>
       <Flex flex={1}>
         <Image
           alt={"Login Image"}
           objectFit={"cover"}
+          maxH="80%"
+          maxW="80%"
           src={
             "https://img.freepik.com/free-vector/account-concept-illustration_114360-399.jpg?w=740&t=st=1668700968~exp=1668701568~hmac=2fc7a4e39aedc62a508eeccea0651ff5742d91ff72a3cda488b0861ddaf4a62f"
           }

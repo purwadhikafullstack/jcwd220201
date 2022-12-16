@@ -1,22 +1,40 @@
 "use strict"
-const Sequelize = require("sequelize")
 const { Model } = require("sequelize")
 module.exports = function (sequelize, DataTypes) {
   class Product extends Model {
     static associate(models) {
-      Product.belongsTo(models.Category)
-      Product.hasMany(models.ProductPicture)
-      Product.hasMany(models.ProductStock)
+      Product.belongsTo(models.Category, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Product.hasMany(models.CartItem, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Product.hasMany(models.ProductPicture, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Product.hasMany(models.StockRequestItem, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Product.hasMany(models.OrderItem, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Product.hasMany(models.JournalItem, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Product.hasMany(models.ProductStock, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
     }
   }
   Product.init(
     {
-      id: {
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-      },
       product_name: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -29,14 +47,6 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      category_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "categories",
-          key: "id",
-        },
-      },
       weight: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -44,21 +54,8 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       sequelize,
-      tableName: "products",
+      modelName: "Product",
       timestamps: false,
-      indexes: [
-        {
-          name: "PRIMARY",
-          unique: true,
-          using: "BTREE",
-          fields: [{ name: "id" }],
-        },
-        {
-          name: "fk_products_category_id_idx",
-          using: "BTREE",
-          fields: [{ name: "category_id" }],
-        },
-      ],
     }
   )
   return Product

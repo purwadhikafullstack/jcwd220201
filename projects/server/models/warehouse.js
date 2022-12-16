@@ -1,14 +1,34 @@
-const Sequelize = require("sequelize")
-module.exports = function (sequelize, DataTypes) {
-  return sequelize.define(
-    "Warehouse",
+"use strict"
+const { Model } = require("sequelize")
+module.exports = (sequelize, DataTypes) => {
+  class Warehouse extends Model {
+    static associate(models) {
+      Warehouse.hasMany(models.JournalItem, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Warehouse.hasMany(models.ProductStock, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Warehouse.hasMany(models.WarehousesUser, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      Warehouse.hasMany(models.StockRequest, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+        foreignKey: "FromWarehouseId",
+      })
+      Warehouse.hasMany(models.StockRequest, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+        foreignKey: "ToWarehouseId",
+      })
+    }
+  }
+  Warehouse.init(
     {
-      id: {
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-      },
       warehouse_name: {
         type: DataTypes.STRING(50),
         allowNull: true,
@@ -32,16 +52,9 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       sequelize,
-      tableName: "warehouses",
-      timestamps: false,
-      indexes: [
-        {
-          name: "PRIMARY",
-          unique: true,
-          using: "BTREE",
-          fields: [{ name: "id" }],
-        },
-      ],
+      tableName: "Warehouse",
+      timestamps: true,
     }
   )
+  return Warehouse
 }

@@ -114,7 +114,7 @@ const SidebarAdmin = () => {
               _hover={{ bg: "#005e9d" }}
             >
               Manage Product
-            </Button>{" "}
+            </Button>
           </NavLink>
           <NavLink
             // to="/admin/warehouseData" ISI INI YA TEMAN2

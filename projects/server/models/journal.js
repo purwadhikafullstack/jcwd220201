@@ -1,29 +1,26 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Journal', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
+"use strict"
+const { Model } = require("sequelize")
+module.exports = function (sequelize, DataTypes) {
+  class Journal extends Model {
+    static associate(models) {
+      Journal.hasMany(models.JournalItem, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
     }
-  }, {
-    sequelize,
-    tableName: 'journals',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
+  }
+  Journal.init(
+    {
+      date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
       },
-    ]
-  });
-};
+    },
+    {
+      sequelize,
+      modelName: "Journal",
+      timestamps: true,
+    }
+  )
+  return Journal
+}

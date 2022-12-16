@@ -15,6 +15,13 @@ import {
   Text,
   useToast,
   InputGroup,
+  Tab,
+  Tabs,
+  TabList,
+  TabPanels,
+  TabPanel,
+  FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useState, useRef } from "react"
@@ -32,6 +39,7 @@ const EditProfile = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPW, setShowConfirmPW] = useState(false)
   const [users, setUsers] = useState([])
+  const [tabNumber, setTabNumber] = useState(1)
   const inputFileRef = useRef()
 
   const dispatch = useDispatch()
@@ -99,6 +107,7 @@ const EditProfile = () => {
 
         dispatch(login(userResponse.data.data))
         setEditMode(false)
+        navigate("/")
         toast({ title: "Profile Edited" })
       } catch (err) {
         console.log(err)
@@ -109,12 +118,15 @@ const EditProfile = () => {
         })
       }
     },
-    validationSchema: Yup.object({
-      password: Yup.string().required(),
-      confirm_password: Yup.string()
-        .required()
-        .oneOf([Yup.ref("password"), null], "password not match"),
-    }),
+    validationSchema:
+      tabNumber === 2
+        ? Yup.object({
+            password: Yup.string(),
+            confirm_password: Yup.string()
+              .required()
+              .oneOf([Yup.ref("password"), null], "password not match"),
+          })
+        : null,
     validateOnChange: false,
   })
 
@@ -137,138 +149,226 @@ const EditProfile = () => {
         p="6"
         borderRadius="8px"
       >
-        <HStack spacing="6" justifyContent={"center"} alignItems={"center"}>
-          <Stack
-            spacing={6}
-            w={"full"}
-            maxW={"lg"}
-            bg={"white"}
-            rounded={"xl"}
-            boxShadow={"lg"}
-            p={6}
-          >
-            <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-              Ubah Profil Pengguna
-            </Heading>
-            <Center>
-              <Avatar
-                size="2xl"
-                name={authSelector.name}
-                src={
-                  formik.values.profile_picture
-                    ? URL.createObjectURL(formik.values.profile_picture)
-                    : authSelector.profile_picture
-                }
-              />
-            </Center>
-            <FormControl>
-              <FormLabel>Foto Profil</FormLabel>
-              <Button w="full" onClick={() => inputFileRef.current.click()}>
-                Pilih Foto
-              </Button>
-              <Input
-                accept="image/*"
-                type="file"
-                name="profile_picture"
-                ref={inputFileRef}
-                display="none"
-                onChange={(event) =>
-                  formik.setFieldValue("profile_picture", event.target.files[0])
-                }
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Nama</FormLabel>
-              <Input
-                onChange={formChangeHandler}
-                name="name"
-                defaultValue={authSelector.name}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Jenis Kelamin</FormLabel>
-              <Select
-                onChange={formChangeHandler}
-                defaultValue={authSelector.gender}
-                name="gender"
+        <Tabs isFitted variant="enclosed">
+          <TabList mb="1em">
+            <Tab onClick={() => setTabNumber(1)}>Ubah Biodata Diri</Tab>
+            <Tab onClick={() => setTabNumber(2)}>Ubah Kata Sandi</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <HStack
+                spacing="6"
+                justifyContent={"center"}
+                alignItems={"center"}
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </Select>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Nomor Telpon</FormLabel>
-              <Input
-                onChange={formChangeHandler}
-                name="phone"
-                defaultValue={authSelector.phone}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Tanggal Lahir</FormLabel>
-
-              <Input
-                onChange={formChangeHandler}
-                name="date_of_birth"
-                defaultValue={authSelector.date_of_birth}
-                type="date"
-              />
-            </FormControl>
-            <FormControl isInvalid={formik.errors.password}>
-              <FormLabel>Kata Sandi</FormLabel>
-              <InputGroup>
-                <Input
-                  onChange={formChangeHandler}
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                />
-                <InputRightElement h={"full"}>
-                  <Button
-                    variant={"ghost"}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
+                <Stack
+                  spacing={6}
+                  w={"full"}
+                  maxW={"lg"}
+                  bg={"white"}
+                  rounded={"xl"}
+                  boxShadow={"lg"}
+                  p={6}
+                >
+                  <Heading
+                    lineHeight={1.1}
+                    fontSize={{ base: "2xl", sm: "3xl" }}
                   >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+                    Ubah Profil Pengguna
+                  </Heading>
+                  <Center>
+                    <Avatar
+                      size="2xl"
+                      name={authSelector.name}
+                      src={
+                        formik.values.profile_picture
+                          ? URL.createObjectURL(formik.values.profile_picture)
+                          : authSelector.profile_picture
+                      }
+                    />
+                  </Center>
+                  <FormControl isInvalid={formik.errors.profile_picture}>
+                    <FormLabel>Foto Profil</FormLabel>
+                    <Button
+                      w="full"
+                      onClick={() => inputFileRef.current.click()}
+                    >
+                      Pilih Foto
+                    </Button>
+                    <Input
+                      accept="image/*"
+                      type="file"
+                      name="profile_picture"
+                      ref={inputFileRef}
+                      display="none"
+                      onChange={(event) =>
+                        formik.setFieldValue(
+                          "profile_picture",
+                          event.target.files[0]
+                        )
+                      }
+                    />
+                    <FormErrorMessage>
+                      {formik.errors.profile_picture}
+                    </FormErrorMessage>
+                    <FormHelperText>
+                      Besar file: maksimum 1 MB. Ekstensi file yang
+                      diperbolehkan: .JPG .JPEG .PNG
+                    </FormHelperText>
+                  </FormControl>
 
-            <FormControl isInvalid={formik.errors.confirm_password}>
-              <FormLabel>Konfirmasi Kata Sandi</FormLabel>
-              <Input
-                onChange={formChangeHandler}
-                name="confirm_password"
-                type="confirm_password"
-              />
-            </FormControl>
-          </Stack>
-        </HStack>
+                  <FormControl isInvalid={formik.errors.name}>
+                    <FormLabel>Nama</FormLabel>
+                    <Input
+                      onChange={formChangeHandler}
+                      name="name"
+                      defaultValue={authSelector.name}
+                    />
+                    <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                  </FormControl>
 
-        <>
-          <Center>
-            <Button
-              mt="8"
-              width="75%"
-              colorScheme="teal"
-              onClick={formik.handleSubmit}
-            >
-              Simpan
-            </Button>
-          </Center>
-          <Center>
-            <Button
-              mt="5"
-              width="75%"
-              colorScheme="red"
-              onClick={() => navigate(-1)}
-            >
-              Batalkan
-            </Button>
-          </Center>
-        </>
+                  <FormControl isInvalid={formik.errors.gender}>
+                    <FormLabel>Jenis Kelamin</FormLabel>
+                    <Select
+                      onChange={formChangeHandler}
+                      defaultValue={authSelector.gender}
+                      name="gender"
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </Select>
+                    <FormErrorMessage>{formik.errors.gender}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={formik.errors.phone}>
+                    <FormLabel>Nomor Telepon</FormLabel>
+                    <Input
+                      onChange={formChangeHandler}
+                      name="phone"
+                      defaultValue={authSelector.phone}
+                    />
+                    <FormErrorMessage>{formik.errors.phone}</FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={formik.errors.date_of_birth}>
+                    <FormLabel>Tanggal Lahir</FormLabel>
+
+                    <Input
+                      onChange={formChangeHandler}
+                      name="date_of_birth"
+                      defaultValue={authSelector.date_of_birth}
+                      type="date"
+                    />
+                    <FormErrorMessage>
+                      {formik.errors.date_of_birth}
+                    </FormErrorMessage>
+                  </FormControl>
+                  <>
+                    <Center>
+                      <Button
+                        width="80%"
+                        colorScheme="teal"
+                        onClick={formik.handleSubmit}
+                      >
+                        Simpan
+                      </Button>
+                    </Center>
+                    <Center>
+                      <Button
+                        width="80%"
+                        colorScheme="red"
+                        onClick={() => navigate(-1)}
+                      >
+                        Batalkan
+                      </Button>
+                    </Center>
+                  </>
+                </Stack>
+              </HStack>
+            </TabPanel>
+            <TabPanel>
+              <HStack
+                spacing="6"
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Stack
+                  spacing={6}
+                  w={"full"}
+                  maxW={"lg"}
+                  bg={"white"}
+                  rounded={"xl"}
+                  boxShadow={"lg"}
+                  p={6}
+                >
+                  <Heading
+                    lineHeight={1.1}
+                    fontSize={{ base: "2xl", sm: "3xl" }}
+                  >
+                    Ubah Profil Pengguna
+                  </Heading>
+
+                  <FormControl isInvalid={formik.errors.password}>
+                    <FormLabel>Kata Sandi</FormLabel>
+                    <InputGroup>
+                      <Input
+                        onChange={formChangeHandler}
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                      />
+                      <InputRightElement h={"full"}>
+                        <Button
+                          variant={"ghost"}
+                          onClick={() =>
+                            setShowPassword((showPassword) => !showPassword)
+                          }
+                        >
+                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>
+                      {formik.errors.password}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl isInvalid={formik.errors.confirm_password}>
+                    <FormLabel>Konfirmasi Kata Sandi</FormLabel>
+                    <Input
+                      onChange={formChangeHandler}
+                      name="confirm_password"
+                      type="confirm_password"
+                    />
+                    <FormErrorMessage>
+                      {formik.errors.confirm_password}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <>
+                    <Center>
+                      <Button
+                        width="80%"
+                        colorScheme="teal"
+                        onClick={formik.handleSubmit}
+                      >
+                        Simpan
+                      </Button>
+                    </Center>
+                    <Center>
+                      <Button
+                        width="80%"
+                        colorScheme="red"
+                        onClick={() => navigate(-1)}
+                      >
+                        Batalkan
+                      </Button>
+                    </Center>
+                  </>
+                </Stack>
+              </HStack>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Box>
     </Container>
   )

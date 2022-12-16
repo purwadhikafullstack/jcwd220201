@@ -5,7 +5,7 @@ const GuestRoute = ({ children }) => {
   const authSelector = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  if (authSelector.role_id === 1 || authSelector.role_id === 2) {
+  if (authSelector.RoleId === 1 || authSelector.RoleId === 2) {
     navigate("/admin/dashboard")
   } else {
     navigate(-1)

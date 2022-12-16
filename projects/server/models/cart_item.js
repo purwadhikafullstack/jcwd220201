@@ -1,63 +1,35 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('CartItem', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    cart_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'carts',
-        key: 'id'
-      }
-    },
-    product_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'products',
-        key: 'id'
-      }
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    is_checked: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
+"use strict"
+const { Model } = require("sequelize")
+module.exports = (sequelize, DataTypes) => {
+  class CartItem extends Model {
+    static associate(models) {
+      CartItem.belongsTo(models.Cart, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+      CartItem.belongsTo(models.Product, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
     }
-  }, {
-    sequelize,
-    tableName: 'cart_items',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
+  }
+  CartItem.init(
+    {
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
-      {
-        name: "fk_cart_id_idx",
-        using: "BTREE",
-        fields: [
-          { name: "cart_id" },
-        ]
+      is_checked: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0,
       },
-      {
-        name: "fk_product_id_idx",
-        using: "BTREE",
-        fields: [
-          { name: "product_id" },
-        ]
-      },
-    ]
-  });
-};
+    },
+    {
+      sequelize,
+      modelName: "CartItem",
+      timestamps: false,
+    }
+  )
+  return CartItem
+}

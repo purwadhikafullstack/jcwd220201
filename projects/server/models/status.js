@@ -1,29 +1,26 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Status', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    status: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+"use strict"
+const { Model } = require("sequelize")
+module.exports = function (sequelize, DataTypes) {
+  class Status extends Model {
+    static associate(models) {
+      Status.hasMany(models.Order, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
     }
-  }, {
-    sequelize,
-    tableName: 'statuses',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id" },
-        ]
+  }
+  Status.init(
+    {
+      status: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
       },
-    ]
-  });
-};
+    },
+    {
+      sequelize,
+      modelName: "Status",
+      timestamps: false,
+    }
+  )
+  return Status
+}

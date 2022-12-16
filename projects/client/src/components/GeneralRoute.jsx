@@ -5,7 +5,7 @@ const GeneralRoute = ({ children }) => {
   const authSelector = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
-  if (!authSelector.role_id) {
+  if (!authSelector.RoleId) {
     navigate("/login")
   }
   return children

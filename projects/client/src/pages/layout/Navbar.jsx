@@ -240,6 +240,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                       name={authSelector.profile_picture}
                       src={authSelector.profile_picture}
                     />
+                    {/* {authSelector.profile_picture} */}
                     <Text my="auto" p="8px">
                       {authSelector.name}
                     </Text>

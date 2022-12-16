@@ -79,6 +79,33 @@ const authController = {
       })
     }
   },
+  editUserPassword: async (req, res) => {
+    try {
+      const { password } = req.body
+
+      const hashedPassword = bcrypt.hashSync(password, 5)
+
+      await User.update(
+        { password: hashedPassword },
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      )
+
+      const findUserById = await User.findByPk(req.user.id)
+
+      return res.status(200).json({
+        message: "Edited user data",
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: "Server error",
+      })
+    }
+  },
   refreshToken: async (req, res) => {
     try {
       const findUserById = await User.findByPk(req.user.id)
