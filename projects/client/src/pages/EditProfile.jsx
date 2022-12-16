@@ -21,6 +21,7 @@ import {
   TabPanels,
   TabPanel,
   FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useState, useRef } from "react"
@@ -118,18 +119,6 @@ const EditProfile = () => {
       }
     },
     validationSchema:
-      // tabNumber === 1
-      //   ? Yup.object({
-      //       profile_picture: Yup.string().test(
-      //         "fileSize",
-      //         "The file is to large",
-      //         (value) => {
-      //           return value && value[0].size < 100
-      //           0000
-      //         }
-      //       ),
-      //     })
-      //   : null,
       tabNumber === 2
         ? Yup.object({
             password: Yup.string(),
@@ -198,7 +187,7 @@ const EditProfile = () => {
                       }
                     />
                   </Center>
-                  <FormControl>
+                  <FormControl isInvalid={formik.errors.profile_picture}>
                     <FormLabel>Foto Profil</FormLabel>
                     <Button
                       w="full"
@@ -219,17 +208,26 @@ const EditProfile = () => {
                         )
                       }
                     />
+                    <FormErrorMessage>
+                      {formik.errors.profile_picture}
+                    </FormErrorMessage>
+                    <FormHelperText>
+                      Besar file: maksimum 2 MB. Ekstensi file yang
+                      diperbolehkan: .JPG .JPEG .PNG
+                    </FormHelperText>
                   </FormControl>
-                  <FormControl>
+
+                  <FormControl isInvalid={formik.errors.name}>
                     <FormLabel>Nama</FormLabel>
                     <Input
                       onChange={formChangeHandler}
                       name="name"
                       defaultValue={authSelector.name}
                     />
+                    <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isInvalid={formik.errors.gender}>
                     <FormLabel>Jenis Kelamin</FormLabel>
                     <Select
                       onChange={formChangeHandler}
@@ -239,16 +237,20 @@ const EditProfile = () => {
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </Select>
+                    <FormErrorMessage>{formik.errors.gender}</FormErrorMessage>
                   </FormControl>
-                  <FormControl>
+
+                  <FormControl isInvalid={formik.errors.phone}>
                     <FormLabel>Nomor Telepon</FormLabel>
                     <Input
                       onChange={formChangeHandler}
                       name="phone"
                       defaultValue={authSelector.phone}
                     />
+                    <FormErrorMessage>{formik.errors.phone}</FormErrorMessage>
                   </FormControl>
-                  <FormControl>
+
+                  <FormControl isInvalid={formik.errors.date_of_birth}>
                     <FormLabel>Tanggal Lahir</FormLabel>
 
                     <Input
@@ -257,6 +259,9 @@ const EditProfile = () => {
                       defaultValue={authSelector.date_of_birth}
                       type="date"
                     />
+                    <FormErrorMessage>
+                      {formik.errors.date_of_birth}
+                    </FormErrorMessage>
                   </FormControl>
                   <>
                     <Center>
@@ -322,6 +327,9 @@ const EditProfile = () => {
                         </Button>
                       </InputRightElement>
                     </InputGroup>
+                    <FormErrorMessage>
+                      {formik.errors.password}
+                    </FormErrorMessage>
                   </FormControl>
 
                   <FormControl isInvalid={formik.errors.confirm_password}>

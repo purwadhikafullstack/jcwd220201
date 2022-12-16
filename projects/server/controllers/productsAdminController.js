@@ -91,14 +91,6 @@ const productAdminController = {
         data: findAllProducts.rows,
         dataCount: findAllProducts.count,
       })
-      // const findAllProducts = await db.Product.findAll({
-      //   include: { all: true },
-      // })
-
-      // return res.status(200).json({
-      //   message: "Get All Product",
-      //   data: findAllProducts,
-      // })
     } catch (err) {
       console.log(err)
       return res.status(500).json({
@@ -279,13 +271,13 @@ const productAdminController = {
     }
   },
   createImages: async (req, res) => {
-    // const findAdmin = await db.User.findByPk(req.user.id)
+    const findAdmin = await db.User.findByPk(req.user.id)
 
-    // if (findAdmin.RoleId === 2) {
-    //   return res.status(400).json({
-    //     message: "Admin unauthorized",
-    //   })
-    // }
+    if (findAdmin.RoleId === 2) {
+      return res.status(400).json({
+        message: "Admin unauthorized",
+      })
+    }
     try {
       await db.Product.findOne({
         where: {
@@ -298,7 +290,6 @@ const productAdminController = {
         ProductId: req.params.id,
       })
 
-      // console.log(req.file.filename)
       return res.status(200).json({
         message: "Post new product image",
         data: createImg,

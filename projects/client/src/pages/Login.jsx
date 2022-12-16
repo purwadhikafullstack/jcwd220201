@@ -1,6 +1,7 @@
 import {
   Button,
   Center,
+  Container,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -165,6 +166,8 @@ const LoginPage = () => {
         <Image
           alt={"Login Image"}
           objectFit={"cover"}
+          maxH="80%"
+          maxW="80%"
           src={
             "https://img.freepik.com/free-vector/account-concept-illustration_114360-399.jpg?w=740&t=st=1668700968~exp=1668701568~hmac=2fc7a4e39aedc62a508eeccea0651ff5742d91ff72a3cda488b0861ddaf4a62f"
           }

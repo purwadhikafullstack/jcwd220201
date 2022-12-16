@@ -1,5 +1,5 @@
 const db = require("../models")
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt")
 const { signToken } = require("../lib/jwt")
 const { Op } = require("sequelize")
 
@@ -22,20 +22,18 @@ const authController = {
         })
       }
 
-      // const passwordValid = bcrypt.compareSync(
-      //   password,
-      //   findUserByEmail.password
-      // );
+      const passwordValid = bcrypt.compareSync(
+        password,
+        findUserByEmail.password
+      )
 
-      // if (!passwordValid) {
-      //   return res.status(400).json({
-      //     message: "Password invalid",
-      //   });
-      // }
+      if (!passwordValid) {
+        return res.status(400).json({
+          message: "Password invalid",
+        })
+      }
 
-      // Hapus property password dari object yang akan dikirim
-      // sebagai response
-      // delete findUserByEmail.dataValues.password;
+      delete findUserByEmail.dataValues.password
 
       const token = signToken({
         id: findUserByEmail.id,
@@ -60,8 +58,12 @@ const authController = {
         req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
       }
 
+      const { password } = req.body
+
+      const hashedPassword = bcrypt.hashSync(password, 5)
+
       await User.update(
-        { ...req.body },
+        { password: hashedPassword },
         {
           where: {
             id: req.user.id,

@@ -70,7 +70,6 @@ const WarehouseProduct = () => {
           _sortDir: "DESC",
         },
       })
-      console.log(response.data.data, "responnnnn!!!!")
 
       setproducts(response.data.data)
       const temporary = response.data.data.filter((item) => item.id === idEdit)
@@ -136,8 +135,6 @@ const WarehouseProduct = () => {
     setImageEdit(product_picture)
     setIdEdit(id)
   }
-
-  console.log(products, "PRODUCt")
 
   const renderProduct = () => {
     return products.map((val) => {
@@ -238,10 +235,6 @@ const WarehouseProduct = () => {
         formData.append("price", price)
         formData.append("CategoryId", CategoryId)
         formData.append("weight", weight)
-
-        // for (let i = 0; i < product_picture.length; i++) {
-        // }
-
         Object.values(product_picture).forEach((product_picture) => {
           formData.append("product_picture", product_picture)
         })
@@ -253,6 +246,7 @@ const WarehouseProduct = () => {
         formik.setFieldValue(CategoryId, "")
         formik.setFieldValue(weight, "")
         formik.setFieldValue(product_picture, [])
+        formik.setSubmitting(false)
 
         fetchProduct()
         fetchImage()
@@ -263,7 +257,7 @@ const WarehouseProduct = () => {
       } catch (err) {
         toast({
           title: "Nama Produk Telah Ada",
-          // description: "Hanya Super Admin yang dapat menambahkan produk",
+          description: "Hanya Super Admin yang dapat menambahkan produk",
           status: "error",
         })
         console.log(err)
@@ -294,44 +288,14 @@ const WarehouseProduct = () => {
       )
       setPreview(fileArray)
       console.log(fileArray, "file")
-
-      // setImages((prevImages) => prevImages.concat(fileArray))
-      // Array.from(e.target.files).map((file) => URL.revokeObjectURL(file))
     }
-
-    // if (images.size < 10) {
-    //   window.alert("please upload file smaller")
-    //   return false
-    // }
   }
-
-  // const renderPageButton = () => {
-  //   const totalPage = Math.ceil(totalCount / limit)
-
-  //   const pageArray = new Array(totalPage).fill(null).map((val, i) => ({
-  //     id: i + 1,
-  //   }))
-
-  //   return pageArray.map((val) => {
-  //     return (
-  //       <PageButton
-  //         key={val.id.toString()}
-  //         id={val.id}
-  //         onClick={() => setPage(val.id)}
-  //       />
-  //     )
-  //   })
-  // }
 
   return (
     <>
       <Flex h="100%" w="full" direction="column">
         <Flex w="full" justifyContent="center">
           <HStack mt="3" wrap="wrap" justifyContent="center">
-            {/* <Grid templateColumns="repeat(5, 1fr)" columnGap="4">
-            <GridItem> */}
-            {/* <Flex>
-            <Box> */}
             <Grid templateColumns="repeat(3, 1fr)" gap="4">
               <GridItem>
                 <FormControl isInvalid={formik.errors.product_name}>
@@ -431,8 +395,6 @@ const WarehouseProduct = () => {
                       handleImage(event)
                       console.log(event.target.files, "eve")
                     }}
-
-                    // onChange={handleImage}
                   />
                   <FormHelperText>
                     Besar file: maksimum 2 MB. Ekstensi file yang diperbolehkan:
@@ -450,13 +412,10 @@ const WarehouseProduct = () => {
             ))}
 
             <Box w="full" h="8%"></Box>
-            {/* </Box>
-              </Flex> */}
-            {/* </GridItem>
-          </Grid> */}
+
             <Button
-              onClick={formik.handleSubmit}
               disabled={formik.isSubmitting}
+              onClick={formik.handleSubmit}
               my="4"
               colorScheme="teal"
             >
@@ -530,14 +489,8 @@ const WarehouseProduct = () => {
             </Table>
           </TableContainer>
         </Container>
-        {/* </Flex>
-      // </Flex> */}
-        <HStack
-          w="full"
-          alignSelf="flex-end"
-          // pr="18px"
-          justifyContent="center"
-        >
+
+        <HStack w="full" alignSelf="flex-end" justifyContent="center">
           <Box>
             <Button onClick={prevPage} colorScheme="linkedin" width="100%">
               <FiArrowLeftCircle />

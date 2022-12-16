@@ -9,14 +9,12 @@ import EditProfile from "./pages/EditProfile"
 import Navbar from "./pages/layout/Navbar"
 import MainContent from "./pages/layout/MainContent"
 import Footer from "./pages/layout/Footer"
-import Dashboard from "./pages/admin/Dashboard"
 import ProtectedRoute from "./components/ProtectedRoute"
 import GuestRoute from "./components/GuestRoute"
 import NotFound from "./pages/404"
 import AdminHome from "./pages/admin/home.jsx"
 import ManageWarehouseData from "./pages/admin/warehouseData.jsx"
 import GeneralRoute from "./components/GeneralRoute"
-import ProductImage from "./components/admin/postImage"
 import ManageProduct from "./pages/admin/manageProduct"
 
 const App = () => {
@@ -73,14 +71,6 @@ const App = () => {
             </GuestRoute>
           }
         />
-        <Route
-          path="/dash"
-          element={
-            // <GuestRoute>
-            <Dashboard />
-            // </GuestRoute>
-          }
-        />
 
         {/* Admin Route */}
         <Route
@@ -106,14 +96,6 @@ const App = () => {
             <ProtectedRoute>
               <ManageProduct />
             </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/edit-image/:id"
-          element={
-            // <ProtectedRoute>
-            <ProductImage />
-            // {/* </ProtectedRoute> */}
           }
         />
       </Routes>

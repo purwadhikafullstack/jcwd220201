@@ -73,22 +73,6 @@ const EditProduct = (props) => {
       weight,
     }) => {
       try {
-        // const editProduct = new FormData()
-        // editProduct.append("product_name", nameEdit)
-        // editProduct.append("descEdit", descEdit)
-        // editProduct.append("price", priceEdit)
-        // editProduct.append("CategoryId", catEdit)
-        // editProduct.append("weight", weightEdit)
-        // Object.values(product_picture).forEach((product_picture) => {
-        //   editProduct.append("product_picture", product_picture)
-        //   console.log(product_picture, "picture")
-        // })
-
-        // console.log(imageEdit, "editimg")
-
-        // for (let i = 0; i < product_picture.length; i++) {
-        // }
-
         let editProduct = {
           product_name: nameEdit,
           description: descEdit,
@@ -137,59 +121,18 @@ const EditProduct = (props) => {
       console.log(err)
     }
   }
-  // console.log(imageEdit, "IMGGGG")
-
-  // const handleImageEdit = (e) => {
-  //   const temp = [...imageEdit, e.target.value]
-  //   setImageEdit(temp)
-
-  //   console.log(setImageEdit(temp), "set")
-  // }
 
   const handleImageEdit = async (e) => {
-    // console.log(e.target.files, "ADAYAH")
-    if (e.target.files) {
-      console.log(e.target.files, "event")
+    try {
+      const newImg = new FormData()
 
-      const formData = new FormData()
-
-      // formData.append("ProductId", idEdit)
-      // formData.append("product_picture", e.target.files[0].name)
-      formData.append("filename", e.target.files[0])
-
-      // const resp = await axiosInstance.post(
-      //   `/product-admin/image/${idEdit}`,
-      //   formData
-      // )
-
-      axios
-        .post(`http://localhost:8000/product-admin/image/39`, formData, {})
-        .then(function (response) {
-          console.log(response.data)
-        })
-        .catch(function (err) {
-          console.error(err)
-        })
-
-      // console.log(resp, "resp")
-
-      // const temp = [...imageEdit]
-      // const fileArray = Array.from(e.target.files).map((file) => {
-      //   temp.push({
-      //     ProductId: idEdit,
-      //     product_picture: file.name,
-      //   })
-
-      //   console.log(file, "file")
-      // })
-
-      // setImageEdit(temp)
-
-      // console.log(temp, "temp")
-
-      // // console.log(setImageEdit(temp), "setimage")
-
-      // Array.from(temp).map((file) => URL.revokeObjectURL(file))
+      newImg.append("product_picture", e)
+      const resp = await axiosInstance.post(
+        `/product-admin/image/${idEdit}`,
+        newImg
+      )
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -271,16 +214,7 @@ const EditProduct = (props) => {
                   name="product_picture"
                   ref={inputFileRef}
                   display="none"
-                  onChange={(event) => {
-                    formik.setFieldValue(
-                      "product_picture",
-                      event.target.files[0]
-                    )
-
-                    handleImageEdit(event)
-                    console.log(event.target.files[0], "event")
-                  }}
-                  // onChange={(e) => handleImageEdit(e)}
+                  onChange={(e) => handleImageEdit(e.target.files[0])}
                 />
                 {imageEdit ? (
                   <>
