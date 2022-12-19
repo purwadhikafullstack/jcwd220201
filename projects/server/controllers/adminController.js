@@ -16,7 +16,7 @@ const adminController = {
           },
         },
       })
-      if (findUserAdmin.role_id == 3 || findUserAdmin.is_verified == false) {
+      if (findUserAdmin.RoleId == 3 || findUserAdmin.is_verified == false) {
         return res.status(400).json({
           msg: "User Unauthorized !",
         })
@@ -29,7 +29,7 @@ const adminController = {
       //   findUserAdmin.password
       // )
 
-      if (!findUserAdmin.role_id == 1 || !findUserAdmin.role_id == 2) {
+      if (!findUserAdmin.RoleId == 1 || !findUserAdmin.RoleId == 2) {
         return res.status(400).json({
           msg: "Role Admin Not Found ❌",
         })

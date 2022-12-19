@@ -7,6 +7,7 @@ const adminRoute = require("../routes/adminRoute")
 const authRoute = require("../routes/authRoute")
 const productsRoute = require("../routes/productsRoute")
 const registerRoute = require("../routes/registerRoute")
+const cartRoute = require("../routes/cartsRoute")
 
 dotenv.config()
 
@@ -48,6 +49,7 @@ app.use("/auth", authRoute)
 app.use("/admin", adminRoute)
 app.use("/products", productsRoute)
 app.use("/categories", categoriesRoute)
+app.use("/carts", cartRoute)
 app.use("/product-admin", productsAdminRoute)
 
 app.get("/api", (req, res) => {

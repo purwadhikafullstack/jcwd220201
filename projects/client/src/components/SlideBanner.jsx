@@ -4,6 +4,7 @@ import { useState } from "react"
 
 const SlideBanner = () => {
   const arrowStyles = {
+    autoplay: true,
     cursor: "pointer",
     pos: "absolute",
     top: "50%",

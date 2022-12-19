@@ -56,9 +56,13 @@ const authController = {
       if (req.file) {
         req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
       }
+      const { password } = req.body
+
+      // edit with hashed password
+      const hashedPassword = bcrypt.hashSync(password, 5)
 
       await User.update(
-        { ...req.body },
+        { password: hashedPassword },
         {
           where: {
             id: req.user.id,

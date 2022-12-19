@@ -5,17 +5,17 @@ const productsController = {
   getAllProducts: async (req, res) => {
     try {
       const {
-        category_id = "",
+        CategoryId = "",
         _limit = 10,
         _page = 1,
         _sortBy = "id",
         _sortDir = "ASC",
       } = req.query
 
-      if (_sortBy === "category_id") {
+      if (_sortBy === "CategoryId") {
       }
       {
-        if (!Number(category_id)) {
+        if (!Number(CategoryId)) {
           const getAllProducts1 = await Product.findAndCountAll({
             where: {
               product_name: {
@@ -41,7 +41,7 @@ const productsController = {
           product_name: {
             [Op.like]: `%${req.query.product_name || ""}%`,
           },
-          category_id,
+          CategoryId,
         },
 
         include: [{ model: db.Category }],

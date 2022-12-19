@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { axiosInstance } from "../../api"
+import { Rupiah } from "../../lib/currency/Rupiah"
 
 const ProductCard = ({ id, product_name, price }) => {
   const [productData, setProductData] = useState({
@@ -10,8 +11,11 @@ const ProductCard = ({ id, product_name, price }) => {
     price: 0,
     id: "",
     category_id: "",
+    product_picture: "",
   })
   const [productImg, setProductImg] = useState([])
+
+  console.log("state", productImg)
   const [productId, setProductId] = useState(0)
 
   const fetchProductById = async () => {
@@ -26,15 +30,12 @@ const ProductCard = ({ id, product_name, price }) => {
   const fetchProductImage = async () => {
     try {
       const responseImg = await axiosInstance.get(`/products/image/${id}`)
-      setProductImg(responseImg.data.data)
+      console.log("res", responseImg)
+      setProductImg([responseImg.data.data])
     } catch (err) {
       console.log(err)
     }
   }
-
-  // const productDetail = () => {
-  //   setProductId(id)
-  // }
 
   useEffect(() => {
     fetchProductById()
@@ -67,7 +68,7 @@ const ProductCard = ({ id, product_name, price }) => {
               <Image
                 objectFit="fill"
                 alt="pict of product"
-                src={productImg.product_picture}
+                src={productImg.Product?.ProductPictures?.product_picture}
               />
             </Box>
           </Link>
@@ -76,7 +77,7 @@ const ProductCard = ({ id, product_name, price }) => {
               {product_name}
             </Box>
 
-            <Box>Rp{price}</Box>
+            <Box>{Rupiah(price)}</Box>
             {/* <Box>{productData.category_id}</Box> */}
           </Box>
         </Box>

@@ -19,6 +19,8 @@ import ProductList from "./pages/products/ProductList"
 import ProductDetail from "./pages/products/ProductDetail"
 import ManageProduct from "./pages/admin/manageProduct.jsx"
 import Register from "./pages/Register"
+import CartPage from "./pages/CartPage"
+import AdminRoute from "./components/AdminRoute"
 
 const App = () => {
   const [authCheck, setAuthCheck] = useState(false)
@@ -54,12 +56,25 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navbar />}>
+        <Route
+          path="/"
+          element={
+            <AdminRoute>
+              <Navbar />
+            </AdminRoute>
+          }
+        >
           <Route index element={<MainContent />} />
           <Route index element={<Footer />} />
         </Route>
+
+        {/* Cart Page */}
+        <Route path="/cart" element={<CartPage />} />
+
+        {/* Product List */}
         <Route path="/product" element={<ProductList />} />
 
+        {/* Product Detail */}
         <Route
           path="/product-detail/:id/:product_name"
           element={<ProductDetail />}

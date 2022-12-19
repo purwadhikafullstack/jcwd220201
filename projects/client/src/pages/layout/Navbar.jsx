@@ -44,8 +44,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { logout, login } from "../../redux/features/authSlice"
 import { axiosInstance } from "../../api"
 import { useEffect, useState } from "react"
+import { itemCart } from "../../redux/features/cartSlice"
+import { Rupiah } from "../../lib/currency/Rupiah"
 
 const Navbar = ({ onChange, onClick, onKeyDown }) => {
+  const cartSelector = useSelector((state) => state.cart)
   const authSelector = useSelector((state) => state.auth)
 
   const [authCheck, setAuthCheck] = useState(false)
@@ -53,10 +56,11 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
 
   const [searchValue, setSearchValue] = useState("")
   const [searchQuery, setSearchQuery] = useSearchParams()
+  const [cartProduct, setCartProduct] = useState([])
+  const [cartQty, setCartQty] = useState(0)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  // const location = useLocation()
 
   const keepUserLogin = async () => {
     try {
@@ -87,12 +91,6 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
   const handleOnChange = (e) => {
     setSearchValue(e.target.value)
     onChange(e)
-    // ==============================
-    // if (location.pathname === "/") {
-    //   setSearchValue(e.target.value)
-    // } else {
-    //   onChange(e)
-    // }
   }
 
   const handleOnKeyDown = (e) => {
@@ -103,23 +101,81 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
       })
       onKeyDown(e)
     }
+  }
 
-    // ===================================================
-    // if (location.pathname === "/") {
-    //   if (e.key === "Enter") {
-    //     navigate({
-    //       pathname: "/product",
-    //       search: createSearchParams({ search: searchValue }).toString(),
-    //     })
-    //   }
-    // } else {
-    //   onKeyDown(e)
-    // }
+  const fetchUserCart = async () => {
+    try {
+      const response = await axiosInstance.get("/carts/me")
+
+      dispatch(itemCart(response.data.data))
+      setCartProduct(response.data.data)
+      const productQty = response.data.data.map((val) => val.quantity)
+
+      let total = 0
+
+      for (let i = 0; i < productQty.length; i++) {
+        total = Number(productQty[i])
+      }
+      setCartQty(total)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const renderCartProduct = () => {
+    return cartProduct.map((val) => {
+      return (
+        <>
+          <Box p={4} display={{ md: "flex" }}>
+            <Box>
+              <Image
+                maxW="40"
+                maxH="40"
+                borderRadius="lg"
+                width={{ md: 40 }}
+                src={val.Product.ProductPictures[0].product_picture}
+              />
+            </Box>
+            <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>
+              <Text
+                fontWeight="bold"
+                textTransform="uppercase"
+                fontSize="sm"
+                letterSpacing="wide"
+                color="teal.600"
+              >
+                {val.Product.product_name}
+              </Text>
+              <Link
+                mt={1}
+                display="block"
+                fontSize="lg"
+                lineHeight="normal"
+                fontWeight="semibold"
+                href="#"
+              >
+                {Rupiah(val.Product.price)}
+              </Link>
+              <Text fontWeight="bold" mt={2} color="teal.600">
+                Quantity
+              </Text>
+              <Text mt={2} color="gray.500">
+                {val.quantity}
+              </Text>
+            </Box>
+          </Box>
+        </>
+      )
+    })
   }
 
   useEffect(() => {
     keepUserLogin()
   }, [])
+
+  useEffect(() => {
+    fetchUserCart()
+  }, [cartProduct])
 
   useEffect(() => {
     setSearchValue(searchQuery.get("search"))
@@ -194,7 +250,10 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 <Popover trigger="hover">
                   <PopoverTrigger>
                     <LinkRouterDom>
-                      <IoMdCart fontSize="20px" />
+                      <HStack>
+                        <IoMdCart fontSize="20px" />
+                        <Text>{cartSelector.cart.length}</Text>
+                      </HStack>
                     </LinkRouterDom>
                   </PopoverTrigger>
                   <PopoverContent>
@@ -202,16 +261,17 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                       display="flex"
                       justifyContent="space-between"
                     >
-                      <Text>Keranjang (0)</Text>
+                      <Text>Keranjang ({cartSelector.cart.length})</Text>
                       <LinkRouterDom to="/cart">
                         <Text>Lihat Keranjang</Text>
                       </LinkRouterDom>
                     </PopoverHeader>
                     <PopoverBody>
-                      <Image src="https://ecs7.tokopedia.net/assets-unify/il-header-cart-empty.jpg" />
-                      <Text align="center" fontWeight="semibold">
+                      {renderCartProduct()}
+                      {/* <Image src={product_picture} /> */}
+                      {/* <Text align="center" fontWeight="semibold">
                         Keranjangmu Masih Kosong nih ?
-                      </Text>
+                      </Text> */}
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>

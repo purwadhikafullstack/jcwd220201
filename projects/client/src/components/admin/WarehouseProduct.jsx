@@ -37,6 +37,7 @@ import EditProduct from "./editProduct"
 import PageButton from "./pageButton"
 import { Link } from "react-router-dom"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
+import { Rupiah } from "../../lib/currency/Rupiah"
 
 const WarehouseProduct = () => {
   const [products, setproducts] = useState([])
@@ -153,7 +154,7 @@ const WarehouseProduct = () => {
             <Text textAlign="justify">{val.description} </Text>
           </Td>
           <Td border={"1px solid black"} textAlign={"center"}>
-            Rp. {val.price.toLocaleString()}
+            {Rupiah(val.price)}
           </Td>
           <Td border={"1px solid black"} textAlign={"center"}>
             {val.CategoryId}

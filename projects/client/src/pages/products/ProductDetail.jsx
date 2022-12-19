@@ -16,6 +16,11 @@ import {
   Input,
   NumberInput,
   NumberInputField,
+  useNumberInput,
+  InputGroup,
+  InputRightElement,
+  InputLeftElement,
+  useToast,
 } from "@chakra-ui/react"
 import { Carousel } from "react-responsive-carousel"
 import { useState } from "react"
@@ -25,6 +30,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"
 import { axiosInstance } from "../../api"
 import { useEffect } from "react"
 import Navbar from "../layout/Navbar"
+import { AddIcon, MinusIcon } from "@chakra-ui/icons"
+import { useDispatch } from "react-redux"
+import { addProductToCart, itemCart } from "../../redux/features/cartSlice"
+import { Rupiah } from "../../lib/currency/Rupiah"
 
 const ProductDetail = () => {
   const [produck, setProducts] = useState({
@@ -35,10 +44,15 @@ const ProductDetail = () => {
     weight: 0,
     Category: "",
   })
-  const params = useParams()
 
+  const [productId, setProductId] = useState([])
   const [productImg, setProductImg] = useState([])
   const [productStock, setProductStock] = useState([])
+  const [cartQty, setCartQty] = useState(null)
+
+  const dispatch = useDispatch()
+  const toast = useToast()
+  const params = useParams()
 
   const fetchProductDetail = async () => {
     try {
@@ -46,16 +60,107 @@ const ProductDetail = () => {
 
       setProducts(response.data.data)
       setProductImg(response.data.data.ProductPictures)
-      setProductStock(response.data.data.ProductStocks)
-      console.log("response", response)
+      // setProductStock(response.data.data.ProductStocks)
+      setProductId(response.data.data.id)
+
+      const cartStock = response.data.data.ProductStocks.map((val) => val.stock)
+      let total = 0
+      for (let i = 0; i < cartStock.length; i++) {
+        total += Number(cartStock[i])
+      }
+      setProductStock(total)
     } catch (err) {
       console.log(err)
     }
   }
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 1,
+      min: 1,
+      max: productStock,
+    })
+
+  const inc = getIncrementButtonProps()
+  const dec = getDecrementButtonProps()
+  const input = getInputProps()
+  const qty = Number(input.value)
+
+  const fetchCart = async () => {
+    try {
+      const response = await axiosInstance.get("/carts/me")
+      dispatch(itemCart(response.data.data))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const fetchCartByProduct = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/carts/cart-product/ProductId/${productId}`
+      )
+
+      if (response.data.data === null) {
+        setCartQty(null)
+      } else {
+        setCartQty(response.data.data.quantity)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const addToCart1 = async () => {
+    try {
+      let addToCart1 = {
+        ProductId: productId,
+        quantity: qty,
+      }
+      const response = await axiosInstance.post("/carts", addToCart1)
+
+      dispatch(addProductToCart(response.data.data))
+
+      toast({
+        title: "Product Add to Cart",
+        status: "success",
+      })
+      fetchCartByProduct()
+      fetchCart()
+    } catch (err) {
+      console.log(err)
+      toast({
+        title: "Error Add Product to Cart",
+        status: "error",
+        description: err.response.data.message,
+      })
+    }
+  }
+
+  const updateAddProduct = async () => {
+    try {
+      let updateQty = {
+        quantity: qty,
+      }
+      await axiosInstance.patch(`/carts/addQty/${productId}`, updateQty)
+      toast({ title: "Product Add to Cart", status: "success" })
+
+      fetchCartByProduct()
+      fetchCart()
+    } catch (err) {
+      console.log(err)
+      const sisaProduk = productStock - cartQty
+      toast({
+        title: `Barang sudah ada di keranjang tersisa ${sisaProduk}, hanya menambah Quantity ${cartQty}`,
+        status: "error",
+        description: err.response.data.message,
+      })
+    }
+  }
 
   useEffect(() => {
+    fetchCart()
+    fetchCartByProduct()
     fetchProductDetail()
-  }, [])
+  }, [qty, cartQty, produck])
 
   return (
     <>
@@ -69,7 +174,7 @@ const ProductDetail = () => {
           <Flex>
             <Carousel swipeable={true} showStatus={false} dynamicHeight={false}>
               {productImg.map((val) => (
-                <Image
+                <img
                   // className="image-prod-detail"
                   h={{ base: "100%", sm: "400px", lg: "500px" }}
                   src={val.product_picture}
@@ -92,10 +197,9 @@ const ProductDetail = () => {
                 {produck.product_name}
               </Heading>
               <Text color="gray.900" fontWeight="300" fontSize="2xl">
-                Rp {produck.price.toLocaleString()}
+                {Rupiah(produck.price)}
               </Text>
             </Box>
-
             <Stack
               divider={<StackDivider borderColor="gray.200" />}
               spacing={{ base: 4, sm: 6 }}
@@ -124,52 +228,93 @@ const ProductDetail = () => {
                     </Text>{" "}
                     Baru
                   </ListItem>
-
                   <ListItem>
                     <Text as="span" fontWeight="thin">
                       Berat Satuan:
                     </Text>{" "}
                     {produck.weight} gram
                   </ListItem>
-
                   <ListItem>
                     <Text as="span" fontWeight="thin">
                       Kategori:
                     </Text>{" "}
                     {produck.Category?.category || "Kategori"}
                   </ListItem>
-                  {productStock.map((val) => (
-                    <ListItem>
-                      <Text as="span" fontWeight="thin">
-                        Stock:
-                      </Text>{" "}
-                      {val.stock}
-                    </ListItem>
-                  ))}
+                  {/* {productStock.map((val) => ( */}
+                  <ListItem>
+                    <Text as="span" fontWeight="thin">
+                      Stock:
+                    </Text>{" "}
+                    {productStock}
+                  </ListItem>
+                  {/* // ))} */}
+                  {/* <ListItem>
+                    <Text as="span" fontWeight="thin">
+                      Subtotal: {Rupiah(produck.price * qty)}
+                    </Text>{" "}
+                  </ListItem> */}
                 </List>
               </Box>
             </Stack>
             <HStack alignSelf="center" maxW="320px">
-              <Button>-</Button>
+              {/* <Button>-</Button>
               <NumberInput>
                 <NumberInputField />
               </NumberInput>
-              <Button>+</Button>
+              <Button>+</Button> */}
+              <InputGroup>
+                <InputLeftElement>
+                  <AddIcon
+                    {...inc}
+                    color={productStock <= qty ? "#c0cada" : "#0095DA"}
+                  />
+                </InputLeftElement>
+                <Input
+                  width="10em"
+                  textAlign="center"
+                  {...input}
+                  _hover={"none"}
+                  isDisabled={productStock === 0 ? true : false}
+                />
+                <InputRightElement>
+                  <MinusIcon {...dec} color={qty > 1 ? "#0095DA" : "#c0cada"} />
+                </InputRightElement>
+              </InputGroup>
             </HStack>
-
-            <Button
-              _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
-              textTransform="uppercase"
-              color="gray.900"
-              bg="teal.500"
-              size="md"
-              w="full"
-              mt="8"
-              py="6"
-              rounded="none"
-            >
-              Masukkan Keranjang
-            </Button>
+            <Text as="span" fontWeight="thin">
+              Subtotal: {Rupiah(produck.price * qty)}
+            </Text>{" "}
+            {cartQty === null ? (
+              <Button
+                _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
+                textTransform="uppercase"
+                color="gray.900"
+                bg="teal.500"
+                size="md"
+                w="full"
+                mt="8"
+                py="6"
+                rounded="none"
+                onClick={addToCart1}
+              >
+                Masukkan Keranjang
+              </Button>
+            ) : (
+              <Button
+                _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
+                textTransform="uppercase"
+                color="gray.900"
+                bg="teal.500"
+                size="md"
+                w="full"
+                mt="8"
+                py="6"
+                rounded="none"
+                onClick={updateAddProduct}
+              >
+                Masukkan Keranjang
+              </Button>
+            )}
           </Stack>
         </SimpleGrid>
       </Container>

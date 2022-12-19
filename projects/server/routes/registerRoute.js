@@ -1,5 +1,5 @@
-const express = require("express");
-const { body } = require("express-validator");
+const express = require("express")
+const { body } = require("express-validator")
 
 // Controller imports
 const {
@@ -8,9 +8,9 @@ const {
   validateOtp,
   completeRegistration,
   requestOtp,
-} = require("../controllers/registerController");
+} = require("../controllers/registerController")
 
-const router = express.Router();
+const router = express.Router()
 
 // Duplicate check
 router.post(
@@ -18,7 +18,7 @@ router.post(
   // Input must be an email
   body("email").isEmail(),
   duplicateCheck
-);
+)
 
 // Register
 router.post(
@@ -26,13 +26,13 @@ router.post(
   // Input must be an email
   body("email").isEmail(),
   register
-);
+)
 
 // Request OTP
-router.post("/otp", requestOtp);
+router.post("/otp", requestOtp)
 
 // Verify OTP
-router.post("/verify", validateOtp);
+router.post("/verify", validateOtp)
 
 // Complete registration
 router.post(
@@ -40,6 +40,6 @@ router.post(
   body("name").isLength({ min: 3 }),
   body("password").isLength({ min: 8 }),
   completeRegistration
-);
+)
 
-module.exports = router;
+module.exports = router
