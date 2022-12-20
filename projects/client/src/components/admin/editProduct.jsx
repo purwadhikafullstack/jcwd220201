@@ -33,7 +33,6 @@ const EditProduct = (props) => {
 
   const {
     nameEdit,
-    products,
     setNameEdit,
     descEdit,
     setDescEdit,
@@ -49,7 +48,6 @@ const EditProduct = (props) => {
     getCategories,
     categories,
     fetchImage,
-
     idEdit,
     setOpenModal,
   } = props
@@ -100,7 +98,6 @@ const EditProduct = (props) => {
         console.log(err)
         toast({
           title: "Edit Gagal",
-          description: "Hanya Super Admin yang dapat melalukan perubahan",
           status: "error",
         })
       }
@@ -127,6 +124,7 @@ const EditProduct = (props) => {
       const newImg = new FormData()
 
       newImg.append("product_picture", e)
+      console.log(newImg, "newimg")
       const resp = await axiosInstance.post(
         `/product-admin/image/${idEdit}`,
         newImg

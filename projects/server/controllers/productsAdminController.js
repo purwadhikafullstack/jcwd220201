@@ -105,6 +105,17 @@ const productAdminController = {
           message: "Admin unauthorized",
         })
       }
+      const findProductByName = await db.Product.findOne({
+        where: {
+          product_name: req.body.product_name || "".toUpperCase(),
+        },
+      })
+
+      if (findProductByName) {
+        return res.status(400).json({
+          message: "Nama Produk telah ada",
+        })
+      }
 
       await db.Product.update(req.body, {
         where: {
@@ -118,7 +129,7 @@ const productAdminController = {
     } catch (err) {
       console.log(err)
       return res.status(500).json({
-        message: "Server error",
+        message: err.message,
       })
     }
   },

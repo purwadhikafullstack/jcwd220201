@@ -20,14 +20,13 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useState } from "react"
 import { useFormik } from "formik"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { useNavigate, Link as LinkRouterDom } from "react-router-dom"
 import * as Yup from "yup"
 import { axiosInstance } from "../api"
 import { login } from "../redux/features/authSlice"
 
 const LoginPage = () => {
-  const authSelector = useSelector((state) => state.auth)
   const toast = useToast()
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)

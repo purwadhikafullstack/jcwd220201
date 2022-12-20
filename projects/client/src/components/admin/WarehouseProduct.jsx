@@ -139,6 +139,7 @@ const WarehouseProduct = () => {
   }
 
   const renderProduct = () => {
+    console.log(products, "product")
     return products.map((val) => {
       return (
         <Tr key={val.id} border={"1px solid black"} textAlign={"center"}>
@@ -163,6 +164,7 @@ const WarehouseProduct = () => {
           <Td border={"1px solid black"} textAlign={"center"}>
             {val.weight}
           </Td>
+
           <Image
             src={`http://localhost:8000/public/${val.ProductPictures[0].product_picture}`}
           ></Image>

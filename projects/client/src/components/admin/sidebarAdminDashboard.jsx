@@ -71,6 +71,14 @@ const SidebarAdmin = () => {
             >
               Dashboard
             </Button>
+          </NavLink>
+
+          <NavLink
+            to="/admin/user"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? "#005e9d" : "#008deb",
+            })}
+          >
             <Button
               whiteSpace="initial"
               w="100%"
