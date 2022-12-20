@@ -12,7 +12,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Link,
+  Link as LinkChakra,
   Stack,
   Text,
   useToast,
@@ -21,7 +21,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useState } from "react"
 import { useFormik } from "formik"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link as LinkRouterDom } from "react-router-dom"
 import * as Yup from "yup"
 import { axiosInstance } from "../api"
 import { login } from "../redux/features/authSlice"
@@ -137,7 +137,7 @@ const LoginPage = () => {
                   </InputRightElement>
                 </InputGroup>
                 <FormHelperText mt="5" mb="5" textAlign="right">
-                  <Link>Lupa Password?</Link>
+                  <LinkChakra>Lupa Password?</LinkChakra>
                 </FormHelperText>
                 <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
               </FormControl>
@@ -152,9 +152,9 @@ const LoginPage = () => {
             <Stack pt={6}>
               <Text align={"center"}>
                 Belum punya akun?{" "}
-                <Link to="/register" color={"teal"}>
+                <LinkRouterDom to="/register" color={"teal"}>
                   Daftar
-                </Link>
+                </LinkRouterDom>
               </Text>
             </Stack>
           </form>
