@@ -21,7 +21,11 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useState } from "react"
 import { useFormik } from "formik"
 import { useDispatch } from "react-redux"
-import { useNavigate, Link as LinkRouterDom } from "react-router-dom"
+import {
+  useNavigate,
+  Link as LinkRouterDom,
+  useLocation,
+} from "react-router-dom"
 import * as Yup from "yup"
 import { axiosInstance } from "../api"
 import { login } from "../redux/features/authSlice"
@@ -31,6 +35,7 @@ const LoginPage = () => {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +48,6 @@ const LoginPage = () => {
           email,
           password,
         })
-        console.log(response)
 
         localStorage.setItem("auth_token", response.data.token)
         dispatch(
@@ -76,6 +80,7 @@ const LoginPage = () => {
           description: err.response.data.message,
         })
       }
+      navigate(location.state.from)
     },
     validationSchema: Yup.object({
       email: Yup.string().required(),
@@ -136,15 +141,17 @@ const LoginPage = () => {
                   </InputRightElement>
                 </InputGroup>
                 <FormHelperText mt="5" mb="5" textAlign="right">
-                  <LinkChakra>Lupa Password?</LinkChakra>
+                  <LinkChakra
+                    onClick={() => {
+                      navigate("/forgot-password")
+                    }}
+                  >
+                    Lupa Password?
+                  </LinkChakra>
                 </FormHelperText>
                 <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
               </FormControl>
-              <Button
-                onClick={navigate.goBack}
-                type="submit"
-                colorScheme="teal"
-              >
+              <Button type="submit" colorScheme="teal">
                 Masuk
               </Button>
             </Stack>

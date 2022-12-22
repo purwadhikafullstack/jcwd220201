@@ -28,9 +28,9 @@ import {
   PopoverBody,
   Image,
   Divider,
-} from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
-import { IoMdCart } from "react-icons/io";
+} from "@chakra-ui/react"
+import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons"
+import { IoMdCart } from "react-icons/io"
 import {
   Link,
   Link as LinkRouterDom,
@@ -39,88 +39,88 @@ import {
   useLocation,
   createSearchParams,
   useSearchParams,
-} from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, login } from "../../redux/features/authSlice";
-import { axiosInstance } from "../../api";
-import { useEffect, useState } from "react";
-import { itemCart } from "../../redux/features/cartSlice";
-import { Rupiah } from "../../lib/currency/Rupiah";
+} from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { logout, login } from "../../redux/features/authSlice"
+import { axiosInstance } from "../../api"
+import { useEffect, useState } from "react"
+import { itemCart } from "../../redux/features/cartSlice"
+import { Rupiah } from "../../lib/currency/Rupiah"
 
 const Navbar = ({ onChange, onClick, onKeyDown }) => {
-  const cartSelector = useSelector((state) => state.cart);
-  const authSelector = useSelector((state) => state.auth);
+  const cartSelector = useSelector((state) => state.cart)
+  const authSelector = useSelector((state) => state.auth)
 
-  const [authCheck, setAuthCheck] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [authCheck, setAuthCheck] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [searchValue, setSearchValue] = useState("");
-  const [searchQuery, setSearchQuery] = useSearchParams();
-  const [cartProduct, setCartProduct] = useState([]);
-  const [cartQty, setCartQty] = useState(0);
+  const [searchValue, setSearchValue] = useState("")
+  const [searchQuery, setSearchQuery] = useSearchParams()
+  const [cartProduct, setCartProduct] = useState([])
+  const [cartQty, setCartQty] = useState(0)
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const keepUserLogin = async () => {
     try {
-      const auth_token = localStorage.getItem("auth_token");
+      const auth_token = localStorage.getItem("auth_token")
 
       if (!auth_token) {
-        setAuthCheck(true);
-        return;
+        setAuthCheck(true)
+        return
       }
 
-      const response = await axiosInstance.get("/auth/refresh-token");
+      const response = await axiosInstance.get("/auth/refresh-token")
 
-      dispatch(login(response.data.data));
-      localStorage.setItem("auth_token", response.data.token);
-      setAuthCheck(true);
+      dispatch(login(response.data.data))
+      localStorage.setItem("auth_token", response.data.token)
+      setAuthCheck(true)
     } catch (err) {
-      console.log(err);
-      setAuthCheck(true);
+      console.log(err)
+      setAuthCheck(true)
     }
-  };
+  }
 
   const btnLogout = () => {
-    localStorage.removeItem("auth_token");
-    dispatch(logout());
-    navigate("/");
-  };
+    localStorage.removeItem("auth_token")
+    dispatch(logout())
+    navigate("/")
+  }
 
   const handleOnChange = (e) => {
-    setSearchValue(e.target.value);
-    onChange(e);
-  };
+    setSearchValue(e.target.value)
+    onChange(e)
+  }
 
   const handleOnKeyDown = (e) => {
     if (e.key === "Enter") {
       navigate({
         pathname: "/product",
         search: createSearchParams({ search: searchValue }).toString(),
-      });
-      onKeyDown(e);
+      })
+      onKeyDown(e)
     }
-  };
+  }
 
   const fetchUserCart = async () => {
     try {
-      const response = await axiosInstance.get("/carts/me");
+      const response = await axiosInstance.get("/carts/me")
 
-      dispatch(itemCart(response.data.data));
-      setCartProduct(response.data.data);
-      const productQty = response.data.data.map((val) => val.quantity);
+      dispatch(itemCart(response.data.data))
+      setCartProduct(response.data.data)
+      const productQty = response.data.data.map((val) => val.quantity)
 
-      let total = 0;
+      let total = 0
 
       for (let i = 0; i < productQty.length; i++) {
-        total = Number(productQty[i]);
+        total = Number(productQty[i])
       }
-      setCartQty(total);
+      setCartQty(total)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   const renderCartProduct = () => {
     return cartProduct.map((val) => {
@@ -165,21 +165,21 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
             </Box>
           </Box>
         </>
-      );
-    });
-  };
+      )
+    })
+  }
 
   useEffect(() => {
-    keepUserLogin();
-  }, []);
+    keepUserLogin()
+  }, [])
 
   useEffect(() => {
-    fetchUserCart();
-  }, [cartProduct]);
+    fetchUserCart()
+  }, [cartProduct])
 
   useEffect(() => {
-    setSearchValue(searchQuery.get("search"));
-  }, []);
+    setSearchValue(searchQuery.get("search"))
+  }, [])
   return (
     <>
       <Box
@@ -401,7 +401,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
       </Box>
       <Outlet />
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

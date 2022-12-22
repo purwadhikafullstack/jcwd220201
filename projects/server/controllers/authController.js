@@ -1,60 +1,63 @@
-const db = require("../models");
-const bcrypt = require("bcrypt");
-const { signToken } = require("../lib/jwt");
-const { Op } = require("sequelize");
+const db = require("../models")
+const bcrypt = require("bcrypt")
+const { signToken, decode } = require("../lib/jwt")
+const { Op } = require("sequelize")
+const emailer = require("../lib/emailer")
+const fs = require("fs")
+const handlebars = require("handlebars")
 
-const User = db.User;
+const User = db.User
 
 const authController = {
   loginUser: async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email, password } = req.body
 
       const findUserByEmail = await User.findOne({
         where: {
           email,
         },
-      });
+      })
       if (!findUserByEmail) {
         return res.status(400).json({
           message: "Email or Password not found",
-        });
+        })
       }
 
       const passwordValid = bcrypt.compareSync(
         password,
         findUserByEmail.password
-      );
+      )
 
       if (!passwordValid) {
         return res.status(400).json({
           message: "Password invalid",
-        });
+        })
       }
 
-      delete findUserByEmail.dataValues.password;
+      delete findUserByEmail.dataValues.password
 
       const token = signToken({
         id: findUserByEmail.id,
-      });
+      })
 
       return res.status(201).json({
         message: "Login User",
         data: findUserByEmail,
         token,
-      });
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
       return res.status(500).json({
         message: "Server Error",
-      });
+      })
     }
   },
 
   editUserProfile: async (req, res) => {
     try {
       if (req.file) {
-        req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`;
+        req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
       }
       const { password } = req.body
 
@@ -68,19 +71,19 @@ const authController = {
             id: req.user.id,
           },
         }
-      );
+      )
 
-      const findUserById = await User.findByPk(req.user.id);
+      const findUserById = await User.findByPk(req.user.id)
 
       return res.status(200).json({
         message: "Edited user data",
         data: findUserById,
-      });
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   editUserPassword: async (req, res) => {
@@ -112,22 +115,22 @@ const authController = {
   },
   refreshToken: async (req, res) => {
     try {
-      const findUserById = await User.findByPk(req.user.id);
+      const findUserById = await User.findByPk(req.user.id)
 
       const renewedToken = signToken({
         id: req.user.id,
-      });
+      })
 
       return res.status(200).json({
         message: "Renewed user token",
         data: findUserById,
         token: renewedToken,
-      });
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   getUserById: async (req, res) => {
@@ -136,17 +139,17 @@ const authController = {
         while: {
           id: req.params.id,
         },
-      });
+      })
 
       return res.status(200).json({
         message: "Get user By ID",
         data: findUserById,
-      });
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   getAllUser: async (req, res) => {
@@ -155,59 +158,110 @@ const authController = {
         where: {
           ...req.query,
         },
-      });
+      })
       return res.status(200).json({
         message: "Get All User",
         data: findAllUser,
-      });
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
-  // adminLogin: async (req, res) => {
-  //   try {
-  //     const { nameOrEmail, password } = req.body
+  forgotPassword: async (req, res) => {
+    try {
+      const { email } = req.body
 
-  //     const findUserAdmin = await db.User.findOne({
-  //       where: {
-  //         [Op.or]: {
-  //           name: nameOrEmail,
-  //           email: nameOrEmail,
-  //           password: password,
-  //         },
-  //       },
-  //     })
-  //     if (findUserAdmin.role_id == 3 || findUserAdmin.is_verified == false) {
-  //       return res.status(400).json({
-  //         msg: "User Unauthorized !",
-  //       })
-  //     }
+      const findUser = await db.User.findOne({
+        where: { email: email },
+      })
 
-  //     // later use this to compare hashed password
+      if (!findUser) {
+        return res.status(400).json({
+          message: "email tidak tersedia",
+        })
+      }
 
-  //     // const validatePassword = bcrypt.compareSync(
-  //     //   password,
-  //     //   findUserAdmin.password
-  //     // )
+      const token = signToken({
+        id: findUser.id,
+      })
 
-  //     if (!findUserAdmin.role_id == 1 || !findUserAdmin.role_id == 2) {
-  //       return res.status(400).json({
-  //         msg: "Role Admin Not Found ❌",
-  //       })
-  //     }
+      const resetLink = `http://localhost:3000/recover-password/${token}`
 
-  //     return res.status(201).json({
-  //       msg: "Admin Logged in ✅",
-  //       data: findUserAdmin,
-  //     })
-  //   } catch (err) {
-  //     .log(err)
-  //     return res.status(500).json({ msg: "Server Error !" })
-  //   }
-  // },
-};
+      const file = fs.readFileSync(
+        "./templates/password/reset_password.html",
+        "utf-8"
+      )
+      const template = handlebars.compile(file)
+      // const ResetEmail = template({ email })
 
-module.exports = authController;
+      const htmlResult = template({
+        email,
+        resetLink,
+      })
+      await emailer({
+        to: email,
+        subject: "Link Reset Password",
+        html: htmlResult,
+        text: "setting new password",
+      })
+
+      return res.status(200).json({
+        message: " Your request reset password has been sent",
+        data: findUser,
+        token: token,
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: err.message,
+      })
+    }
+  },
+
+  recoverPassword: async (req, res) => {
+    try {
+      const token = req.header("authorization").split(" ")[1]
+
+      const decodeToken = decode(token)
+
+      if (!decodeToken) {
+        return res.status(400).json({
+          message: "Unauthorized request",
+        })
+      }
+
+      const findUser = await db.User.findOne({
+        where: {
+          id: decodeToken.id,
+        },
+      })
+      const hashedPassword = bcrypt.hashSync(req.body.password, 5)
+
+      const updatePassword = await db.User.update(
+        {
+          password: hashedPassword,
+        },
+        {
+          where: { id: findUser.id },
+        }
+      )
+
+      if (updatePassword[0] === 0) {
+        throw new Error("Update password failed")
+      }
+      return res.status(200).json({
+        message: "Password Successfully changed!",
+      })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: err.message,
+      })
+    }
+  },
+}
+
+module.exports = authController

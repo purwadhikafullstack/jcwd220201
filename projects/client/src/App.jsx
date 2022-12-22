@@ -23,6 +23,8 @@ import Register from "./pages/Register"
 import CartPage from "./pages/CartPage"
 import AdminRoute from "./components/AdminRoute"
 import Address from "./pages/Address"
+import ForgotPassword from "./pages/ForgotPassword"
+import RecoverPassword from "./pages/RecoverPassword"
 import ManageUser from "./pages/admin/manageUser"
 
 const App = () => {
@@ -99,6 +101,15 @@ const App = () => {
             </GuestRoute>
           }
         />
+        <Route
+          path="/forgot-password"
+          element={
+            <GeneralRoute>
+              <ForgotPassword />
+            </GeneralRoute>
+          }
+        />
+        <Route path="/recover-password/:token" element={<RecoverPassword />} />
 
         {/* Admin Route */}
         <Route
