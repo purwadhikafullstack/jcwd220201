@@ -12,6 +12,7 @@ import {
   HStack,
   Image,
   Input,
+  InputGroup,
   Modal,
   Select,
   Table,
@@ -34,13 +35,11 @@ import { RiDeleteBin5Fill } from "react-icons/ri"
 import * as Yup from "yup"
 import EditProduct from "./editProduct"
 import PageButton from "./pageButton"
-import { Link } from "react-router-dom"
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
+
 import { Rupiah } from "../../lib/currency/Rupiah"
 
 const WarehouseProduct = () => {
   const [products, setproducts] = useState([])
-
   const [openModal, setOpenModal] = useState(false)
   const [idEdit, setIdEdit] = useState("")
   const [nameEdit, setNameEdit] = useState("")
@@ -52,12 +51,14 @@ const WarehouseProduct = () => {
   const [images, setImages] = useState([])
   const inputFileRef = useRef()
   const [categories, setCategories] = useState([])
-
   const [preview, setPreview] = useState([])
-
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(6)
   const [totalCount, setTotalCount] = useState(0)
+  const [sortBy, setSortBy] = useState("product_name")
+  const [sortDir, setSortDir] = useState("DESC")
+  const [filter, setFilter] = useState("All")
+  const [currentSearch, setCurrentSearch] = useState("")
 
   const toast = useToast()
 
@@ -67,7 +68,10 @@ const WarehouseProduct = () => {
         params: {
           _limit: limit,
           _page: page,
-          _sortDir: "DESC",
+          _sortDir: sortDir,
+          _sortBy: sortBy,
+          CategoryId: filter,
+          product_name: currentSearch,
         },
       })
 
@@ -179,7 +183,6 @@ const WarehouseProduct = () => {
                   val.price,
                   val.CategoryId,
                   val.weight,
-                  // `http://localhost:8000/public/${val.ProductPictures[0].product_picture}`,
                   val.ProductPictures,
                   val.id
                 )
@@ -216,11 +219,47 @@ const WarehouseProduct = () => {
     })
   }
 
+  const sortProductHandler = ({ target }) => {
+    const { value } = target
+    setSortBy(value.split(" ")[0])
+    setSortDir(value.split(" ")[1])
+  }
+
+  const filterProductHandler = ({ target }) => {
+    const { value } = target
+
+    setFilter(value)
+  }
+
+  const formikSearch = useFormik({
+    initialValues: {
+      search: "",
+    },
+    onSubmit: ({ search }) => {
+      setCurrentSearch(search)
+    },
+  })
+
+  const searchHandler = ({ target }) => {
+    const { name, value } = target
+    formikSearch.setFieldValue(name, value)
+  }
+
+  const btnResetFilter = () => {
+    setCurrentSearch(false)
+    setSortBy(false)
+    setFilter(false)
+    window.location.reload(false)
+  }
+
   useEffect(() => {
     fetchProduct()
-    fetchImage()
+  }, [page, sortBy, sortDir, filter, currentSearch])
+
+  useEffect(() => {
     getCategories()
-  }, [page])
+    fetchImage()
+  }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -438,6 +477,81 @@ const WarehouseProduct = () => {
         </Flex>
         <Box w="full" h="2.5%"></Box>
 
+        <Grid
+          gap="4"
+          templateColumns={"repeat(4, 1fr)"}
+          mt="10"
+          mb="4"
+          ml="20%"
+        >
+          <Select
+            onChange={filterProductHandler}
+            fontSize={"15px"}
+            bgColor="white"
+            color={"#6D6D6F"}
+            placeholder="Filter"
+          >
+            <option value="">Select Category</option>
+            {categories.map((val) => (
+              <option value={val.id}>
+                {val.id}. {val.category}
+              </option>
+            ))}
+          </Select>
+
+          <Select
+            onChange={sortProductHandler}
+            fontSize={"15px"}
+            fontWeight="normal"
+            fontFamily="serif"
+            bgColor="white"
+            color={"#6D6D6F"}
+            placeholder="Sort By"
+          >
+            <option value="product_name ASC" selected>
+              Name A-Z
+            </option>
+            <option value="product_name DESC">Name Z-A</option>
+          </Select>
+
+          <form onSubmit={formikSearch.handleSubmit}>
+            <FormControl>
+              <InputGroup textAlign={"right"}>
+                <Input
+                  type={"text"}
+                  placeholder="Search"
+                  name="search"
+                  bgColor={"white"}
+                  onChange={searchHandler}
+                  borderRightRadius="0"
+                  value={formikSearch.values.search}
+                />
+
+                <Button
+                  borderLeftRadius={"0"}
+                  bgColor={"white"}
+                  type="submit"
+                  border="1px solid #e2e8f0"
+                  borderLeft={"0px"}
+                >
+                  search
+                </Button>
+              </InputGroup>
+            </FormControl>
+          </form>
+        </Grid>
+        <Box ml="50%">
+          <Button
+            onClick={btnResetFilter}
+            p="3"
+            bgColor="white"
+            variant="solid"
+            _hover={{ borderBottom: "2px solid " }}
+          >
+            Reset Filter
+          </Button>
+        </Box>
+
         <Container maxW="container.xl" py="8" pb="5" px="1">
           <TableContainer
             border={"1px solid black"}
@@ -508,16 +622,6 @@ const WarehouseProduct = () => {
           <Box>
             Page {page}/{Math.ceil(totalCount / limit)}
           </Box>
-          {/* <Box>
-            <Button onClick={prevPage} colorScheme="linkedin" width="100%">
-              <FiArrowLeftCircle />
-            </Button>
-          </Box>
-          <Box>
-            <Button onClick={nextPage} colorScheme="linkedin" width="100%">
-              <FiArrowRightCircle />
-            </Button>
-          </Box> */}
         </HStack>
         <Box h="4%" w="full"></Box>
       </Flex>

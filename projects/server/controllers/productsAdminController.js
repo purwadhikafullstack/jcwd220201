@@ -2,6 +2,7 @@ const { sequelize } = require("../models")
 const db = require("../models")
 ProductPicture = db.ProductPicture
 const fs = require("fs")
+const { Op } = require("sequelize")
 
 const productAdminController = {
   createProducts: async (req, res) => {
@@ -74,15 +75,75 @@ const productAdminController = {
 
   getAllProduct: async (req, res) => {
     try {
-      const { _limit = 6, _page = 1, _sortDir = "DESC" } = req.query
+      const {
+        _limit = 6,
+        _page = 1,
+        _sortDir = "DESC",
+        product_name = "",
+        CategoryId = "",
+        price = "",
+        _sortBy = "product_name",
+      } = req.query
+
+      if (
+        _sortBy === "product_name" ||
+        _sortBy === "CategoryId" ||
+        _sortBy === "price" ||
+        product_name ||
+        price ||
+        CategoryId
+      ) {
+        if (!Number(CategoryId)) {
+          const findAllProducts = await db.Product.findAndCountAll({
+            include: [db.ProductPicture],
+            limit: Number(_limit),
+            offset: (_page - 1) * _limit,
+            order: [[_sortBy, _sortDir]],
+            where: {
+              [Op.or]: [
+                {
+                  product_name: {
+                    [Op.like]: `%${product_name}`,
+                  },
+                },
+              ],
+            },
+          })
+          return res.status(200).json({
+            message: "Get All Product",
+            data: findAllProducts.rows,
+            dataCount: findAllProducts.count,
+          })
+        }
+
+        const findAllProducts = await db.Product.findAndCountAll({
+          include: [db.ProductPicture],
+          limit: Number(_limit),
+          offset: (_page - 1) * _limit,
+          order: [[_sortBy, _sortDir]],
+          where: {
+            [Op.or]: [
+              {
+                product_name: {
+                  [Op.like]: `%${product_name}`,
+                },
+              },
+            ],
+            CategoryId: CategoryId,
+          },
+        })
+        return res.status(200).json({
+          message: "Get All Product",
+          data: findAllProducts.rows,
+          dataCount: findAllProducts.count,
+        })
+      }
 
       const findAllProducts = await db.Product.findAndCountAll({
         include: [db.ProductPicture],
         limit: Number(_limit),
         offset: (_page - 1) * _limit,
-        order: [["id", _sortDir]],
       })
-
       return res.status(200).json({
         message: "Get All Product",
         data: findAllProducts.rows,
