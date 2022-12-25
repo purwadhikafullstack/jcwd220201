@@ -128,6 +128,7 @@ const SidebarAdmin = () => {
               Manage Product
             </Button>
           </NavLink>
+          {/* Product Stock */}
           {/* Role Admin */}
           {authSelector.RoleId === 1 ? (
             <NavLink
@@ -168,9 +169,9 @@ const SidebarAdmin = () => {
               </Button>
             </NavLink>
           ) : null}
-
+          {/* ====================================================================== */}
           <NavLink
-            // to="/admin/warehouseData" ISI INI YA TEMAN2
+            to="/order/all-order"
             style={({ isActive }) => ({
               backgroundColor: isActive ? "#005e9d" : "#008deb",
             })}
@@ -183,7 +184,7 @@ const SidebarAdmin = () => {
               borderRadius="0px"
               _hover={{ bg: "#005e9d" }}
             >
-              Manage Stock Mutation
+              Manage User Order
             </Button>
           </NavLink>
           <NavLink
@@ -200,7 +201,7 @@ const SidebarAdmin = () => {
               borderRadius="0px"
               _hover={{ bg: "#005e9d" }}
             >
-              Manage Orders
+              Manage Stock Mutation
             </Button>
           </NavLink>
         </ButtonGroup>

@@ -1,35 +1,35 @@
-const { Model } = require("sequelize");
+const { Model } = require("sequelize")
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
       Order.belongsTo(models.Address, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
       Order.belongsTo(models.Courier, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
       Order.belongsTo(models.Status, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
       Order.belongsTo(models.User, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
       Order.belongsTo(models.Warehouse, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
       Order.hasMany(models.JournalItem, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
       Order.hasMany(models.OrderItem, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      });
+      })
     }
   }
   Order.init(
@@ -65,6 +65,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Order",
       timestamps: false,
     }
-  );
-  return Order;
-};
+  )
+  return Order
+}
