@@ -130,7 +130,7 @@ const CartPage = () => {
           product_name={val.Product.product_name}
           price={val.Product.price}
           quantity={val.quantity}
-          product_picture={val.Product.ProductPictures[0].product_picture}
+          product_picture={`http://localhost:8000/localhost/public/${val.Product?.ProductPictures?.product_picture}`}
           CartId={val.id}
           fetchCartItem={fetchCartItem}
           isChecked={val.is_checked}
@@ -252,15 +252,17 @@ const CartPage = () => {
                     </Text>
                   </Flex>
                 </Stack>
-                <Button
-                  colorScheme="teal"
-                  _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
-                  size="lg"
-                  fontSize="lg"
-                  rightIcon={<FaArrowRight />}
-                >
-                  Beli ( )
-                </Button>
+                <LinkRouterDom to="/cart/shipment">
+                  <Button
+                    colorScheme="teal"
+                    _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
+                    size="lg"
+                    fontSize="lg"
+                    rightIcon={<FaArrowRight />}
+                  >
+                    Beli ( )
+                  </Button>
+                </LinkRouterDom>
               </Stack>
 
               {/* ========================================================= */}

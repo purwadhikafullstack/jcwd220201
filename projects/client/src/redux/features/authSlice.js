@@ -26,6 +26,7 @@ const authSlice = createSlice({
       state.phone = action.payload.phone
       state.date_of_birth = action.payload.date_of_birth
       state.password = action.payload.profile_picture
+      state.WarehouseId = action.payload.WarehouseId
     },
     logout: (state) => {
       state.id = 0
@@ -33,6 +34,7 @@ const authSlice = createSlice({
       state.RoleId = 0
       state.name = ""
       state.profile_picture = ""
+      state.WarehouseId = 0
     },
   },
 })

@@ -6,6 +6,7 @@ import sidebarAdmin from "../../components/admin/sidebarAdminDashboard.jsx"
 import WarehouseProduct from "../../components/admin/WarehouseProduct.jsx"
 // import CategoryContent from "../../components/admin/categoryContent.jsx"
 import CategoryContent from "../../components/admin/categoryContent.jsx"
+import Stock from "./Stock/Stock.jsx"
 
 // =======================================
 // =======================================
@@ -58,14 +59,6 @@ const ManageProduct = () => {
             <Button
               _focus={{ bg: "#005e9d" }}
               onClick={() => {
-                setActiveComponent("Product Stock")
-              }}
-            >
-              Product Stock
-            </Button>
-            <Button
-              _focus={{ bg: "#005e9d" }}
-              onClick={() => {
                 setActiveComponent("Product Category")
               }}
             >
@@ -75,7 +68,6 @@ const ManageProduct = () => {
 
           {{
             "Product Data": <WarehouseProduct />,
-            "Product Stock": <Box />,
             "Product Category": <CategoryContent />,
           }[activeComponent] || <Box />}
         </VStack>

@@ -17,6 +17,8 @@ const authController = {
         where: {
           email,
         },
+        // Dont Delete this belongs to Adli's Task
+        include: [{ model: db.WarehousesUser }],
       })
       if (!findUserByEmail) {
         return res.status(400).json({
@@ -139,6 +141,7 @@ const authController = {
         while: {
           id: req.params.id,
         },
+        include: [{ model: db.WarehousesUser }],
       })
 
       return res.status(200).json({

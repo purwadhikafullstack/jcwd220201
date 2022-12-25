@@ -133,7 +133,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 maxH="40"
                 borderRadius="lg"
                 width={{ md: 40 }}
-                src={val.Product.ProductPictures[0].product_picture}
+                src={`http://localhost:8000/public/${val.Product?.ProductPictures?.product_picture}`}
               />
             </Box>
             <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>

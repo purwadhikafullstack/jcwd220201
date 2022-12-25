@@ -9,6 +9,7 @@ import {
   Flex,
   Avatar,
   Text,
+  HStack,
 } from "@chakra-ui/react"
 import { useNavigate, NavLink, Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
@@ -32,6 +33,9 @@ const SidebarAdmin = () => {
         Admin Dashboard
       </Heading>
       <Divider border="1px solid" />
+      <Heading size="md">
+        {authSelector.RoleId === 1 ? "Admin" : "Warehouse Admin"}
+      </Heading>
       <Flex>
         <Avatar
           size="lg"
@@ -41,7 +45,6 @@ const SidebarAdmin = () => {
         <Text borderRight="2px solid" my="auto" p="8px">
           {authSelector.name}
         </Text>
-
         <Button
           my="4"
           p="8px"
@@ -52,6 +55,7 @@ const SidebarAdmin = () => {
           <Link to="/profile">Edit Profile</Link>
         </Button>
       </Flex>
+      <Flex></Flex>
       <Spacer />
       <Stack color="white" w="full" direction="column">
         <ButtonGroup flexDirection="column" spacing="0" variant="unstyled">
@@ -124,6 +128,47 @@ const SidebarAdmin = () => {
               Manage Product
             </Button>
           </NavLink>
+          {/* Role Admin */}
+          {authSelector.RoleId === 1 ? (
+            <NavLink
+              to="/admin/update-stock"
+              style={({ isActive }) => ({
+                backgroundColor: isActive ? "#005e9d" : "#008deb",
+              })}
+            >
+              <Button
+                whiteSpace="initial"
+                w="100%"
+                pl="10%"
+                textAlign="left"
+                borderRadius="0px"
+                _hover={{ bg: "#005e9d" }}
+              >
+                Manage Product Stock
+              </Button>
+            </NavLink>
+          ) : null}
+          {/* Role Warehouse Admin */}
+          {authSelector.RoleId === 2 ? (
+            <NavLink
+              to="/admin/update-stock"
+              style={({ isActive }) => ({
+                backgroundColor: isActive ? "#005e9d" : "#008deb",
+              })}
+            >
+              <Button
+                whiteSpace="initial"
+                w="100%"
+                pl="10%"
+                textAlign="left"
+                borderRadius="0px"
+                _hover={{ bg: "#005e9d" }}
+              >
+                Update Stock
+              </Button>
+            </NavLink>
+          ) : null}
+
           <NavLink
             // to="/admin/warehouseData" ISI INI YA TEMAN2
             style={({ isActive }) => ({
