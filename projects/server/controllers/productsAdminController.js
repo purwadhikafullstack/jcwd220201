@@ -49,7 +49,6 @@ const productAdminController = {
         const newProductImg = img_path.map((item) => {
           return {
             product_picture: item,
-            product_id: productId,
             ProductId: productId,
           }
         })

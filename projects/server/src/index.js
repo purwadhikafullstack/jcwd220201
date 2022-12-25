@@ -35,6 +35,7 @@ app.use(express.json())
 
 const productsAdminRoute = require("../routes/productsAdminRoute")
 const warehouseUserRoute = require("../routes/warehouseUserRoute")
+const paymentRoute = require("../routes/paymentRoute")
 // Register middleware
 app.use("/api/register", registerRoute)
 
@@ -67,6 +68,7 @@ app.use("/carts", cartRoute)
 app.use("/product-admin", productsAdminRoute)
 app.use("/admin/stock", productStockRoute)
 app.use("/warehouse-user", warehouseUserRoute)
+app.use("/payment", paymentRoute)
 app.use("/order/", userOrderRoute)
 
 app.get("/api", (req, res) => {

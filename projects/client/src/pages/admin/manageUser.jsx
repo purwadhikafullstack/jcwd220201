@@ -1,5 +1,6 @@
 import { Box, Button, Container, Flex, HStack, VStack } from "@chakra-ui/react"
 import React, { useState } from "react"
+import SidebarAdmin from "../../components/admin/sidebarAdminDashboard.jsx"
 import sidebarAdmin from "../../components/admin/sidebarAdminDashboard.jsx"
 import WarehouseUser from "../../components/admin/warehouseUser.jsx"
 
@@ -34,7 +35,7 @@ const ManageUser = () => {
     <Container bg="#e0e7eb" maxW="vw" p="0">
       <Flex h="100vh" p="0">
         <VStack h="full" w="30%" minW="220px" bg="#008deb">
-          {sidebarAdmin()}
+          {SidebarAdmin()}
         </VStack>
 
         <VStack h="full" w="full" overflowX="scroll">
