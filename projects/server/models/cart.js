@@ -1,16 +1,16 @@
-"use strict"
-const { Model } = require("sequelize")
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Cart extends Model {
     static associate(models) {
       Cart.belongsTo(models.User, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       Cart.belongsTo(models.Product, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
     }
   }
   Cart.init(
@@ -29,6 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Cart",
       timestamps: true,
     }
-  )
-  return Cart
-}
+  );
+  return Cart;
+};

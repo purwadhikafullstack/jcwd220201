@@ -1,30 +1,35 @@
-"use strict"
-const { Model } = require("sequelize")
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Warehouse extends Model {
     static associate(models) {
       Warehouse.hasMany(models.JournalItem, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       Warehouse.hasMany(models.ProductStock, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       Warehouse.hasMany(models.WarehousesUser, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       Warehouse.hasMany(models.StockRequest, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
         foreignKey: "FromWarehouseId",
-      })
+      });
       Warehouse.hasMany(models.StockRequest, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
         foreignKey: "ToWarehouseId",
-      })
+      });
+      Warehouse.hasMany(models.Order),
+        {
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+        };
     }
   }
   Warehouse.init(
@@ -53,8 +58,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       tableName: "Warehouse",
-      timestamps: true,
+      timestamps: false,
     }
-  )
-  return Warehouse
-}
+  );
+  return Warehouse;
+};

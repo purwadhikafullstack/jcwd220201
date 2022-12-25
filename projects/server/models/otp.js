@@ -1,12 +1,12 @@
-"use strict"
-const { Model } = require("sequelize")
+"use strict";
+const { Model } = require("sequelize");
 module.exports = function (sequelize, DataTypes) {
   class Otp extends Model {
     static associate(models) {
       Otp.belongsTo(models.User, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
     }
   }
   Otp.init(
@@ -18,7 +18,6 @@ module.exports = function (sequelize, DataTypes) {
 
       issued_at: {
         type: "TIMESTAMP",
-        // if error check here Sequelize
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
         allowNull: false,
       },
@@ -28,6 +27,6 @@ module.exports = function (sequelize, DataTypes) {
       modelName: "Otp",
       timestamps: false,
     }
-  )
-  return Otp
-}
+  );
+  return Otp;
+};

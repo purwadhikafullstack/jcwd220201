@@ -44,7 +44,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
   // Alert functionality
   const toast = useToast();
 
-  // Redirects functionality
+  // Redirect functionality
   const navigate = useNavigate();
 
   // Form functionality

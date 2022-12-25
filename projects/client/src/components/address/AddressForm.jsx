@@ -22,7 +22,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 
@@ -31,6 +31,7 @@ import useCheckInputError from "../../lib/address/hooks/useCheckInputError";
 import clearInput from "../../lib/address/clearInput";
 import CitiesInput from "./CitiesInput";
 import saveAddress from "../../lib/address/saveAddress";
+import { useEffect } from "react";
 
 const AddressForm = ({
   fetchAddresses,
@@ -130,6 +131,8 @@ const AddressForm = ({
       onClose();
     },
   });
+
+  useEffect(() => console.log(formik.values), [formik.values]);
 
   // Invalid input error handling
   const recipientErrorTrigger =

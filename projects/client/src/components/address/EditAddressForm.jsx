@@ -41,17 +41,8 @@ const EditAddressForm = ({
   addressData,
 }) => {
   // Get user data
-  const {
-    id,
-    recipient,
-    phone,
-    label,
-    address,
-    city,
-    province,
-    postal_code,
-    is_default,
-  } = addressData;
+  const { id, recipient, phone, label, address, city, province, postal_code } =
+    addressData;
 
   // Monitor user input
   const [recipientError, setRecipientError] = useState(false);
@@ -84,7 +75,6 @@ const EditAddressForm = ({
       city,
       province,
       postalCode: postal_code,
-      isDefault: is_default,
     },
     validationSchema: Yup.object({
       recipient: Yup.string()
