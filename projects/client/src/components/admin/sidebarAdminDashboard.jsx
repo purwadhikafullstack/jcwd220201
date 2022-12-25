@@ -226,7 +226,7 @@ const SidebarAdmin = () => {
 
         <ButtonGroup flexDirection="column" spacing="0" variant="unstyled">
           <NavLink
-            // to="/admin/warehouseData" ISI INI YA TEMAN2
+            to="/admin/sales-report"
             style={({ isActive }) => ({
               backgroundColor: isActive ? "#005e9d" : "#008deb",
             })}

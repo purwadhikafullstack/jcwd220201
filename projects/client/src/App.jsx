@@ -28,6 +28,7 @@ import Stock from "./pages/admin/Stock/Stock"
 import ForgotPassword from "./pages/ForgotPassword"
 import RecoverPassword from "./pages/RecoverPassword"
 import ManageUser from "./pages/admin/manageUser"
+import SalesReport from "./pages/admin/salesReport"
 import OrderPayment from "./components/admin/orderPayment"
 import Checkout from "./pages/Checkout"
 import UserOrder from "./pages/admin/User Order/UserOrder"
@@ -179,6 +180,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ManageUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/sales-report"
+          element={
+            <ProtectedRoute>
+              <SalesReport />
             </ProtectedRoute>
           }
         />
