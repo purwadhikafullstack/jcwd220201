@@ -1,37 +1,37 @@
-"use strict"
-const { Model } = require("sequelize")
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.hasMany(models.Cart, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       User.hasMany(models.Otp, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       User.hasMany(models.Order, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       User.hasMany(models.Address, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       User.hasMany(models.StockRequest, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
         foreignKey: "CreatedByUserId",
-      })
+      });
       User.hasMany(models.WarehousesUser, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
       User.belongsTo(models.Role, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      })
+      });
     }
   }
   User.init(
@@ -81,6 +81,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       ],
     }
-  )
-  return User
-}
+  );
+  return User;
+};

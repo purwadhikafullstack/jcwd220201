@@ -9,7 +9,6 @@ import Navbar from "./layout/Navbar";
 // Own library imports
 import fetchAddresses from "../lib/address/fetchAddresses";
 import renderAddresses from "../lib/address/renderAddresses";
-import EditAddressForm from "../components/address/EditAddressForm";
 
 const Address = () => {
   // Display addresses functionality

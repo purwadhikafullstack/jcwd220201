@@ -367,6 +367,7 @@ const checkoutController = {
             UserId,
             shipping_cost: shippingCost,
             WarehouseId: sortedWarehouse.nearestWarehouse.warehouseInfo.id,
+            sent_at: null,
           },
           {
             transaction: t,

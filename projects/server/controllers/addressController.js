@@ -43,8 +43,9 @@ const addressController = {
               where: {
                 [Op.and]: [
                   { UserId: id },
-                  { is_default: true },
-                  { is_selected: true },
+                  {
+                    [Op.or]: [{ is_default: true }, { is_selected: true }],
+                  },
                 ],
               },
               transaction: t,
@@ -76,8 +77,8 @@ const addressController = {
             province,
             postal_code: postalCode,
             pinpoint,
-            is_default: isDefault,
-            is_selected: isDefault ? true : false,
+            is_default: isDefault === "true",
+            is_selected: isDefault === "true" ? true : false,
           },
           { transaction: t }
         );

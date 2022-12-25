@@ -18,7 +18,6 @@ import EditAddressForm from "./EditAddressForm";
 import makeDefault from "../../lib/address/makeDefault";
 import fetchAddresses from "../../lib/address/fetchAddresses";
 import { useState } from "react";
-import { useEffect } from "react";
 
 const AddressCard = (props) => {
   const { variant, ...rest } = props;
