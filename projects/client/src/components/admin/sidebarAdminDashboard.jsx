@@ -187,23 +187,6 @@ const SidebarAdmin = () => {
               Manage User Order
             </Button>
           </NavLink>
-          <NavLink
-            // to="/admin/warehouseData" ISI INI YA TEMAN2
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? "#005e9d" : "#008deb",
-            })}
-          >
-            <Button
-              whiteSpace="initial"
-              w="100%"
-              pl="10%"
-              textAlign="left"
-              borderRadius="0px"
-              _hover={{ bg: "#005e9d" }}
-            >
-              Manage Stock Mutation
-            </Button>
-          </NavLink>
 
           <NavLink
             to="/admin/payment"

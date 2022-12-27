@@ -30,13 +30,7 @@ const productStockController = {
         })
       }
 
-      const {
-        _limit = 4,
-        _page = 1,
-        _sortBy = "id",
-        _sortDir = "ASC",
-        search,
-      } = req.query
+      const { search } = req.query
 
       const searchWarehouse = search ? `%${search}%` : "%%"
 
@@ -45,9 +39,6 @@ const productStockController = {
       const { LIMIT, OFFSET } = pagination(page)
 
       const findAllWarehouse = await Warehouse.findAndCountAll({
-        limit: Number(_limit),
-        offset: (_page - 1) * _limit,
-        order: [[_sortBy, _sortDir]],
         limit: LIMIT,
         offset: OFFSET,
         order: [["id", "ASC"]],
@@ -246,7 +237,6 @@ const productStockController = {
         })
       }
 
-      // Find Original Stock and Update it
       const findStock1 = await ProductStock.findByPk(id)
 
       await ProductStock.update(
@@ -256,34 +246,22 @@ const productStockController = {
 
       const findStock2 = await ProductStock.findByPk(id)
       const stock_before = findStock1.dataValues.stock
-      const stock_change = findStock2.dataValues.stock
+      const stock_after = findStock2.dataValues.stock
 
-      const stockCheck = (stock_change, stock_before) => {
-        const count = Math.max(stock_change, stock_before)
-        if (count === stock_before) {
-          return false
-        } else {
-          return true
-        }
-      }
-
-      const addJournal = await JournalType.create({
-        name: "Update Produk Stok",
-        type: stockCheck(stock_change, stock_before),
-        stock_change: findStock2.dataValues.stock,
-        stock_before: findStock1.dataValues.stock,
-        ProductId: findStock2.ProductId,
+      const createJournal = await Journal.create(id)
+      const checkJournalType = await JournalType.findOne({
+        where: { name: "pembaruan stok" },
       })
-
-      const findJournal = await JournalItem.findByPk(addJournal.id)
-
       await JournalItem.create({
-        quantity: stock_change,
-        JournalTypeId: addJournal.id,
-        // JournalId: id,
+        quantity: stock_after,
+        stock_after: findStock2.dataValues.stock,
+        stock_before: findStock1.dataValues.stock,
+        JournalId: createJournal.id,
+        JournalTypeId: checkJournalType.id,
         ProductId: findStock2.ProductId,
         WarehouseId: findStock2.WarehouseId,
       })
+
       return res
         .status(200)
         .json({ message: "Stock Berhasil Diperbaharui", data: findStock2 })
@@ -312,10 +290,10 @@ const productStockController = {
 
       const stock_before = findStock.dataValues.stock
 
-      const stock_change = findStock2.dataValues.stock
+      const stock_after = findStock2.dataValues.stock
 
-      const stockCheck = (stock_before, stock_change) => {
-        const count = Math.max(stock_before, stock_change)
+      const stockCheck = (stock_before, stock_after) => {
+        const count = Math.max(stock_before, stock_after)
 
         if (count === stock_before) {
           return false
@@ -325,9 +303,9 @@ const productStockController = {
       }
 
       const addJournal = await JournalType.create({
-        name: "Hapus Produk Stok",
-        type: stockCheck(stock_change, stock_before),
-        stock_change: findStock2.dataValues.stock,
+        name: "Hapus Stok",
+        type: stockCheck(stock_after, stock_before),
+        stock_after: findStock2.dataValues.stock,
         stock_before: findStock.dataValues.stock,
         ProductId: findStock2.ProductId,
       })
@@ -335,7 +313,7 @@ const productStockController = {
       const findJournal = await JournalItem.findByPk(addJournal.id)
 
       await JournalItem.create({
-        quantity: stock_change,
+        quantity: stock_after,
         JournalTypeId: addJournal.id,
         // JournalId: findStock2.JournalId,
         ProductId: findStock2.ProductId,

@@ -55,16 +55,13 @@ const WarehouseStock = ({}) => {
 
   // Produck Data & Category
   const [data, setData] = useState([])
-  console.log(
-    "data",
-    data.map((val) => val.ProductStock)
-  )
-  const [category, setCategory] = useState([])
+  console.log("data", data)
+  // const [category, setCategory] = useState([])
 
-  const [page, setPage] = useState(0)
-  const [limit, setLimit] = useState(3)
-  const [pages, setPages] = useState(0)
-  const [rows, setRows] = useState(0)
+  // const [page, setPage] = useState(0)
+  // const [limit, setLimit] = useState(3)
+  // const [pages, setPages] = useState(0)
+  // const [rows, setRows] = useState(0)
 
   // Modal Edit Stock Props
   const [openModal, setOpenModal] = useState(false)
@@ -81,7 +78,7 @@ const WarehouseStock = ({}) => {
         const response = await axiosInstance.get(
           `admin/stock/all-product/${authSelector.WarehouseId}`
         )
-
+        console.log("res", response)
         setData(response.data.data.ProductStock)
       }
 
@@ -194,7 +191,7 @@ const WarehouseStock = ({}) => {
 
   useEffect(() => {
     fetchProductWarehouse()
-  }, [page])
+  }, [])
   return (
     <>
       <Container bg="#e0e7eb" maxW="vw" p="0">
