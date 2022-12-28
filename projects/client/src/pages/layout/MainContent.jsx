@@ -23,18 +23,72 @@ import SlideBanner from "../../components/SlideBanner"
 import Footer from "./Footer"
 import "../../styles/globals.css"
 import Features from "../../components/Features"
-import { Link } from "react-router-dom"
-import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { axiosInstance } from "../../api"
+import ProductCard from "../../components/product/ProductCard"
 
 const MainContent = () => {
   const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [page, setPage] = useState(1)
+  const [maxPage, setMaxPage] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
+  const navigate = useNavigate()
+  console.log("cat", categories)
 
   const fetchProducts = async () => {
+    const maxProductInPage = 5
     try {
+      const response = await axiosInstance.get("/products", {
+        params: {
+          _page: page,
+          _limit: maxProductInPage,
+        },
+      })
+
+      setProducts(response.data.data)
+      setTotalCount(response.data.dataCount)
+      setMaxPage(Math.ceil(response.data.dataCount / maxProductInPage))
+
+      if (page === 1) {
+        setProducts(response.data.data)
+      } else {
+        setProducts(response.data.data)
+      }
+      renderProducts()
     } catch (err) {
       console.log(err)
     }
   }
+
+  const fetchAllCategory = async () => {
+    try {
+      const responseCategory = await axiosInstance.get("/products/category")
+
+      setCategories(responseCategory.data.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const renderProducts = () => {
+    return products.map((val) => (
+      <ProductCard
+        key={val.id.toString()}
+        product_name={val.product_name}
+        product_picture={`http://localhost:8000/public/${val.Product?.ProductPictures?.product_picture}`}
+        price={val.price}
+        id={val.id}
+      />
+    ))
+  }
+
+  useEffect(() => {
+    fetchProducts()
+    fetchAllCategory()
+  }, [page])
+
   return (
     <>
       <Box
@@ -72,44 +126,21 @@ const MainContent = () => {
           mx="auto"
           maxW="auto"
         >
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px" fontWeight="700">
-                Category 1
-              </Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px">Category 2</Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px">Category 3</Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px">Category 4</Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px">Category 5</Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
-          <Card boxShadow="lg">
-            <CardHeader>
-              <Heading size="16px">Category 6</Heading>
-            </CardHeader>
-            <CardBody>ICON/LOGO</CardBody>
-          </Card>
+          {categories.map((val) => (
+            <Card
+              boxShadow="lg"
+              // onClick={() => {
+              //   navigate(`/product/${id}`)
+              // }}
+            >
+              <CardHeader>
+                <Heading key={val.id} size="16px" fontWeight="700">
+                  {val.category}
+                </Heading>
+              </CardHeader>
+              <CardBody> {` `}</CardBody>
+            </Card>
+          ))}
         </SimpleGrid>
 
         <Divider mt="7vh" border="1px solid #D5D7DD" />
@@ -164,140 +195,22 @@ const MainContent = () => {
             </Button>
           </Link>
         </Flex>
-        <Flex
-          flexDirection="row"
-          flexWrap="wrap"
-          gap="10"
-          background="radial-gradient(50% 50% at 50% 50%, rgba(0, 155, 144, 0.1) 0%, rgba(33, 205, 192, 0) 100%);"
+        <Grid
+          templateColumns={{ base: "repeat(1,fr)", md: "repeat(5,1fr)" }}
+          gap="1em"
+          minH="-moz-max-content"
+          minChildWidth="250px"
+          align="center"
         >
-          <Card maxW="sm">
-            <CardBody>
-              <Image
-                src="https://t4.ftcdn.net/jpg/05/29/47/27/240_F_529472773_u6uKNUsbouFJ4V9mJouTJb31OFHaAhtF.jpg"
-                alt="Iphone 14"
-                borderRadius="lg"
-              />
-              <Stack mt="6" spacing="3">
-                <Heading size="md">Iphone 14 Pro</Heading>
-                <Text>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Praesentium non rerum, sit inventore deserunt nihil?
-                </Text>
-                <Text color="blue.600" fontSize="md">
-                  IDR {(21_999_000).toLocaleString()}
-                </Text>
-              </Stack>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <ButtonGroup spacing="2">
-                <Button variant="solid" colorScheme="teal">
-                  Beli Sekarang
-                </Button>
-                <Button variant="ghost" colorScheme="teal">
-                  Keranjang
-                </Button>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-          <Card maxW="sm">
-            <CardBody>
-              <Image
-                src="https://t3.ftcdn.net/jpg/04/95/54/52/240_F_495545222_yoR3alEQjWsPbDcclWEdjask7Ww6j2sS.jpg"
-                alt="Iphone 14"
-                borderRadius="lg"
-              />
-              <Stack mt="6" spacing="3">
-                <Heading size="md">Smart TV</Heading>
-                <Text>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Praesentium non rerum, sit inventore deserunt nihil?
-                </Text>
-                <Text color="blue.600" fontSize="md">
-                  IDR {(21_999_000).toLocaleString()}
-                </Text>
-              </Stack>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <ButtonGroup spacing="2">
-                <Button variant="solid" colorScheme="teal">
-                  Beli Sekarang
-                </Button>
-                <Button variant="ghost" colorScheme="teal">
-                  Keranjang
-                </Button>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-          <Card maxW="sm">
-            <CardBody>
-              <Image
-                src="https://t3.ftcdn.net/jpg/00/49/11/66/240_F_49116622_Jcqds9q666zT5eBJwdlmJqANipC803fA.jpg"
-                alt="Iphone 14"
-                borderRadius="lg"
-              />
-              <Stack mt="6" spacing="3">
-                <Heading size="md">Kulkas</Heading>
-                <Text>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Praesentium non rerum, sit inventore deserunt nihil?
-                </Text>
-                <Text color="blue.600" fontSize="md">
-                  IDR {(21_999_000).toLocaleString()}
-                </Text>
-              </Stack>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <ButtonGroup spacing="2">
-                <Button variant="solid" colorScheme="teal">
-                  Beli Sekarang
-                </Button>
-                <Button variant="ghost" colorScheme="teal">
-                  Keranjang
-                </Button>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-          <Card maxW="sm">
-            <CardBody>
-              <Image
-                src="https://t3.ftcdn.net/jpg/00/49/11/66/240_F_49116622_Jcqds9q666zT5eBJwdlmJqANipC803fA.jpg"
-                alt="Iphone 14"
-                borderRadius="lg"
-              />
-              <Stack mt="6" spacing="3">
-                <Heading size="md">Kulkas</Heading>
-                <Text>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Praesentium non rerum, sit inventore deserunt nihil?
-                </Text>
-                <Text color="blue.600" fontSize="md">
-                  IDR {(21_999_000).toLocaleString()}
-                </Text>
-              </Stack>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <ButtonGroup spacing="2">
-                <Button variant="solid" colorScheme="teal">
-                  Beli Sekarang
-                </Button>
-                <Button variant="ghost" colorScheme="teal">
-                  Keranjang
-                </Button>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-        </Flex>
+          {renderProducts()}
+        </Grid>
 
         <Divider mt="7" border="1px solid #D5D7DD" mb="8" />
         <Features />
 
         {/* Footer Component */}
-        <Footer />
       </Box>
+      <Footer />
     </>
   )
 }

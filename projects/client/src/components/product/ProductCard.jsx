@@ -15,7 +15,6 @@ const ProductCard = ({ id, product_name, price }) => {
   })
   const [productImg, setProductImg] = useState([])
 
-  console.log("state", productImg)
   const [productId, setProductId] = useState(0)
 
   const fetchProductById = async () => {
@@ -30,8 +29,8 @@ const ProductCard = ({ id, product_name, price }) => {
   const fetchProductImage = async () => {
     try {
       const responseImg = await axiosInstance.get(`/products/image/${id}`)
-      console.log("res", responseImg)
-      setProductImg([responseImg.data.data])
+
+      setProductImg(responseImg.data.data)
     } catch (err) {
       console.log(err)
     }
@@ -68,7 +67,7 @@ const ProductCard = ({ id, product_name, price }) => {
               <Image
                 objectFit="fill"
                 alt="pict of product"
-                src={productImg.Product?.ProductPictures?.product_picture}
+                src={`http://localhost:8000/public/${productImg.product_picture}`}
               />
             </Box>
           </Link>

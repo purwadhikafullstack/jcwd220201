@@ -7,7 +7,7 @@ import {
   Button,
   Divider,
   Spacer,
-  Select,
+  Select as SelectChakra,
   Grid,
   GridItem,
   FormControl,
@@ -38,19 +38,26 @@ import { SearchIcon } from "@chakra-ui/icons"
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa"
 import { useSearchParams, useLocation } from "react-router-dom"
 import ReactPaginate from "react-paginate"
+import Select from "react-select"
 
 const MotionSimpleGrid = motion(SimpleGrid)
 const MotionBox = motion(Box)
 
 const ProductList = () => {
+  // const [products, setProducts] = useState([])
+  // const [page, setPage] = useState(0)
+  // const [limit, setLimit] = useState(3)
+  // const [pages, setPages] = useState(0)
+  // const [rows, setRows] = useState(0)
+  // ====================================================================
   const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
   const [page, setPage] = useState(1)
   const [maxPage, setMaxPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const [sortBy, setSortBy] = useState("product_name")
   const [sortDir, setSortDir] = useState("ASC")
   const [filterProduct, setFilterProduct] = useState("All")
-  // const [categoryData, setCategoryData] = useState([])
 
   const [searchInput, setSearchInput] = useState()
   const [searchValue, setSearchValue] = useState("")
@@ -70,11 +77,9 @@ const ProductList = () => {
           product_name: searchValue,
         },
       })
-      console.log("res", response)
 
       setProducts(response.data.data)
       setTotalCount(response.data.dataCount)
-      console.log("result", totalCount)
       setMaxPage(Math.ceil(response.data.dataCount / maxProductInPage))
 
       if (page === 1) {
@@ -87,16 +92,39 @@ const ProductList = () => {
       console.log(err)
     }
   }
+  const changePage = ({ selected }) => {
+    setMaxPage(selected)
+  }
 
-  // const fetchCategoryData = async () => {
+  // TRIAL AND ERROR =========================================================================
+  // const fetchProducts = async () => {
   //   try {
-  //     const categoryResponse = await axiosInstance.get("/products/category")
-  //     setCategoryData(categoryResponse.data.data)
-  //     console.log("category response", categoryResponse)
+  //     const response = await axiosInstance.get("/products", {
+  //       params: {
+  //         _page: page,
+  //         _limit: maxProductInPage,
+  //         _sortBy: sortBy,
+  //         _sortDir: sortDir,
+  //         CategoryId: filterProduct,
+  //         product_name: searchValue,
+  //       },
+  //     })
+
+  //     setProducts(response.data.data)
+  //     setTotalCount(response.data.dataCount)
+  //     setMaxPage(Math.ceil(response.data.dataCount / maxProductInPage))
+
+  //     if (page === 1) {
+  //       setProducts(response.data.data)
+  //     } else {
+  //       setProducts(response.data.data)
+  //     }
+  //     renderProducts()
   //   } catch (err) {
   //     console.log(err)
   //   }
   // }
+
   // const categoryOptions = categoryData.map((val) => {
   //   return { value: val.category, label: val.category }
   // })
@@ -151,6 +179,21 @@ const ProductList = () => {
     setSearchParams(queryParams)
   }
 
+  const fetchAllCategory = async () => {
+    try {
+      const responseCategory = await axiosInstance.get("/products/category")
+
+      setCategories(responseCategory.data.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const categoryOptions = categories.map((val) => {
+    return { value: val.category, label: val.category }
+  })
+  console.log("cat", categoryOptions)
+
   const filterCategory = ({ target }) => {
     const { value } = target
     setFilterProduct(value)
@@ -162,10 +205,6 @@ const ProductList = () => {
     setFilterProduct(false)
     window.location.reload(false)
   }
-
-  // const btnClickPage = () => {
-  //   (page + 1)
-  // }
 
   useEffect(() => {
     for (let passing of searchParams.entries()) {
@@ -181,13 +220,12 @@ const ProductList = () => {
         setSortDir(passing[1])
       }
     }
-
     fetchProducts()
   }, [page, sortDir, sortBy, filterProduct, searchValue])
 
-  // useEffect(() => {
-  //   fetchCategoryData()
-  // }, [])
+  useEffect(() => {
+    fetchAllCategory()
+  }, [])
 
   const renderProducts = () => {
     return products.map((val) => (
@@ -234,18 +272,25 @@ const ProductList = () => {
               <GridItem>
                 <FormControl>
                   <FormLabel>Filter</FormLabel>
-                  <Select variant="flushed" onChange={filterCategory}>
+                  {/* <Select
+                    id="categories"
+                    isSearchable="true"
+                    value={filterProduct}
+                    options={categoryOptions}
+                    onChange={filterCategory}
+                  /> */}
+                  <SelectChakra variant="flushed" onChange={filterCategory}>
                     <option value="All">Category</option>
-                    <option value={1}>Handphone</option>
-                    <option value={2}>TV</option>
-                    <option value={3}>Home Appliances</option>
-                  </Select>
+                    {categories.map((val) => (
+                      <option value={val.id}>{val.category}</option>
+                    ))}
+                  </SelectChakra>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
                   <FormLabel>Sort By</FormLabel>
-                  <Select
+                  <SelectChakra
                     borderBottom="1px solid"
                     variant="flushed"
                     onChange={sortProduct}
@@ -254,7 +299,7 @@ const ProductList = () => {
                     <option value="product_name DESC">Z-A</option>
                     <option value="harga maksimum">Harga Tertinggi </option>
                     <option value="harga minimum">Harga Terendah</option>
-                  </Select>
+                  </SelectChakra>
                 </FormControl>
               </GridItem>
               <GridItem>
@@ -321,8 +366,6 @@ const ProductList = () => {
             gap="1em"
             mt="1em"
             borderRadius="none"
-            borderBottomRadius="5px solid"
-            boxShadow="md"
           >
             {page === 1 ? null : (
               <Button colorScheme="teal" onClick={previousPageProduct}>
@@ -330,6 +373,7 @@ const ProductList = () => {
               </Button>
             )}
 
+            {/* Alert If Product Doesn't Exist */}
             {!products.length ? (
               <Alert
                 status="error"
@@ -352,8 +396,7 @@ const ProductList = () => {
               </Alert>
             ) : null}
 
-            <Button>{page - 0}</Button>
-            {/* <Button onClick={btnClickPage}>{page + 1}</Button> */}
+            <Button>{page}</Button>
 
             {page >= maxPage ? null : (
               <Button colorScheme="teal" onClick={nextPageProduct}>
@@ -368,14 +411,16 @@ const ProductList = () => {
             mt="1em"
             borderRadius="none"
             borderBottomRadius="5px solid"
-            boxShadow="md"
           >
             <ReactPaginate
-              previousLabel={<FaArrowLeft />}
-              nextLabel={<FaArrowRight />}
-              pageCount={totalCount - 10}
-              marginPagesDisplayed={3}
-              onPageChange={setPage}
+              breakLabel="..."
+              containerClassName="address-pagination-buttons"
+              nextLabel="Berikutnya"
+              onPageChange={changePage}
+              pageRangeDisplayed={3}
+              pageClassName="address-pagination-pages"
+              pageCount={Math.min(10, setPage)}
+              previousLabel="Sebelumnya"
             />
           </Flex> */}
         </Box>
@@ -401,7 +446,7 @@ const ProductList = () => {
           ))}
         </MotionSimpleGrid>
         </Box> */}
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 }

@@ -2,7 +2,7 @@ const express = require("express")
 const productsController = require("../controllers/productsController")
 const router = express.Router()
 
-// Product & Product ID & All Category
+// All Product & Product ID & All Category
 router.get("/", productsController.getAllProducts)
 router.get("/category", productsController.getAllProductCategory)
 router.get("/:id", productsController.getProductsByID)
