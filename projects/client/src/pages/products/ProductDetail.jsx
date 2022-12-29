@@ -172,7 +172,7 @@ const ProductDetail = () => {
           py={{ base: 18, md: 24 }}
         >
           <Flex>
-            <Carousel swipeable={true} showStatus={false} dynamicHeight={false}>
+            <Carousel showStatus={false} showThumbs={false}>
               {productImg.map((val) => (
                 <Image
                   // className="image-prod-detail"

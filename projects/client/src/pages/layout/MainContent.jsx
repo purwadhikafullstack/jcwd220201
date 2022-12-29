@@ -18,6 +18,7 @@ import {
   ButtonGroup,
   CardFooter,
   Spacer,
+  Container,
 } from "@chakra-ui/react"
 import SlideBanner from "../../components/SlideBanner"
 import Footer from "./Footer"
@@ -92,7 +93,7 @@ const MainContent = () => {
   return (
     <>
       <Box
-        h={{ lg: "205vh", md: "100vh", base: "100vh" }}
+        h={{ lg: "150vh", md: "100vh", base: "100vh" }}
         px={{ lg: "5%", md: "5%", base: "5%" }}
         py="auto"
         mt="50px"
@@ -209,8 +210,11 @@ const MainContent = () => {
         <Features />
 
         {/* Footer Component */}
+        <Box>
+          <Divider />
+          <Footer />
+        </Box>
       </Box>
-      <Footer />
     </>
   )
 }

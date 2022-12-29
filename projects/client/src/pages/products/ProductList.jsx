@@ -424,6 +424,8 @@ const ProductList = () => {
             />
           </Flex> */}
         </Box>
+        <Divider mt="1" />
+        <Footer />
       </Box>
 
       {/* Using Animate */}
@@ -446,7 +448,6 @@ const ProductList = () => {
           ))}
         </MotionSimpleGrid>
         </Box> */}
-      <Footer />
     </>
   )
 }

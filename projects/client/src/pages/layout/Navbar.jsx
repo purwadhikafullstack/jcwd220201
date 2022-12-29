@@ -175,7 +175,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
 
   useEffect(() => {
     fetchUserCart()
-  }, [cartProduct])
+  }, [cartProduct, authSelector])
 
   useEffect(() => {
     setSearchValue(searchQuery.get("search"))
@@ -244,36 +244,72 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 display="flex"
                 my="auto"
                 borderRight="1px solid #e0e0e0"
-                pr="50"
+                // pr="50"
                 color="#6c727c"
               >
                 <Popover trigger="hover">
                   <PopoverTrigger>
-                    <LinkRouterDom>
-                      <HStack>
+                    <LinkRouterDom to="/cart">
+                      <Button bg="inherit" size="md">
                         <IoMdCart fontSize="20px" />
-                        <Text>{cartSelector.cart.length}</Text>
-                      </HStack>
+                        {cartSelector.cart.length && authSelector.id ? (
+                          <sup>
+                            <Box
+                              fontSize="11px"
+                              backgroundColor="teal"
+                              borderRadius="50%"
+                              mt="-2px"
+                              mx="-8px"
+                              px="7px"
+                              py="8px"
+                              color="white"
+                              fontWeight="700"
+                            >
+                              {cartQty}
+                            </Box>
+                          </sup>
+                        ) : null}
+                      </Button>
                     </LinkRouterDom>
                   </PopoverTrigger>
-                  <PopoverContent>
-                    <PopoverHeader
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      <Text>Keranjang ({cartSelector.cart.length})</Text>
-                      <LinkRouterDom to="/cart">
-                        <Text>Lihat Keranjang</Text>
-                      </LinkRouterDom>
-                    </PopoverHeader>
-                    <PopoverBody>
-                      {renderCartProduct()}
-                      {/* <Image src={product_picture} /> */}
-                      {/* <Text align="center" fontWeight="semibold">
+                  {cartSelector.cart.length ? (
+                    <PopoverContent>
+                      <PopoverHeader
+                        display="flex"
+                        justifyContent="space-between"
+                      >
+                        <Text>Keranjang</Text>
+                        <LinkRouterDom to="/cart">
+                          <Text>Lihat Keranjang</Text>
+                        </LinkRouterDom>
+                      </PopoverHeader>
+                      <PopoverBody>
+                        {renderCartProduct()}
+                        {/* <Image src={product_picture} /> */}
+                        {/* <Text align="center" fontWeight="semibold">
                         Keranjangmu Masih Kosong nih ?
                       </Text> */}
-                    </PopoverBody>
-                  </PopoverContent>
+                      </PopoverBody>
+                    </PopoverContent>
+                  ) : (
+                    <PopoverContent>
+                      <PopoverHeader
+                        display="flex"
+                        justifyContent="space-between"
+                      >
+                        <Text>Keranjang</Text>
+                        <LinkRouterDom to="/cart">
+                          <Text>Lihat Keranjang</Text>
+                        </LinkRouterDom>
+                      </PopoverHeader>
+                      <PopoverBody>
+                        <Image src="assets/cart/keranjangkosong.png" />
+                        <Text align="center" fontWeight="semibold">
+                          Keranjangmu Masih Kosong nih ?
+                        </Text>
+                      </PopoverBody>
+                    </PopoverContent>
+                  )}
                 </Popover>
               </Box>
               {/* ====================================================================================== */}
@@ -376,6 +412,58 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              {/* Cart on Mobile View */}
+              <Box
+                display="flex"
+                my="auto"
+                // pr="50"
+                color="#6c727c"
+              >
+                <Popover trigger="hover">
+                  <PopoverTrigger>
+                    <LinkRouterDom to="/cart">
+                      <Button bg="inherit" size="md">
+                        <IoMdCart fontSize="20px" />
+                        {cartSelector.cart.length && authSelector.id ? (
+                          <sup>
+                            <Box
+                              fontSize="11px"
+                              backgroundColor="teal"
+                              borderRadius="50%"
+                              mt="-2px"
+                              mx="-8px"
+                              px="7px"
+                              py="8px"
+                              color="white"
+                              fontWeight="700"
+                            >
+                              {cartQty}
+                            </Box>
+                          </sup>
+                        ) : null}
+                      </Button>
+                    </LinkRouterDom>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverHeader
+                      display="flex"
+                      justifyContent="space-between"
+                    >
+                      <Text>Keranjang</Text>
+                      <LinkRouterDom to="/cart">
+                        <Text>Lihat Keranjang</Text>
+                      </LinkRouterDom>
+                    </PopoverHeader>
+                    <PopoverBody>
+                      {renderCartProduct()}
+                      {/* <Image src={product_picture} /> */}
+                      {/* <Text align="center" fontWeight="semibold">
+                        Keranjangmu Masih Kosong nih ?
+                      </Text> */}
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              </Box>
 
               {authSelector.name ? null : (
                 <ButtonGroup gap="2" display={{ base: "flex", md: "none" }}>
