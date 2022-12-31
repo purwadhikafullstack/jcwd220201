@@ -1,6 +1,6 @@
 import {
+  Box,
   Button,
-  Center,
   Container,
   Flex,
   FormControl,
@@ -16,6 +16,9 @@ import {
   Stack,
   Text,
   useToast,
+  VStack,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useState } from "react"
@@ -102,90 +105,163 @@ const LoginPage = () => {
   }
 
   return (
-    <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
-      <Heading align={"right"} as="h1" size="2xl" letterSpacing={"tighter"}>
-        <LinkRouterDom to="/">WIRED!</LinkRouterDom>
-      </Heading>
-      <Flex p={8} flex={1} align={"center"} justify={"center"}>
-        <Stack spacing={4} w={"full"} maxW={"md"}>
-          <Stack align={"center"}>
-            <Heading fontSize={"4xl"}>Masuk ke akun anda</Heading>
-            <Text fontSize={"lg"} color={"gray.600"}>
-              Untuk berbelanja semua produk kami ✌️
-            </Text>
-          </Stack>
-
-          <form onSubmit={formik.handleSubmit}>
-            <Stack>
-              <FormControl isInvalid={formik.errors.email}>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  value={formik.values.email}
-                  name="email"
-                  type="email"
-                  onChange={formChangeHandler}
-                />
-                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={formik.errors.password}>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input
-                    value={formik.values.password}
-                    name="password"
-                    onChange={formChangeHandler}
-                    type={showPassword ? "text" : "password"}
-                  />
-                  <InputRightElement h={"full"}>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }
+    <>
+      <Container
+        bg="teal.400"
+        maxW="full"
+        mt={0}
+        centerContent
+        overflow="hidden"
+      >
+        <Flex>
+          <Box
+            bg="white"
+            color="white"
+            borderRadius="lg"
+            m={{ sm: 4, md: 16, lg: 10 }}
+            p={{ sm: 5, md: 5, lg: 10 }}
+          >
+            <Box p={4}>
+              <Heading
+                align={"right"}
+                as="h1"
+                size="2xl"
+                letterSpacing={"tighter"}
+                textColor="black"
+                textAlign="center"
+                mb="30px"
+                mt="-5"
+              >
+                WIRED!
+              </Heading>
+              <Wrap spacing={{ base: 10, sm: 3, md: 5, lg: 20 }}>
+                <WrapItem>
+                  <Box>
+                    <Box py={{ base: 5, sm: 5, md: 8, lg: 10 }}>
+                      <VStack
+                        pl={0}
+                        spacing={1}
+                        mb="-20"
+                        mr="-80"
+                        alignItems="flex-start"
+                      >
+                        <Image
+                          alt={"Login Image"}
+                          objectFit={"cover"}
+                          maxH="70%"
+                          maxW="65%"
+                          src={
+                            "https://img.freepik.com/free-vector/account-concept-illustration_114360-399.jpg?w=740&t=st=1668700968~exp=1668701568~hmac=2fc7a4e39aedc62a508eeccea0651ff5742d91ff72a3cda488b0861ddaf4a62f"
+                          }
+                        />
+                      </VStack>
+                    </Box>
+                  </Box>
+                </WrapItem>
+                <WrapItem>
+                  <Box bg="white" borderRadius="lg">
+                    <Box
+                      m={10}
+                      color="#0B0E3F"
+                      borderRadius="10px"
+                      boxShadow={"0 0 10px 3px rgb(0 0 0 / 10%)"}
+                      p="24px 40px 32px "
                     >
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                <FormHelperText mt="5" mb="5" textAlign="right">
-                  <LinkChakra
-                    onClick={() => {
-                      navigate("/forgot-password")
-                    }}
-                  >
-                    Lupa Password?
-                  </LinkChakra>
-                </FormHelperText>
-                <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-              </FormControl>
-              <Button type="submit" colorScheme="teal">
-                Masuk
-              </Button>
-            </Stack>
-            <Stack pt={6}>
-              <Text align={"center"}>
-                Belum punya akun?{" "}
-                <LinkRouterDom to="/register" color={"teal"}>
-                  Daftar
-                </LinkRouterDom>
-              </Text>
-            </Stack>
-          </form>
-          <Text align={"center"}>© 2022 PT WIRED! Indonesia</Text>
-        </Stack>
-      </Flex>
-      <Flex flex={1}>
-        <Image
-          alt={"Login Image"}
-          objectFit={"cover"}
-          maxH="80%"
-          maxW="80%"
-          src={
-            "https://img.freepik.com/free-vector/account-concept-illustration_114360-399.jpg?w=740&t=st=1668700968~exp=1668701568~hmac=2fc7a4e39aedc62a508eeccea0651ff5742d91ff72a3cda488b0861ddaf4a62f"
-          }
-        />
-      </Flex>
-    </Stack>
+                      <Heading textColor="black" fontSize={"2xl"} mb="5px">
+                        Masuk Ke Akun Anda
+                      </Heading>
+                      <Text fontSize={"lg"} color={"gray.600"} mb="20px">
+                        Untuk berbelanja semua produk kami ✌️
+                      </Text>
+                      <VStack spacing={5}>
+                        <FormControl isInvalid={formik.errors.email}>
+                          <FormLabel>Email</FormLabel>
+                          <Input
+                            value={formik.values.email}
+                            name="email"
+                            type="email"
+                            onChange={formChangeHandler}
+                          />
+                          <FormErrorMessage>
+                            {formik.errors.email}
+                          </FormErrorMessage>
+                        </FormControl>
+                        <FormControl isInvalid={formik.errors.password}>
+                          <FormLabel>Password</FormLabel>
+                          <InputGroup>
+                            <Input
+                              value={formik.values.password}
+                              name="password"
+                              onChange={formChangeHandler}
+                              type={showPassword ? "text" : "password"}
+                            />
+                            <InputRightElement h={"full"}>
+                              <Button
+                                variant={"ghost"}
+                                onClick={() =>
+                                  setShowPassword(
+                                    (showPassword) => !showPassword
+                                  )
+                                }
+                              >
+                                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormHelperText mt="5" mb="-2" textAlign="right">
+                            <LinkChakra
+                              onClick={() => {
+                                navigate("/forgot-password")
+                              }}
+                            >
+                              Lupa Password?
+                            </LinkChakra>
+                          </FormHelperText>
+                          <FormErrorMessage>
+                            {formik.errors.password}
+                          </FormErrorMessage>
+                        </FormControl>
+                        <Button
+                          onClick={formik.handleSubmit}
+                          isDisabled={!formik.values.email}
+                          type={"submit"}
+                          bgColor="teal.500"
+                          color={"white"}
+                        >
+                          Masuk
+                        </Button>
+                      </VStack>
+                      <Stack>
+                        <Text align={"center"} mt="20px" mr="2">
+                          Belum Punya Akun?
+                          <LinkRouterDom
+                            style={{ color: "teal" }}
+                            to="/register"
+                          >
+                            Daftar
+                          </LinkRouterDom>
+                        </Text>
+                      </Stack>
+                    </Box>
+                  </Box>
+                </WrapItem>
+              </Wrap>
+            </Box>
+          </Box>
+        </Flex>
+      </Container>
+      <Text
+        color="rgb(96, 96, 96)"
+        mt="7.5rem"
+        mb="0.125rem"
+        lineHeight="1.375rem"
+        whiteSpace="nowrap"
+        display="block"
+        textAlign="center"
+      >
+        © 2022 PT WIRED! Indonesia
+      </Text>
+    </>
   )
 }
 

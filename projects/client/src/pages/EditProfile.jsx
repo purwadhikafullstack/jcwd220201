@@ -10,11 +10,8 @@ import {
   HStack,
   Input,
   Select,
-  InputRightElement,
   Stack,
-  Text,
   useToast,
-  InputGroup,
   Tab,
   Tabs,
   TabList,
@@ -23,34 +20,29 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from "@chakra-ui/react"
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
+
 import { useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { axiosInstance } from "../api"
 import { useFormik } from "formik"
 import { login } from "../redux/features/authSlice"
 import { useEffect } from "react"
-import * as Yup from "yup"
-import { Navigate, useNavigate } from "react-router-dom"
+
+import { Link, useNavigate } from "react-router-dom"
 
 const EditProfile = () => {
   const authSelector = useSelector((state) => state.auth)
   const [editMode, setEditMode] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPW, setShowConfirmPW] = useState(false)
   const [users, setUsers] = useState([])
-  const [tabNumber, setTabNumber] = useState(1)
   const inputFileRef = useRef()
-
   const dispatch = useDispatch()
-  const token = localStorage.getItem("auth_token")
   const navigate = useNavigate()
 
   const toast = useToast()
 
   const getUser = async () => {
     try {
-      const response = await axiosInstance.get(`http://localhost:8000/auth`)
+      const response = await axiosInstance.get("/auth")
 
       setUsers(response.data[0])
     } catch (err) {
@@ -65,8 +57,6 @@ const EditProfile = () => {
       gender: "",
       phone: "",
       date_of_birth: "",
-      password: "",
-      confirm_password: "",
     },
     onSubmit: async ({
       name,
@@ -74,8 +64,6 @@ const EditProfile = () => {
       gender,
       phone,
       date_of_birth,
-      password,
-      confirm_password,
     }) => {
       try {
         const userData = new FormData()
@@ -96,18 +84,17 @@ const EditProfile = () => {
         if (date_of_birth && date_of_birth !== authSelector.date_of_birth) {
           userData.append("date_of_birth", date_of_birth)
         }
-        if (password && password !== authSelector.password) {
-          userData.append("password", password)
-        }
-        if (confirm_password && confirm_password !== authSelector.password) {
-          userData.append("confirm_password", confirm_password)
-        }
 
         const userResponse = await axiosInstance.patch("auth/profile", userData)
 
         dispatch(login(userResponse.data.data))
         setEditMode(false)
-        navigate("/")
+        if (authSelector.RoleId === 1 || authSelector.RoleId === 2) {
+          navigate("/admin/dashboard")
+        } else {
+          navigate("/")
+        }
+
         toast({ title: "Profile Edited" })
       } catch (err) {
         console.log(err)
@@ -118,16 +105,6 @@ const EditProfile = () => {
         })
       }
     },
-    validationSchema:
-      tabNumber === 2
-        ? Yup.object({
-            password: Yup.string(),
-            confirm_password: Yup.string()
-              .required()
-              .oneOf([Yup.ref("password"), null], "password not match"),
-          })
-        : null,
-    validateOnChange: false,
   })
 
   const formChangeHandler = ({ target }) => {
@@ -136,23 +113,43 @@ const EditProfile = () => {
     formik.setFieldValue(name, value)
   }
 
+  const handleCancel = () => {
+    if (authSelector.RoleId === 1 || authSelector.RoleId === 2) {
+      navigate("/admin/dashboard")
+    } else {
+      navigate("/")
+    }
+  }
+
   useEffect(() => {
     getUser()
   }, [])
 
   return (
-    <Container maxW="container.md" py="4" pb="10">
+    <Container
+      borderRadius="6px"
+      backgroundColor="teal.400"
+      maxW="container.lg"
+      py="10"
+      pb="10"
+      pr="10"
+      pl="10"
+    >
       <Box
-        backgroundColor={"#F0FFF4"}
+        backgroundColor="white"
         borderColor="gray.300"
         borderWidth="1px"
         p="6"
         borderRadius="8px"
       >
-        <Tabs isFitted variant="enclosed">
+        <Tabs isManual variant="soft-rounded" colorScheme="gray">
           <TabList mb="1em">
-            <Tab onClick={() => setTabNumber(1)}>Ubah Biodata Diri</Tab>
-            <Tab onClick={() => setTabNumber(2)}>Ubah Kata Sandi</Tab>
+            <Tab _selected={{ color: "white", bg: "teal" }}>
+              Ubah Biodata Diri
+            </Tab>
+            <Link to="/profile/change-password">
+              <Tab>Ubah Kata Sandi</Tab>
+            </Link>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -277,7 +274,7 @@ const EditProfile = () => {
                       <Button
                         width="80%"
                         colorScheme="red"
-                        onClick={() => navigate(-1)}
+                        onClick={handleCancel}
                       >
                         Batalkan
                       </Button>
@@ -286,87 +283,8 @@ const EditProfile = () => {
                 </Stack>
               </HStack>
             </TabPanel>
-            <TabPanel>
-              <HStack
-                spacing="6"
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Stack
-                  spacing={6}
-                  w={"full"}
-                  maxW={"lg"}
-                  bg={"white"}
-                  rounded={"xl"}
-                  boxShadow={"lg"}
-                  p={6}
-                >
-                  <Heading
-                    lineHeight={1.1}
-                    fontSize={{ base: "2xl", sm: "3xl" }}
-                  >
-                    Ubah Profil Pengguna
-                  </Heading>
 
-                  <FormControl isInvalid={formik.errors.password}>
-                    <FormLabel>Kata Sandi</FormLabel>
-                    <InputGroup>
-                      <Input
-                        onChange={formChangeHandler}
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                      />
-                      <InputRightElement h={"full"}>
-                        <Button
-                          variant={"ghost"}
-                          onClick={() =>
-                            setShowPassword((showPassword) => !showPassword)
-                          }
-                        >
-                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
-                    <FormErrorMessage>
-                      {formik.errors.password}
-                    </FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl isInvalid={formik.errors.confirm_password}>
-                    <FormLabel>Konfirmasi Kata Sandi</FormLabel>
-                    <Input
-                      onChange={formChangeHandler}
-                      name="confirm_password"
-                      type="confirm_password"
-                    />
-                    <FormErrorMessage>
-                      {formik.errors.confirm_password}
-                    </FormErrorMessage>
-                  </FormControl>
-
-                  <>
-                    <Center>
-                      <Button
-                        width="80%"
-                        colorScheme="teal"
-                        onClick={formik.handleSubmit}
-                      >
-                        Simpan
-                      </Button>
-                    </Center>
-                    <Center>
-                      <Button
-                        width="80%"
-                        colorScheme="red"
-                        onClick={() => navigate(-1)}
-                      >
-                        Batalkan
-                      </Button>
-                    </Center>
-                  </>
-                </Stack>
-              </HStack>
-            </TabPanel>
+            <TabPanel></TabPanel>
           </TabPanels>
         </Tabs>
       </Box>

@@ -1,34 +1,26 @@
 import {
   Box,
   Button,
-  Container,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   Input,
   InputGroup,
-  InputRightElement,
   Stack,
   Text,
-  Toast,
-  useToast,
 } from "@chakra-ui/react"
 import { useFormik } from "formik"
 import { useState } from "react"
 import { IoMdArrowRoundBack } from "react-icons/io"
-import { useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import * as Yup from "yup"
 import { axiosInstance } from "../api"
 
 const ForgotPassword = () => {
   const [message, setMessage] = useState("")
-  const navigate = useNavigate()
-  const toast = useToast()
   const [email, setEmail] = useState("")
-  const dispatch = useDispatch()
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -47,11 +39,11 @@ const ForgotPassword = () => {
           email,
         })
 
-        setEmail("")
+        formik.handleReset()
         setMessage("Silahkan cek email anda")
         setTimeout(() => {
           setMessage("")
-        }, 6000)
+        }, 5000)
       } catch (err) {
         console.log(err)
 
@@ -89,7 +81,6 @@ const ForgotPassword = () => {
                     name="email"
                     type="email"
                     onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
                   />
                 </InputGroup>
                 <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -112,7 +103,7 @@ const ForgotPassword = () => {
           </form>
         </Flex>
         <Box>
-          <Link to="/">
+          <Link to="/login">
             <Box>
               <Button
                 bgColor={"white"}

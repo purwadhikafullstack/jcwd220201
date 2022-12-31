@@ -28,6 +28,7 @@ import Stock from "./pages/admin/Stock/Stock"
 import ForgotPassword from "./pages/ForgotPassword"
 import RecoverPassword from "./pages/RecoverPassword"
 import ManageUser from "./pages/admin/manageUser"
+import EditPassword from "./components/profile/EditPassword"
 import SalesReport from "./pages/admin/salesReport"
 import OrderPayment from "./components/admin/orderPayment"
 import Checkout from "./pages/Checkout"
@@ -97,6 +98,14 @@ const App = () => {
           element={
             <GeneralRoute>
               <EditProfile />
+            </GeneralRoute>
+          }
+        />
+        <Route
+          path="/profile/change-password"
+          element={
+            <GeneralRoute>
+              <EditPassword />
             </GeneralRoute>
           }
         />
