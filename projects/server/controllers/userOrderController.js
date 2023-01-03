@@ -77,6 +77,39 @@ const userOrderController = {
     }
   },
   getWarehouseById: async (req, res) => {},
+
+  cancelOrderUser: async (req, res) => {
+    try {
+      const findStatus = await db.Order.findOne(req.body.StatusId)
+
+      if (findStatus.StatusId !== 1) {
+        return res.status(400).json({
+          message: "Status tidak dapat dibatalkan",
+        })
+      } else {
+        await db.Order.update(
+          {
+            StatusId: 6,
+          },
+          {
+            where: {
+              id: req.params.id,
+            },
+          }
+        )
+
+        return res.status(200).json({
+          message: "Pesanan dibatalkan",
+          data: findStatus,
+        })
+      }
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({
+        message: err.message,
+      })
+    }
+  },
 }
 
 module.exports = userOrderController

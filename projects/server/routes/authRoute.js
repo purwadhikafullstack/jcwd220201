@@ -3,7 +3,6 @@ const authController = require("../controllers/authController")
 const { verifyToken } = require("../middlewares/authMiddleware")
 const router = express.Router()
 const { upload } = require("../lib/uploader")
-const { validToken } = require("../lib/jwt")
 
 router.post("/login", authController.loginUser)
 router.post("/forgot-password", authController.forgotPassword)

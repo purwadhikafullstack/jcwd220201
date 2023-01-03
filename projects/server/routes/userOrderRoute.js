@@ -7,5 +7,7 @@ const { verifyToken } = require("../middlewares/authMiddleware")
 router.get("/all-user", userOrderController.getAllUserOrder2)
 // Warehouse Id - Login by Warehouse Admin
 router.get("/all-user/:id", userOrderController.getWarehouseById)
+// For User CancelOrder
+router.patch("/cancel/:id", userOrderController.cancelOrderUser)
 
 module.exports = router
