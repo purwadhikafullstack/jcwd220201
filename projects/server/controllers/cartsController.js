@@ -395,7 +395,7 @@ const cartController = {
         { where: { id: findProduct.id } }
       )
 
-      return res.status(200), json({ message: "Berhasil Menambah Quantity" })
+      return res.status(200).json({ message: "Berhasil Menambah Quantity" })
     } catch (err) {
       return res.status(500).json({ message: err.message })
     }

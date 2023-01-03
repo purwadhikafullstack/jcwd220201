@@ -27,12 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogFooter,
 } from "@chakra-ui/react"
-import {
-  Editable,
-  EditableInput,
-  EditableTextarea,
-  EditablePreview,
-} from "@chakra-ui/react"
+
 import { useEffect } from "react"
 import { useState } from "react"
 import { FiGift } from "react-icons/fi"
@@ -46,6 +41,8 @@ const CartItem = ({
   product_picture,
   CartId,
   productId,
+  CategoryId,
+  category,
   quantity,
   checkAllProduct,
   fetchCartItem,
@@ -149,6 +146,7 @@ const CartItem = ({
   const inc = getIncrementButtonProps(addQty)
   const dec = getDecrementButtonProps(decQty)
   const input = getInputProps(qtyProduct)
+  console.log("inp", input)
   const qty = Number(input.value)
   useEffect(() => {
     fetchCartById()
@@ -180,7 +178,7 @@ const CartItem = ({
             height="120px"
             fit="cover"
             src={product_picture}
-            // alt={name}
+            alt="gambar produk"
             draggable="false"
             loading="lazy"
           />
@@ -191,7 +189,8 @@ const CartItem = ({
                 color={useColorModeValue("gray.600", "gray.400")}
                 fontSize="sm"
               >
-                Kategori
+                {/* Kategori */}
+                {category}
                 {/* {CategoryId} */}
               </Text>
             </Stack>
@@ -208,31 +207,66 @@ const CartItem = ({
             md: "flex",
           }}
         >
-          <InputGroup w="40%">
+          {/* <InputGroup w="40%">
             <InputLeftElement>
-              <MinusIcon
-                fontSize="10"
-                {...dec}
-                color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
-                onClick={decQty}
-              />
+              <Button
+                variant="unstyled"
+                onClick={addQty}
+                isDisabled={productStock <= qty}
+              >
+                <AddIcon
+                  fontSize="10"
+                  {...inc}
+                  color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
+                  onClick={addQty}
+                />
+              </Button>
             </InputLeftElement>
             <Input width="10em" textAlign="center" _hover={"none"} {...input} />
+            <Text>{qtyProduct}</Text>
             <InputRightElement>
-              <AddIcon
-                fontSize="10"
-                {...inc}
-                color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
+              <Button variant="unstyled" onClick={decQty}>
+                <MinusIcon
+                  fontSize="10"
+                  {...dec}
+                  color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
+                  onClick={decQty}
+                />
+              </Button>
+            </InputRightElement>
+          </InputGroup> */}
+          <InputGroup w="40%">
+            <InputLeftElement>
+              <Button
+                variant="unstyled"
                 onClick={addQty}
-              />
+                isDisabled={productStock <= qty}
+              >
+                <AddIcon
+                  fontSize="10"
+                  {...inc}
+                  color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
+                  onClick={addQty}
+                />
+              </Button>
+            </InputLeftElement>
+
+            <Text>{qtyProduct}</Text>
+            <InputRightElement>
+              <Button variant="unstyled" onClick={decQty}>
+                <MinusIcon
+                  fontSize="10"
+                  {...dec}
+                  color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
+                  onClick={decQty}
+                />
+              </Button>
             </InputRightElement>
           </InputGroup>
 
           <HStack spacing="1">
             <Text>{Rupiah(price)}</Text>
           </HStack>
-
-          {/* <PriceTag price={price} currency={currency} /> */}
 
           <CloseButton onClick={btnDelete} />
         </Flex>
@@ -251,16 +285,6 @@ const CartItem = ({
           <Link fontSize="sm" textDecor="underline" onClick={btnDelete}>
             Hapus Produk
           </Link>
-          {/* <Select
-            maxW="64px"
-            aria-label="Select quantity"
-            focusBorderColor={useColorModeValue("blue.500", "blue.200")}
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </Select> */}
           <InputGroup w="40%">
             <InputLeftElement>
               <MinusIcon
@@ -280,7 +304,6 @@ const CartItem = ({
               />
             </InputRightElement>
           </InputGroup>
-          {/* <PriceTag price={price} currency={currency} /> */}
         </Flex>
       </Flex>
       <Divider />

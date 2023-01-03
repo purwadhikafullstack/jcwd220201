@@ -140,6 +140,8 @@ const CartPage = () => {
           price={val.Product.price}
           quantity={val.quantity}
           product_picture={`http://localhost:8000/public/${val.Product?.ProductPictures[0].product_picture}`}
+          category={val.Category?.category}
+          CategoryId={val.CategoryId}
           CartId={val.id}
           fetchCartItem={fetchCartItem}
           isChecked={val.is_checked}
