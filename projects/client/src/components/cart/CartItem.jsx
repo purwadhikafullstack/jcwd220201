@@ -20,6 +20,12 @@ import {
   useDisclosure,
   Button,
   useToast,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
 } from "@chakra-ui/react"
 import {
   Editable,
@@ -30,6 +36,7 @@ import {
 import { useEffect } from "react"
 import { useState } from "react"
 import { FiGift } from "react-icons/fi"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { axiosInstance } from "../../api"
 import { Rupiah } from "../../lib/currency/Rupiah"
@@ -49,9 +56,11 @@ const CartItem = ({
   const [checkProduct, setCheckProduct] = useState(false)
   const [qtyProduct, setQtyProduct] = useState(quantity)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const cartSelector = useSelector((state) => state.cart)
   const toast = useToast()
 
   const btnDelete = () => {
+    onClose()
     onDelete()
   }
   const fetchCartById = async () => {
@@ -239,10 +248,10 @@ const CartItem = ({
             md: "none",
           }}
         >
-          <Link fontSize="sm" textDecor="underline">
+          <Link fontSize="sm" textDecor="underline" onClick={btnDelete}>
             Hapus Produk
           </Link>
-          <Select
+          {/* <Select
             maxW="64px"
             aria-label="Select quantity"
             focusBorderColor={useColorModeValue("blue.500", "blue.200")}
@@ -251,11 +260,52 @@ const CartItem = ({
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-          </Select>
+          </Select> */}
+          <InputGroup w="40%">
+            <InputLeftElement>
+              <MinusIcon
+                fontSize="10"
+                {...dec}
+                color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
+                onClick={decQty}
+              />
+            </InputLeftElement>
+            <Input width="10em" textAlign="center" _hover={"none"} {...input} />
+            <InputRightElement>
+              <AddIcon
+                fontSize="10"
+                {...inc}
+                color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
+                onClick={addQty}
+              />
+            </InputRightElement>
+          </InputGroup>
           {/* <PriceTag price={price} currency={currency} /> */}
         </Flex>
       </Flex>
       <Divider />
+
+      {/* Delete Per Product */}
+      <AlertDialog isOpen={isOpen} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Hapus Barang dari Keranjag
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Barang yang kamu pilih akan dihapus dari keranjang.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button onClick={onClose}>Kembali</Button>
+              <Button colorScheme="red" onClick={btnDelete} ml={3}>
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   )
 }

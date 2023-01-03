@@ -32,13 +32,13 @@ const cartController = {
 
       if (totalStock === 0) {
         return res.status(400).json({
-          message: "Product Stock is Empty",
+          message: "Stok Produk Habis",
         })
       }
 
       if (!findProductsCart && quantity > totalStock) {
         return res.status(400).json({
-          message: "Product Stock is Empty",
+          message: "Stok Produk Habis",
         })
       }
 
@@ -84,13 +84,13 @@ const cartController = {
 
       if (totalStockCart === 0 || totalStockCart < quantity) {
         return res.status(400).json({
-          message: "Product Stock is empty",
+          message: "Stok Produk Habis",
         })
       }
 
       if (totalStockCart === 0 || totalStockCart < cartItem + quantity) {
         return res.status(400).json({
-          message: "Product Stock is empty",
+          message: "Stok Produk Habis",
         })
       }
     } catch (err) {
@@ -348,7 +348,7 @@ const cartController = {
 
       if (findProduct.quantity <= 1) {
         return res.status(200).json({
-          message: "Minimum 1 Quantity Product",
+          message: "Minimal 1 Quantity Produk",
         })
       }
 
@@ -357,7 +357,7 @@ const cartController = {
         { where: { id: findProduct.id } }
       )
 
-      return res.status(200).json({ message: "Quantity Decreased" })
+      return res.status(200).json({ message: "Quantity Berkurang" })
     } catch (err) {
       console.log(err)
     }
@@ -387,7 +387,7 @@ const cartController = {
       const subTotal = total
 
       if (findProduct.quantity + 1 > subTotal) {
-        return res.status(400).json({ message: "Product Stock Empty" })
+        return res.status(400).json({ message: "Stok Produk Habis" })
       }
 
       await db.Cart.update(
@@ -395,7 +395,7 @@ const cartController = {
         { where: { id: findProduct.id } }
       )
 
-      return res.status(200), json({ message: "Quantity Added" })
+      return res.status(200), json({ message: "Berhasil Menambah Quantity" })
     } catch (err) {
       return res.status(500).json({ message: err.message })
     }
@@ -411,7 +411,7 @@ const cartController = {
         },
       })
       return res.status(200).json({
-        message: "Product deleted from Cart !",
+        message: "Produk dihapus dari Keranjang !",
       })
     } catch (err) {
       console.log(err)
@@ -426,7 +426,7 @@ const cartController = {
         where: { UserId: req.user.id },
       })
       return res.status(200).json({
-        mesage: "All Product Deleted !",
+        mesage: "Semua Produk Dihapus !",
       })
     } catch (err) {
       console.log(err)

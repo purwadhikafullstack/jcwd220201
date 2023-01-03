@@ -26,6 +26,7 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
+  Spacer,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useEffect } from "react"
@@ -35,7 +36,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { axiosInstance } from "../api"
 import CartItem from "../components/cart/CartItem"
 import { getSubTotal, getTotalQty, itemCart } from "../redux/features/cartSlice"
-import { Link as LinkRouterDom } from "react-router-dom"
+import { Link, Link as LinkRouterDom, useNavigate } from "react-router-dom"
 import { Rupiah } from "../lib/currency/Rupiah"
 import Navbar from "./layout/Navbar"
 import Footer from "./layout/Footer"
@@ -45,6 +46,7 @@ const CartPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cartSelector = useSelector((state) => state.cart)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const toast = useToast()
 
@@ -102,8 +104,7 @@ const CartPage = () => {
 
       fetchCartItem()
       totalHarga()
-      onClose()
-      toast({ tittle: "Produk Dihapus", status: "success" })
+      toast({ title: "Produk Dihapus", status: "success", duration: 1000 })
     } catch (err) {
       console.log(err)
     }
@@ -116,10 +117,18 @@ const CartPage = () => {
       fetchCartItem()
       totalHarga()
       onClose()
-      toast({ title: "Semua Barang Dihapus", status: "success" })
+      toast({
+        title: "Semua Barang Dihapus",
+        status: "success",
+        duration: 1000,
+      })
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const btnCheckout = () => {
+    navigate("/cart/shipment")
   }
   const renderCartItem = () => {
     return cartSelector.cart.map((val) => {
@@ -130,7 +139,7 @@ const CartPage = () => {
           product_name={val.Product.product_name}
           price={val.Product.price}
           quantity={val.quantity}
-          product_picture={`http://localhost:8000/localhost/public/${val.Product?.ProductPictures?.product_picture}`}
+          product_picture={`http://localhost:8000/public/${val.Product?.ProductPictures[0].product_picture}`}
           CartId={val.id}
           fetchCartItem={fetchCartItem}
           isChecked={val.is_checked}
@@ -146,100 +155,95 @@ const CartPage = () => {
     fetchCartItem()
     totalHarga()
   }, [])
-  if (!cartSelector.cart.length) {
-    return (
-      <>
-        <Navbar />
-        <Alert
-          status="error"
-          variant="subtle"
-          flexDir="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-          h="200px"
-        >
-          <AlertIcon boxSize="40px" mr="0" />
-          <AlertTitle>Oops, produk nggak ditemukan !</AlertTitle>
-          <AlertDescription>
-            Coba kata kunci lain atau cek produk rekomendasi kami. Terimakasih{" "}
-            <span size="lg">🤯</span>
-          </AlertDescription>
-          <Button>
-            <a href="/product">Lanjut Belanja</a>
-          </Button>
-        </Alert>
-      </>
-    )
-  } else {
-    return (
-      <>
-        <Navbar />
-        <Box
-          maxW={{ base: "3xl", lg: "7xl" }}
-          mx="auto"
-          px={{ base: "4", md: "8", lg: "12" }}
-          py={{ base: "6", md: "8", lg: "12" }}
-        >
-          <Stack
-            direction={{ base: "column", lg: "row" }}
-            align={{ lg: "flex-start" }}
-            spacing={{ base: "8", md: "16" }}
-          >
-            <Stack spacing={{ base: "8", md: "10" }} flex="2">
-              <Heading fontSize="2xl" fontWeight="extrabold">
-                Keranjang
-              </Heading>
-              <Flex justifyContent="space-between">
-                <Checkbox
-                  colorScheme="teal"
-                  isChecked={allProductCheck}
-                  borderColor="teal"
-                  size="lg"
-                  onChange={() => checkAllProduct()}
-                >
-                  <Text>Pilih Semua</Text>
-                </Checkbox>
-                {allProductCheck !== true ? null : (
-                  <Text
-                    fontSize="17px"
-                    fontWeight="700"
-                    color="teal"
-                    cursor="pointer"
-                    // position={"relative"}
-                    onClick={() => onOpen()}
-                  >
-                    Hapus
-                  </Text>
-                )}
-              </Flex>
-              <Divider backgroundColor="#F3F4F5" border="5px" />
 
-              <Stack spacing="6">{renderCartItem()}</Stack>
-            </Stack>
-
-            {/* Ringkasan Belanja */}
-            <Flex direction="column" align="center" flex="1">
-              <Stack
-                spacing="8"
-                borderWidth="1px"
-                rounded="lg"
-                padding="8"
-                width="full"
+  return (
+    <>
+      <Navbar />
+      <Box
+        maxW={{ base: "3xl", lg: "7xl" }}
+        mx="auto"
+        px={{ base: "4", md: "8", lg: "12" }}
+        py={{ base: "6", md: "8", lg: "36" }}
+      >
+        <Stack
+          direction={{ base: "column", lg: "row" }}
+          align={{ lg: "flex-start" }}
+          spacing={{ base: "8", md: "16" }}
+        >
+          <Stack spacing={{ base: "8", md: "10" }} flex="2">
+            <Heading fontSize="2xl" fontWeight="extrabold">
+              Keranjang
+            </Heading>
+            <Flex justifyContent="space-between">
+              <Checkbox
+                colorScheme="teal"
+                isChecked={allProductCheck}
+                borderColor="teal"
+                size="lg"
+                onChange={() => checkAllProduct()}
               >
-                <Heading size="md">Ringkasan Belanja</Heading>
+                <Text>Pilih Semua</Text>
+              </Checkbox>
+              {allProductCheck !== true ? null : (
+                <Text
+                  fontSize="17px"
+                  fontWeight="700"
+                  color="teal"
+                  cursor="pointer"
+                  // position={"relative"}
+                  onClick={() => onOpen()}
+                >
+                  Hapus
+                </Text>
+              )}
+            </Flex>
+            <Divider backgroundColor="#F3F4F5" border="5px" />
 
+            <Stack spacing="6">
+              {!cartSelector.cart.length ? (
+                <Alert
+                  status="error"
+                  variant="subtle"
+                  flexDir="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  textAlign="center"
+                  h="200px"
+                >
+                  <AlertIcon boxSize="40px" mr="0" />
+                  <AlertTitle>Oops, produk nggak ditemukan !</AlertTitle>
+                  <AlertDescription>
+                    Coba kata kunci lain atau cek produk rekomendasi kami.
+                    Terimakasih <span size="lg">🤯</span>
+                  </AlertDescription>
+                  <Link to="/product">
+                    <Button>Lanjut Belanja</Button>
+                  </Link>
+                </Alert>
+              ) : (
+                renderCartItem()
+              )}
+            </Stack>
+          </Stack>
+
+          {/* Ringkasan Belanja */}
+          <Flex direction="column" align="center" flex="1">
+            <Stack
+              spacing="8"
+              borderWidth="1px"
+              rounded="lg"
+              padding="8"
+              width="full"
+            >
+              <Heading size="md">Ringkasan Belanja</Heading>
+
+              {!cartSelector.totalQty ? (
                 <Stack spacing="6">
                   <Flex justify="space-between" fontSize="sm">
-                    {/* <Text
-                      fontWeight="medium"
-                      color={useColorModeValue("gray.600", "gray.400")}
-                    > */}
                     <Text fontWeight="medium" color="gray.600">
-                      Subtotal (Produk)
+                      Total Harga (0 Barang)
                     </Text>
                     <Text fontWeight="medium">
-                      {/* {Rupiah(cartSelector.totalPrice)} */}
                       {Rupiah(cartSelector.subTotal)}
                     </Text>
                   </Flex>
@@ -252,56 +256,88 @@ const CartPage = () => {
                     </Text>
                   </Flex>
                 </Stack>
-                <LinkRouterDom to="/cart/shipment">
-                  <Button
-                    colorScheme="teal"
-                    _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
-                    size="lg"
-                    fontSize="lg"
-                    rightIcon={<FaArrowRight />}
-                  >
-                    Beli ( )
-                  </Button>
-                </LinkRouterDom>
-              </Stack>
+              ) : (
+                <Stack spacing="6">
+                  <Flex justify="space-between" fontSize="sm">
+                    <Text fontWeight="medium" color="gray.600">
+                      Total Harga ({cartSelector.totalQty} Barang)
+                    </Text>
+                    <Text fontWeight="medium">
+                      {Rupiah(cartSelector.subTotal)}
+                    </Text>
+                  </Flex>
+                  <Flex justify="space-between">
+                    <Text fontSize="lg" fontWeight="semibold">
+                      Total Harga
+                    </Text>
+                    <Text fontSize="xl" fontWeight="extrabold">
+                      {Rupiah(cartSelector.subTotal)}
+                    </Text>
+                  </Flex>
+                </Stack>
+              )}
 
-              {/* ========================================================= */}
-              <HStack mt="6" fontWeight="semibold">
-                <p>atau</p>
-
-                <LinkChakra color="teal.500">
-                  <LinkRouterDom to="/product">Lanjut Belanja</LinkRouterDom>
-                </LinkChakra>
-              </HStack>
-            </Flex>
-          </Stack>
-        </Box>
-        <Footer />
-
-        {/* Delete Product */}
-        <AlertDialog isOpen={isOpen} onClose={onClose}>
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Hapus {cartSelector.cart.length} Barang
-              </AlertDialogHeader>
-
-              <AlertDialogBody>
-                Barang yang kamu pilih akan dihapus dari keranjang.
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button onClick={onClose}>Kembali</Button>
-                <Button colorScheme="red" onClick={btnDeleteAll} ml={3}>
-                  Hapus
+              {!cartSelector.totalQty ? (
+                <Button
+                  colorScheme="teal"
+                  _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
+                  size="lg"
+                  fontSize="lg"
+                  rightIcon={<FaArrowRight />}
+                  onClick={btnCheckout}
+                  isDisabled={true}
+                >
+                  Beli ( 0 )
                 </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
-      </>
-    )
-  }
+              ) : (
+                <Button
+                  colorScheme="teal"
+                  _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
+                  size="lg"
+                  fontSize="lg"
+                  rightIcon={<FaArrowRight />}
+                  onClick={btnCheckout}
+                >
+                  Beli ( {cartSelector.totalQty} )
+                </Button>
+              )}
+            </Stack>
+            <HStack mt="6" fontWeight="semibold">
+              <p>atau</p>
+
+              <LinkChakra color="teal.500">
+                <LinkRouterDom to="/product">Lanjut Belanja</LinkRouterDom>
+              </LinkChakra>
+            </HStack>
+          </Flex>
+        </Stack>
+      </Box>
+      <Divider />
+      <Footer />
+
+      {/* Delete All Product */}
+      <AlertDialog isOpen={isOpen} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Hapus {cartSelector.cart.length} Barang
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Barang yang kamu pilih akan dihapus dari keranjang.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button onClick={onClose}>Kembali</Button>
+              <Button colorScheme="red" onClick={btnDeleteAll} ml={3}>
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
+  )
 }
 
 export default CartPage

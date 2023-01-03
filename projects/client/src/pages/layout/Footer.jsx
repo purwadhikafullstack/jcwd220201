@@ -24,6 +24,7 @@ import {
 } from "react-icons/fa"
 import { BiMailSend } from "react-icons/bi"
 import { Link as LinkRouterDom } from "react-router-dom"
+import Logo from "./Logo"
 
 const Footer = () => {
   return (
@@ -40,11 +41,11 @@ const Footer = () => {
             spacing={8}
           >
             <Stack spacing={6}>
-              <Box>
-                <LinkRouterDom to="/">
+              {/* <LinkRouterDom to="/">
                   <Heading>WIRED!</Heading>
-                </LinkRouterDom>
-              </Box>
+                </LinkRouterDom> */}
+              <Logo />
+
               <Text fontSize={"sm"}>
                 &copy; {new Date().getFullYear()} PT WIRED! Indonesia. Made With
                 💗
