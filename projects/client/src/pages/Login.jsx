@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   Flex,
   FormControl,
@@ -124,15 +125,19 @@ const LoginPage = () => {
             <Box p={4}>
               <Heading
                 align={"right"}
-                as="h1"
+                as="h3"
                 size="2xl"
                 letterSpacing={"tighter"}
                 textColor="black"
                 textAlign="center"
+                justifySelf="center"
                 mb="30px"
                 mt="-5"
               >
-                WIRED!
+                {/* WIRED! */}
+                <Center>
+                  <Image boxSize="30%" src="logo.png"></Image>
+                </Center>
               </Heading>
               <Wrap spacing={{ base: 10, sm: 3, md: 5, lg: 20 }}>
                 <WrapItem>
