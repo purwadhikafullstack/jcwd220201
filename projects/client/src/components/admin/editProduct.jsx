@@ -22,6 +22,7 @@ import { useState } from "react"
 import { useRef } from "react"
 import { useParams } from "react-router-dom"
 import { axiosInstance } from "../../api"
+import { MdDelete, MdDeleteForever } from "react-icons/md"
 
 import axios from "axios"
 
@@ -134,11 +135,6 @@ const EditProduct = (props) => {
     }
   }
 
-  const formChangeHandler = ({ target }) => {
-    const { name, value } = target
-
-    formik.setFieldValue(name, value)
-  }
   return (
     <>
       <ModalOverlay />
@@ -226,11 +222,15 @@ const EditProduct = (props) => {
                                 src={`http://localhost:8000/public/${item.product_picture}`}
                               ></Image>
                               <Button
+                                boxSize="10"
+                                w="6vh"
+                                colorScheme="red"
+                                alignSelf="center"
                                 onClick={() => {
                                   deleteBtn(item.id)
                                 }}
                               >
-                                Delete
+                                <MdDeleteForever />
                               </Button>
                             </Flex>
                           </>
@@ -242,11 +242,15 @@ const EditProduct = (props) => {
                                 src={`http://localhost:8000/public/${item.name}`}
                               ></Image>
                               <Button
+                                boxSize="10"
+                                w="6vh"
+                                colorScheme="red"
+                                alignSelf="center"
                                 onClick={() => {
                                   deleteBtn(item.id)
                                 }}
                               >
-                                Delete
+                                <MdDeleteForever />
                               </Button>
                             </Flex>
                           </>
