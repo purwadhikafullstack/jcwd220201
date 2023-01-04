@@ -6,17 +6,11 @@ import {
   HStack,
   Image,
   Stack,
-  Select,
   Text,
   useColorModeValue,
   Icon,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  InputRightElement,
   Checkbox,
   Divider,
-  useNumberInput,
   useDisclosure,
   Button,
   useToast,
@@ -30,7 +24,6 @@ import {
 
 import { useEffect } from "react"
 import { useState } from "react"
-import { FiGift } from "react-icons/fi"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { axiosInstance } from "../../api"
@@ -136,18 +129,7 @@ const CartItem = ({
       console.log(err)
     }
   }
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      step: 1,
-      defaultValue: qtyProduct,
-      min: 1,
-      max: qtyProduct,
-    })
-  const inc = getIncrementButtonProps(addQty)
-  const dec = getDecrementButtonProps(decQty)
-  const input = getInputProps(qtyProduct)
-  console.log("inp", input)
-  const qty = Number(input.value)
+
   useEffect(() => {
     fetchCartById()
     fetchCartByProduct()
@@ -207,62 +189,31 @@ const CartItem = ({
             md: "flex",
           }}
         >
-          {/* <InputGroup w="40%">
-            <InputLeftElement>
-              <Button
-                variant="unstyled"
-                onClick={addQty}
-                isDisabled={productStock <= qty}
-              >
-                <AddIcon
-                  fontSize="10"
-                  {...inc}
-                  color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
-                  onClick={addQty}
-                />
-              </Button>
-            </InputLeftElement>
-            <Input width="10em" textAlign="center" _hover={"none"} {...input} />
-            <Text>{qtyProduct}</Text>
-            <InputRightElement>
-              <Button variant="unstyled" onClick={decQty}>
-                <MinusIcon
-                  fontSize="10"
-                  {...dec}
-                  color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
-                  onClick={decQty}
-                />
-              </Button>
-            </InputRightElement>
-          </InputGroup> */}
-          <InputGroup w="40%">
-            <InputLeftElement>
-              <Button
-                variant="unstyled"
-                onClick={addQty}
-                isDisabled={productStock <= qty}
-              >
-                <AddIcon
-                  fontSize="10"
-                  {...inc}
-                  color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
-                  onClick={addQty}
-                />
-              </Button>
-            </InputLeftElement>
+          <Box
+            display="flex"
+            borderRadius="10px"
+            boxShadow="base"
+            justifyContent="space-between"
+          >
+            <Button
+              variant="unstyled"
+              onClick={addQty}
+              isDisabled={productStock <= qtyProduct}
+              color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
+            >
+              <AddIcon fontSize="10" />
+            </Button>
 
-            <Text>{qtyProduct}</Text>
-            <InputRightElement>
-              <Button variant="unstyled" onClick={decQty}>
-                <MinusIcon
-                  fontSize="10"
-                  {...dec}
-                  color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
-                  onClick={decQty}
-                />
-              </Button>
-            </InputRightElement>
-          </InputGroup>
+            <Text mt="2">{qtyProduct}</Text>
+
+            <Button
+              variant="unstyled"
+              onClick={decQty}
+              color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
+            >
+              <MinusIcon fontSize="10" />
+            </Button>
+          </Box>
 
           <HStack spacing="1">
             <Text>{Rupiah(price)}</Text>
@@ -285,25 +236,31 @@ const CartItem = ({
           <Link fontSize="sm" textDecor="underline" onClick={btnDelete}>
             Hapus Produk
           </Link>
-          <InputGroup w="40%">
-            <InputLeftElement>
-              <MinusIcon
-                fontSize="10"
-                {...dec}
-                color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
-                onClick={decQty}
-              />
-            </InputLeftElement>
-            <Input width="10em" textAlign="center" _hover={"none"} {...input} />
-            <InputRightElement>
-              <AddIcon
-                fontSize="10"
-                {...inc}
-                color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
-                onClick={addQty}
-              />
-            </InputRightElement>
-          </InputGroup>
+          <Box
+            display="flex"
+            borderRadius="10px"
+            boxShadow="base"
+            justifyContent="space-between"
+          >
+            <Button
+              variant="unstyled"
+              onClick={addQty}
+              isDisabled={productStock <= qtyProduct}
+              color={productStock <= qtyProduct ? "#c0cada" : "#0095DA"}
+            >
+              <AddIcon fontSize="10" />
+            </Button>
+
+            <Text mt="2">{qtyProduct}</Text>
+
+            <Button
+              variant="unstyled"
+              onClick={decQty}
+              color={qtyProduct > 1 ? "#0095DA" : "#c0cada"}
+            >
+              <MinusIcon fontSize="10" />
+            </Button>
+          </Box>
         </Flex>
       </Flex>
       <Divider />

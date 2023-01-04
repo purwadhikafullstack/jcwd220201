@@ -30,7 +30,6 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useEffect } from "react"
-import { AiFillDelete } from "react-icons/ai"
 import { FaArrowRight } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
 import { axiosInstance } from "../api"

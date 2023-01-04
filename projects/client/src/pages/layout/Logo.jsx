@@ -7,19 +7,18 @@ const Logo = () => {
   const navigate = useNavigate()
 
   return (
-   
-      <Image
-        src="logo.png"
-        alt="logo"
-        width={
-          isLargerThanMd ? "10rem" : isLargerThanSm ? "8.262rem" : "6.826rem"
-        }
-        maxW="100%"
-        py="1.25rem"
-        cursor="pointer"
-        onClick={() => navigate("/")}
-      />
-    
+    <Image
+      // src={require("logo.png")}
+      src="logo.png"
+      alt="logo"
+      width={
+        isLargerThanMd ? "10rem" : isLargerThanSm ? "8.262rem" : "6.826rem"
+      }
+      maxW="100%"
+      py="1.25rem"
+      cursor="pointer"
+      onClick={() => navigate("/")}
+    />
   )
 }
 
