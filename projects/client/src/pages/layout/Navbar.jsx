@@ -213,8 +213,8 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
             alignItems={"center"}
           >
             <Box>
-              {/* <Logo /> */}
-              <Image
+              <Logo />
+              {/* <Image
                 src="logo.png"
                 alt="logo"
                 width={
@@ -228,7 +228,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 py="1.25rem"
                 cursor="pointer"
                 onClick={() => navigate("/")}
-              />
+              /> */}
             </Box>
             <HStack
               w="full"

@@ -202,7 +202,7 @@ const ProductDetail = () => {
 
   return (
     <Fragment>
-      <Navbar />
+      {/* <Navbar /> */}
       <Container maxW="7xl">
         <SimpleGrid
           spacing={{ base: 8, md: 10 }}

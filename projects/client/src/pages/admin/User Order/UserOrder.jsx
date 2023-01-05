@@ -43,6 +43,7 @@ import { Rupiah } from "../../../lib/currency/Rupiah"
 const UserOrder = () => {
   const authSelector = useSelector((state) => state.auth)
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
 
   // Render Warehouse
   const [data, setData] = useState([])
@@ -56,18 +57,16 @@ const UserOrder = () => {
       const response = await axiosInstance.get(url)
 
       setData(response.data.data)
+      setLoading(false)
     } catch (err) {
       console.log(err.response)
     }
   }
 
-  //   const toWarehouse = (warehouse_name) => {
-  //     navigate(`/admin/update-stock/${warehouse_name}`)
-  //   }
-
   useEffect(() => {
     fetchAllOrder()
   }, [])
+
   return (
     <>
       <Container bg="#e0e7eb" maxW="vw" p="0">
@@ -91,29 +90,97 @@ const UserOrder = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {data.map((val) => (
-                  <Tr h="auto">
-                    <Td
-                      cursor="pointer"
-                      _hover={{ color: "teal.400" }}
-                      //   onClick={() => toWarehouse(val.warehouse_name)}
-                    >
-                      {val.name}
-                    </Td>
-                    <Td>
-                      <Text>{val.product_name}</Text>
-                    </Td>
-                    <Td>{val.quantity}</Td>
-                    <Td>{Rupiah(val.total_price)}</Td>
-                    <Td>{val.warehouse_name}</Td>
-                    <Td>{val.status}</Td>
-                    <Td>
-                      <Button>Button1</Button>
-                      <Button>Button2</Button>
-                    </Td>
-                  </Tr>
-                ))}
+                {loading
+                  ? null
+                  : data.map((val) => {
+                      return (
+                        <Tr h="auto">
+                          <Td cursor="pointer" _hover={{ color: "teal.400" }}>
+                            {val.name}
+                          </Td>
+                          <Td>
+                            <Text>{val.product_name}</Text>
+                          </Td>
+                          <Td>{val.quantity}</Td>
+                          <Td>{Rupiah(val.total_price)}</Td>
+                          <Td>{val.warehouse_name}</Td>
+                          <Td textTransform="capitalize">{val.status}</Td>
+                          {val.status === "menunggu konfirmasi pembayaran" ? (
+                            <Td>
+                              <Button>fraya</Button>
+                              <Button>fraya</Button>
+                            </Td>
+                          ) : val.status === "diproses" ? (
+                            <Td>
+                              <Button>ariel</Button>
+                              <Button>ariel</Button>
+                            </Td>
+                          ) : null}
+                        </Tr>
+                      )
+                    })}
               </Tbody>
+              {/* <Tbody>
+                {loading
+                  ? null
+                  : data.map((val) => {
+                      if (val.status === "menunggu konfirmasi pembayaran") {
+                        return (
+                          <Tr h="auto">
+                            <Td cursor="pointer" _hover={{ color: "teal.400" }}>
+                              {val.name}
+                            </Td>
+                            <Td>
+                              <Text>{val.product_name}</Text>
+                            </Td>
+                            <Td>{val.quantity}</Td>
+                            <Td>{Rupiah(val.total_price)}</Td>
+                            <Td>{val.warehouse_name}</Td>
+                            <Td>{val.status}</Td>
+                            <Td>
+                              <Button>fraya</Button>
+                              <Button>fraya</Button>
+                            </Td>
+                          </Tr>
+                        )
+                      } else if (val.status === "diproses") {
+                        return (
+                          <Tr h="auto">
+                            <Td cursor="pointer" _hover={{ color: "teal.400" }}>
+                              {val.name}
+                            </Td>
+                            <Td>
+                              <Text>{val.product_name}</Text>
+                            </Td>
+                            <Td>{val.quantity}</Td>
+                            <Td>{Rupiah(val.total_price)}</Td>
+                            <Td>{val.warehouse_name}</Td>
+                            <Td>{val.status}</Td>
+
+                            <Td>
+                              <Button>ariel</Button>
+                              <Button>ariel</Button>
+                            </Td>
+                          </Tr>
+                        )
+                      } else {
+                        return (
+                          <Tr h="auto">
+                            <Td cursor="pointer" _hover={{ color: "teal.400" }}>
+                              {val.name}
+                            </Td>
+                            <Td>
+                              <Text>{val.product_name}</Text>
+                            </Td>
+                            <Td>{val.quantity}</Td>
+                            <Td>{Rupiah(val.total_price)}</Td>
+                            <Td>{val.warehouse_name}</Td>
+                            <Td>{val.status}</Td>
+                          </Tr>
+                        )
+                      }
+                    })}
+              </Tbody> */}
             </Table>
             {/* <ReactPaginate
               breakLabel="..."

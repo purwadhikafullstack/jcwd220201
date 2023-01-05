@@ -72,7 +72,7 @@ const productStockController = {
       //   }
 
       //   const page = parseInt(req.query.page) || 0
-      //   const limit = parseInt(req.query.limit) || 3
+      //   const limit = parseInt(req.query.limit) || 1
       //   const search = req.query.search_query || ""
       //   const offset = limit * page
       //   const totalRows = await Warehouse.count({
@@ -171,7 +171,7 @@ const productStockController = {
     //   }
 
     //   const page = parseInt(req.query.page) || 0
-    //   const limit = parseInt(req.query.limit) || 2
+    //   const limit = parseInt(req.query.limit) || 1
     //   const search = req.query.search_query || ""
     //   const offset = limit * page
     //   const totalRows = await ProductStock.count({
@@ -223,6 +223,70 @@ const productStockController = {
     } catch (err) {
       console.log(err)
       return res.status(500).json({ mesage: err.message })
+    }
+  },
+  createStock: async (req, res) => {
+    try {
+      const { stock } = req.body
+      const { id } = req.params
+
+      const findAdminByRole = await User.findByPk(req.user.id)
+      if (findAdminByRole.RoleId !== 1) {
+        return res.status(400).json({
+          message:
+            "Hanya Admin yang bisa melihat Fitur ini, silahkan Login sebagai Admin",
+        })
+      }
+
+      const findWarehouse = await Warehouse.findByPk(req.body.WarehouseId)
+      if (!findWarehouse) {
+        return res.status(400).json({ message: "Warehouse Tidak Ditemukan" })
+      }
+
+      const findProduct = await Product.findByPk(req.body.ProductId)
+
+      if (!findProduct) {
+        return res.status(400).json({ message: "Produk Tidak Ditemukan" })
+      }
+
+      const validateProduct = await ProductStock.findOne({
+        where: { WarehouseId: req.body.WarehouseId },
+      })
+
+      if (validateProduct) {
+        return res.status(400).json({
+          message: "Produk telah ada , tidak bisa menambah produk yang sama",
+        })
+      }
+      const createStock = await ProductStock.create({
+        stock,
+        ProductId: findProduct.id,
+        WarehouseId: findWarehouse.id,
+      })
+
+      const findStock = await ProductStock.findByPk(createStock.id)
+      const stock_after = findStock.dataValues.stock
+
+      const createJournal = await Journal.create(id)
+      const checkJournalType = await JournalType.findOne({
+        where: { name: "pembuatan stok" },
+      })
+      await JournalItem.create({
+        quantity: stock_after,
+        stock_after: findStock.dataValues.stock,
+        stock_before: 0,
+        JournalId: createJournal.id,
+        JournalTypeId: checkJournalType.id,
+        ProductId: findStock.ProductId,
+        WarehouseId: findStock.WarehouseId,
+      })
+
+      return res
+        .status(200)
+        .json({ message: "Stok Berhasil Dibuat", data: createStock })
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ message: err.message })
     }
   },
   updateProductStock: async (req, res) => {
@@ -282,40 +346,36 @@ const productStockController = {
         })
       }
 
-      const findStock = await ProductStock.findByPk(id)
+      const findStock1 = await ProductStock.findByPk(id)
 
       await ProductStock.update({ stock: 0 }, { where: { id: id } })
 
       const findStock2 = await ProductStock.findByPk(id)
 
-      const stock_before = findStock.dataValues.stock
-
+      const stock_before = findStock1.dataValues.stock
       const stock_after = findStock2.dataValues.stock
 
-      const stockCheck = (stock_before, stock_after) => {
-        const count = Math.max(stock_before, stock_after)
+      // const stockCheck = (stock_before, stock_after) => {
+      //   const count = Math.max(stock_before, stock_after)
 
-        if (count === stock_before) {
-          return false
-        } else {
-          return true
-        }
-      }
+      //   if (count === stock_before) {
+      //     return false
+      //   } else {
+      //     return true
+      //   }
+      // }
 
-      const addJournal = await JournalType.create({
-        name: "Hapus Stok",
-        type: stockCheck(stock_after, stock_before),
-        stock_after: findStock2.dataValues.stock,
-        stock_before: findStock.dataValues.stock,
-        ProductId: findStock2.ProductId,
+      const createJournal = await Journal.create(id)
+      const checkJournalType = await JournalType.findOne({
+        where: { name: "hapus stok" },
       })
-
-      const findJournal = await JournalItem.findByPk(addJournal.id)
 
       await JournalItem.create({
         quantity: stock_after,
-        JournalTypeId: addJournal.id,
-        // JournalId: findStock2.JournalId,
+        stock_after: findStock2.dataValues.stock,
+        stock_before: findStock1.dataValues.stock,
+        JournalId: createJournal.id,
+        JournalTypeId: checkJournalType.id,
         ProductId: findStock2.ProductId,
         WarehouseId: findStock2.WarehouseId,
       })
