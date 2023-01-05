@@ -154,8 +154,24 @@ const ProductList = () => {
     setPage(page - 1)
   }
 
-  const sortProduct = ({ target }) => {
-    const { value } = target
+  // const sortProduct = ({ target }) => {
+  //   const { value } = target
+
+  //   setSortBy(value.split(" ")[0])
+  //   setSortDir(value.split(" ")[1])
+
+  //   if (value === "harga maksimum") {
+  //     setSortBy("price")
+  //     setSortDir("DESC")
+  //   } else if (value === "harga minimum") {
+  //     setSortBy("price")
+  //     setSortDir("ASC")
+  //   } else if (value == "") {
+  //     setSortBy("")
+  //     setSortDir("")
+  //   }
+  const sortProduct = (e) => {
+    const value = e.value
 
     setSortBy(value.split(" ")[0])
     setSortDir(value.split(" ")[1])
@@ -179,6 +195,13 @@ const ProductList = () => {
     setSearchParams(queryParams)
   }
 
+  const sortOptions = [
+    { value: "price DESC", label: "Harga Maksimum" },
+    { value: "price ASC", label: "Harga Minimum" },
+    { value: "product_name ASC", label: "A-Z" },
+    { value: "product_name DESC", label: "Z-A" },
+  ]
+
   const fetchAllCategory = async () => {
     try {
       const responseCategory = await axiosInstance.get("/products/category")
@@ -189,13 +212,14 @@ const ProductList = () => {
     }
   }
 
+  // Category Select Options
   const categoryOptions = categories.map((val) => {
-    return { value: val.category, label: val.category }
+    return { value: val.id, label: val.category }
   })
-  console.log("cat", categoryOptions)
 
-  const filterCategory = ({ target }) => {
-    const { value } = target
+  const filterCategory = (e) => {
+    const value = e.value
+
     setFilterProduct(value)
   }
 
@@ -241,6 +265,13 @@ const ProductList = () => {
     ))
   }
 
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      width: "min-content",
+      minWidth: "25vh",
+    }),
+  }
   return (
     <>
       {/* Navbar Component */}
@@ -267,39 +298,31 @@ const ProductList = () => {
               <BreadcrumbLink href="#">Kategori</BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
+
           <Flex>
             <Grid templateColumns="repeat(4, 1fr)" gap="32px" pb="50px">
               <GridItem>
                 <FormControl>
-                  <FormLabel>Filter</FormLabel>
-                  {/* <Select
-                    id="categories"
-                    isSearchable="true"
-                    value={filterProduct}
+                  <FormLabel>Filter Kategori</FormLabel>
+                  <Select
+                    styles={customStyles}
+                    placeholder="Pilih ..."
                     options={categoryOptions}
                     onChange={filterCategory}
-                  /> */}
-                  <SelectChakra variant="flushed" onChange={filterCategory}>
-                    <option value="All">Category</option>
-                    {categories.map((val) => (
-                      <option value={val.id}>{val.category}</option>
-                    ))}
-                  </SelectChakra>
+                  />
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>Sort By</FormLabel>
-                  <SelectChakra
-                    borderBottom="1px solid"
-                    variant="flushed"
-                    onChange={sortProduct}
-                  >
-                    <option value="product_name ASC">A-Z</option>
-                    <option value="product_name DESC">Z-A</option>
-                    <option value="harga maksimum">Harga Tertinggi </option>
-                    <option value="harga minimum">Harga Terendah</option>
-                  </SelectChakra>
+                  <FormLabel>Urutkan</FormLabel>
+                  <Select
+                    placeholder="Pilih ..."
+                    styles={customStyles}
+                    options={sortOptions}
+                    onChange={(e) => {
+                      sortProduct(e)
+                    }}
+                  />
                 </FormControl>
               </GridItem>
               <GridItem>
@@ -317,32 +340,6 @@ const ProductList = () => {
                   Reset Filter
                 </Button>
               </GridItem>
-
-              {/* <FormControl>
-                <FormLabel>Search</FormLabel>
-                <InputGroup>
-                  <Input
-                    float="right"
-                    borderRadius="8px"
-                    border="1px solid #CCCCCC"
-                    placeholder="Cari di WIRED!"
-                    _placeholder={{ fontSize: "14px" }}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    type="text"
-                    onKeyDown={handleEnter}
-                    bgColor="white"
-                  />
-                  <InputRightElement>
-                    <Button
-                      variant="solid"
-                      borderRadius="8px"
-                      onClick={btnSearch}
-                    >
-                      <SearchIcon />
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl> */}
             </Grid>
           </Flex>
 
@@ -424,8 +421,11 @@ const ProductList = () => {
             />
           </Flex> */}
         </Box>
-        <Divider mt="1" />
-        <Footer />
+
+        <Box mt="15vh">
+          <Divider mt="1" />
+          <Footer />
+        </Box>
       </Box>
 
       {/* Using Animate */}
