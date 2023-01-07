@@ -85,9 +85,9 @@ const EditProfile = () => {
           userData.append("date_of_birth", date_of_birth)
         }
 
-        const userResponse = await axiosInstance.patch("auth/profile", userData)
+        const response = await axiosInstance.patch("auth/profile", userData)
 
-        dispatch(login(userResponse.data.data))
+        dispatch(login(response.data.data))
         setEditMode(false)
         if (authSelector.RoleId === 1 || authSelector.RoleId === 2) {
           navigate("/admin/dashboard")

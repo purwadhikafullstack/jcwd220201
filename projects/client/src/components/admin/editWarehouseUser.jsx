@@ -39,7 +39,7 @@ const EditWarehouseUser = (props) => {
           WarehouseId: warehouseEdit,
         }
 
-        const respons = await axiosInstance.patch(
+        const response = await axiosInstance.patch(
           `/warehouse-user/${idEdit}`,
           editWareUser
         )
@@ -50,7 +50,7 @@ const EditWarehouseUser = (props) => {
 
         toast({
           title: "WarehouseUser telah diedit",
-          description: respons.data.message,
+          description: response.data.message,
           status: "success",
         })
       } catch (err) {
@@ -58,6 +58,7 @@ const EditWarehouseUser = (props) => {
         toast({
           title: "Edit User Gagal",
           status: "error",
+          description: err.response.data.message,
         })
       }
     },

@@ -12,7 +12,8 @@ router.post(
   upload({
     acceptedFileTypes: ["png", "jpeg", "jpg"],
     filePrefix: "FILE",
-  }).array("product_picture", 5),
+    maxSize: 1 * 1024 * 1024,
+  }).array("product_picture"),
   productAdminController.createProducts
 )
 router.post(
@@ -21,6 +22,7 @@ router.post(
   upload({
     acceptedFileTypes: ["png", "jpeg", "jpg"],
     filePrefix: "FILE",
+    maxSize: 1 * 1024 * 1024,
   }).single("product_picture"),
   productAdminController.createImages
 )

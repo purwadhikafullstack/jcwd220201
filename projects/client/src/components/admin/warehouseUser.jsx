@@ -42,7 +42,7 @@ import EditWarehouseUser from "./editWarehouseUser"
 import { RiDeleteBin2Line } from "react-icons/ri"
 import { FaRegEdit } from "react-icons/fa"
 import PageButton from "../../components/admin/pageButton.jsx"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import * as Yup from "yup"
 import Select from "react-select"
@@ -71,10 +71,12 @@ const WarehouseUser = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
   const btnRef = useRef()
+  const [openAlert, setOpenAlert] = useState(false)
+  const [idDelete, setIdDelete] = useState(0)
 
   const fetchWareUser = async () => {
     try {
-      const respons = await axiosInstance.get(`/warehouse-user`, {
+      const response = await axiosInstance.get(`/warehouse-user`, {
         params: {
           _limit: limit,
           _page: page,
@@ -86,8 +88,8 @@ const WarehouseUser = () => {
         },
       })
 
-      setTotalCount(respons.data.dataCount)
-      setUsers(respons.data.data)
+      setTotalCount(response.data.dataCount)
+      setUsers(response.data.data)
 
       formik.handleReset()
     } catch (err) {
@@ -104,9 +106,9 @@ const WarehouseUser = () => {
 
   const getUser = async () => {
     try {
-      const resp = await axiosInstance.get(`/auth`)
+      const response = await axiosInstance.get(`/auth`)
 
-      setUserId(resp.data.data)
+      setUserId(response.data.data)
     } catch (err) {
       console.log(err)
     }
@@ -114,21 +116,23 @@ const WarehouseUser = () => {
 
   const getWarehouse = async () => {
     try {
-      const responWare = await axiosInstance.get(`/warehouses`)
+      const response = await axiosInstance.get(`/warehouses`)
 
-      setWarehouse(responWare.data.data)
+      setWarehouse(response.data.data)
     } catch (err) {
       console.log(err)
     }
   }
 
-  const deleteBtn = async (id) => {
+  const deleteBtn = async () => {
     try {
-      const resDelete = await axiosInstance.delete(`/warehouse-user/${id}`)
+      const response = await axiosInstance.delete(`/warehouse-user/${idDelete}`)
 
       fetchWareUser()
       getUser()
       getWarehouse()
+
+      setOpenAlert(false)
 
       toast({
         title: "User telah dihapus",
@@ -138,6 +142,7 @@ const WarehouseUser = () => {
       toast({
         title: "User Gagal dihapus",
         status: "error",
+        description: err.response.data.message,
       })
     }
   }
@@ -219,8 +224,8 @@ const WarehouseUser = () => {
       } catch (err) {
         console.log(err)
         toast({
-          title: "User Id telah ada",
-          description: "Hanya warehouse admin yang dapat ditambahkan",
+          title: "User Gagal ditambhakan",
+          description: err.response.data.message,
           status: "error",
         })
       }
@@ -269,6 +274,11 @@ const WarehouseUser = () => {
       width: "min-content",
       minWidth: "25vh",
     }),
+  }
+
+  const handleOpenAlert = (id) => {
+    setOpenAlert(true)
+    setIdDelete(id)
   }
 
   return (
@@ -389,7 +399,7 @@ const WarehouseUser = () => {
 
         <Container maxW="container.lg" py="8" pb="5" px="1">
           <TableContainer border={"1px solid black"} mt={8} overflowY="unset">
-            <Table responsive="md" variant="simple">
+            <Table responseive="md" variant="simple">
               <Thead position={"sticky"} top={-1} backgroundColor={"#718096"}>
                 <Tr border={"1px solid black"} maxW="50px">
                   <Th
@@ -429,7 +439,7 @@ const WarehouseUser = () => {
 
               <Tbody maxWidth="max-content">
                 {users.map((val) => (
-                  <Tr key={val.id}>
+                  <Tr>
                     <Td textAlign="center" border="1px solid black">
                       {val.UserId}
                     </Td>
@@ -443,7 +453,7 @@ const WarehouseUser = () => {
                     <Td textAlign="center" border="1px solid black">
                       {val.Warehouse.warehouse_name}
                     </Td>
-                    <Td textAlign="center" border="1px solid black" w="50px">
+                    <Td textAlign="center" border="1px solid black" w="10px">
                       <Button
                         alignContent={"left"}
                         onClick={() =>
@@ -452,53 +462,16 @@ const WarehouseUser = () => {
                         mx="4"
                         colorScheme={"teal"}
                       >
-                        <FaRegEdit />
+                        <FaRegEdit /> Edit
                       </Button>
                       <Button
                         ref={btnRef}
-                        onClick={onOpen}
+                        onClick={() => handleOpenAlert(val.id)}
                         colorScheme="red"
                         mx="4"
                       >
-                        <RiDeleteBin2Line />
+                        <RiDeleteBin2Line /> Hapus
                       </Button>
-                      <AlertDialog
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        leastDestructiveRef={cancelRef}
-                        motionPreset="slideInBottom"
-                        isCentered
-                        finalFocusRef={btnRef}
-                      >
-                        <AlertDialogOverlay>
-                          <AlertDialogContent>
-                            <AlertDialogHeader fontSize="lg" fontStyle="bold">
-                              Hapus Admin
-                            </AlertDialogHeader>
-                            <AlertDialogCloseButton />
-
-                            <AlertDialogBody>
-                              Apakah Yakin Ingin Menghapus Warehouse Admin??
-                            </AlertDialogBody>
-
-                            <AlertDialogFooter>
-                              <Button
-                                mr="10px"
-                                ref={cancelRef}
-                                onClick={onClose}
-                              >
-                                Cancel
-                              </Button>
-                              <Button
-                                colorScheme="red"
-                                onClick={() => deleteBtn(val.id)}
-                              >
-                                Hapus
-                              </Button>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialogOverlay>
-                      </AlertDialog>
                     </Td>
                   </Tr>
                 ))}
@@ -519,7 +492,7 @@ const WarehouseUser = () => {
             w="70%"
           >
             <AlertIcon boxSize="20px" mr="0" />
-            <AlertTitle>Oops, produk tidak ditemukan !</AlertTitle>
+            <AlertTitle>Oops, user tidak ditemukan !</AlertTitle>
             <AlertDescription>Coba kata kunci lain</AlertDescription>
           </Alert>
         ) : null}
@@ -533,6 +506,45 @@ const WarehouseUser = () => {
 
         <Box h="4%" w="full"></Box>
       </Flex>
+      <AlertDialog
+        isOpen={openAlert}
+        onClose={() => setOpenAlert(false)}
+        leastDestructiveRef={cancelRef}
+        motionPreset="slideInBottom"
+        isCentered
+        finalFocusRef={btnRef}
+      >
+        <AlertDialogOverlay
+          bg="none"
+          backdropFilter="auto"
+          backdropInvert="80%"
+          backdropBlur="2px"
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontStyle="bold">
+              Hapus Admin
+            </AlertDialogHeader>
+            <AlertDialogCloseButton />
+
+            <AlertDialogBody>
+              Apakah Yakin Ingin Menghapus Warehouse Admin?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button
+                mr="10px"
+                ref={cancelRef}
+                onClick={() => setOpenAlert(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={() => deleteBtn()} colorScheme="red">
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         <EditWarehouseUser

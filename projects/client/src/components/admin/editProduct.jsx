@@ -13,24 +13,23 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
   Select,
   Textarea,
   useToast,
 } from "@chakra-ui/react"
+
 import { useFormik } from "formik"
 import { useState } from "react"
 import { useRef } from "react"
-import { useParams } from "react-router-dom"
 import { axiosInstance } from "../../api"
-import { MdDelete, MdDeleteForever } from "react-icons/md"
-
-import axios from "axios"
+import { MdDeleteForever } from "react-icons/md"
+import { useEffect } from "react"
 
 const EditProduct = (props) => {
   const inputFileRef = useRef()
   const toast = useToast()
-  const { id } = useParams()
-  const [file, setFile] = useState("")
+  const [image, setImage] = useState("")
 
   const {
     nameEdit,
@@ -63,14 +62,7 @@ const EditProduct = (props) => {
       weight: "",
     },
 
-    onSubmit: async ({
-      product_name,
-      description,
-      price,
-      CategoryId,
-      product_picture,
-      weight,
-    }) => {
+    onSubmit: async () => {
       try {
         let editProduct = {
           product_name: nameEdit,
@@ -85,11 +77,12 @@ const EditProduct = (props) => {
           `/product-admin/${idEdit}`,
           editProduct
         )
+
         formik.setFieldValue(imageEdit, [])
         setOpenModal(false)
         fetchProduct()
         getCategories()
-        // fetchImage()
+
         toast({
           title: "Produk telah diedit",
           description: response.data.message,
@@ -100,6 +93,7 @@ const EditProduct = (props) => {
         toast({
           title: "Edit Gagal",
           status: "error",
+          description: err.response.data.message,
         })
       }
     },
@@ -107,12 +101,12 @@ const EditProduct = (props) => {
 
   const deleteBtn = async (id) => {
     try {
-      const res = await axiosInstance.delete(`product-admin/image/${id}`)
+      const response = await axiosInstance.delete(`product-admin/image/${id}`)
 
       fetchProduct()
       fetchImage()
       toast({
-        title: "Produk berhasil dihapus",
+        title: "Foto Produk berhasil dihapus",
         status: "success",
       })
     } catch (err) {
@@ -125,15 +119,19 @@ const EditProduct = (props) => {
       const newImg = new FormData()
 
       newImg.append("product_picture", e)
-      console.log(newImg, "newimg")
-      const resp = await axiosInstance.post(
+
+      const response = await axiosInstance.post(
         `/product-admin/image/${idEdit}`,
         newImg
       )
+      setImage(response.data.data.ProductPictures)
+      imageEdit.push(response?.data?.data)
     } catch (err) {
       console.log(err)
     }
   }
+
+  useEffect(() => {}, [image])
 
   return (
     <>
@@ -182,11 +180,11 @@ const EditProduct = (props) => {
               </FormControl>
               <FormControl>
                 <FormLabel>
-                  Category_id
+                  Category Id
                   <Select
                     value={catEdit}
                     onChange={(e) => setCatEdit(e.target.value)}
-                    name="category_id"
+                    name="CategoryId"
                   >
                     <option value="">Select Category</option>
                     {categories.map((val) => (
@@ -210,55 +208,58 @@ const EditProduct = (props) => {
                   display="none"
                   onChange={(e) => handleImageEdit(e.target.files[0])}
                 />
-                {imageEdit ? (
-                  <>
-                    {imageEdit.map((item) => (
-                      <>
-                        {item.product_picture ? (
-                          <>
-                            <Flex>
-                              <Image
-                                boxSize="100px"
-                                src={`http://localhost:8000/public/${item.product_picture}`}
-                              ></Image>
-                              <Button
-                                boxSize="10"
-                                w="6vh"
-                                colorScheme="red"
-                                alignSelf="center"
-                                onClick={() => {
-                                  deleteBtn(item.id)
-                                }}
-                              >
-                                <MdDeleteForever />
-                              </Button>
-                            </Flex>
-                          </>
-                        ) : (
-                          <>
-                            <Flex>
-                              <Image
-                                boxSize="100px"
-                                src={`http://localhost:8000/public/${item.name}`}
-                              ></Image>
-                              <Button
-                                boxSize="10"
-                                w="6vh"
-                                colorScheme="red"
-                                alignSelf="center"
-                                onClick={() => {
-                                  deleteBtn(item.id)
-                                }}
-                              >
-                                <MdDeleteForever />
-                              </Button>
-                            </Flex>
-                          </>
-                        )}
-                      </>
-                    ))}
-                  </>
-                ) : null}
+                <Stack ml="5" overflowY="scroll" h="30vh" mt="2">
+                  {imageEdit ? (
+                    <>
+                      {imageEdit.map((item) => (
+                        <>
+                          {item.product_picture ? (
+                            <>
+                              <Flex>
+                                <Image
+                                  boxSize="100px"
+                                  src={`http://localhost:8000/public/${item.product_picture}`}
+                                ></Image>
+                                <Button
+                                  boxSize="30px"
+                                  w="6vh"
+                                  ml="4"
+                                  colorScheme="red"
+                                  alignSelf="center"
+                                  onClick={() => {
+                                    deleteBtn(item.id)
+                                  }}
+                                >
+                                  <MdDeleteForever size="40" />
+                                </Button>
+                              </Flex>
+                            </>
+                          ) : (
+                            <>
+                              <Flex>
+                                <Image
+                                  boxSize="100px"
+                                  src={`http://localhost:8000/public/${item.name}`}
+                                ></Image>
+                                <Button
+                                  boxSize="10"
+                                  w="6vh"
+                                  colorScheme="red"
+                                  alignSelf="center"
+                                  onClick={() => {
+                                    deleteBtn(item.id)
+                                  }}
+                                >
+                                  <MdDeleteForever />
+                                </Button>
+                              </Flex>
+                            </>
+                          )}
+                        </>
+                      ))}
+                    </>
+                  ) : null}
+                </Stack>
               </FormControl>
               <FormControl>
                 <FormLabel>

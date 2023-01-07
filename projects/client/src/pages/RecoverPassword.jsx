@@ -46,7 +46,7 @@ const RecoverPassword = () => {
     }),
     onSubmit: async ({ password }) => {
       try {
-        const respon = await axiosInstance.patch(
+        const response = await axiosInstance.patch(
           `/auth/recover-password`,
           {
             password,
@@ -55,7 +55,7 @@ const RecoverPassword = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        setPass(respon.data.data)
+        setPass(response.data.data)
         toast({
           title:
             "Password successfully changed, use your new password to login",
@@ -67,7 +67,7 @@ const RecoverPassword = () => {
         toast({
           title: "Failed to changed your password",
           status: "error",
-          description: err.respon.data.message,
+          description: err.response.data.message,
         })
       }
     },

@@ -35,11 +35,11 @@ const OrderPayment = () => {
 
   const fetchOrder = async () => {
     try {
-      const resp = await axiosInstance.get(`/payment`)
+      const response = await axiosInstance.get(`/payment`)
 
-      setPayment(resp.data.data)
+      setPayment(response.data.data)
 
-      console.log(resp, "resp")
+      console.log(response, "response")
     } catch (err) {
       console.log(err)
     }
@@ -63,9 +63,9 @@ const OrderPayment = () => {
   }
   const rejectOrder = async (id) => {
     try {
-      const resp = await axiosInstance.patch(`/payment/reject/${id}`)
+      const response = await axiosInstance.patch(`/payment/reject/${id}`)
 
-      setReject(resp.data.data)
+      setReject(response.data.data)
 
       fetchOrder()
       toast({
@@ -166,7 +166,7 @@ const OrderPayment = () => {
                   mt={8}
                   overflowY="unset"
                 >
-                  <Table responsive="md" variant="simple">
+                  <Table responseonsive="md" variant="simple">
                     <Thead position={"sticky"} top={-1}>
                       <Tr border={"1px solid black"} maxW="50px">
                         <Th
