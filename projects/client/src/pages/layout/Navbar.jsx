@@ -177,14 +177,14 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
     keepUserLogin()
   }, [])
 
-  useEffect(() => {
-    fetchUserCart()
-  }, [])
-
-  // BUG
   // useEffect(() => {
   //   fetchUserCart()
-  // }, [cartProduct])
+  // }, [])
+
+  // BUG
+  useEffect(() => {
+    fetchUserCart()
+  }, [cartProduct])
 
   useEffect(() => {
     setSearchValue(searchQuery.get("search"))

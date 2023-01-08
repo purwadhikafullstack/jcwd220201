@@ -32,26 +32,27 @@ import {
 } from "@chakra-ui/react"
 import { Carousel } from "react-responsive-carousel"
 import { Fragment, useState } from "react"
-import { Link, useLocation, useParams } from "react-router-dom"
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import "react-responsive-carousel/lib/styles/carousel.min.css"
 import Logo from "../layout/Logo"
 import { axiosInstance } from "../../api"
 import { useEffect } from "react"
 import Navbar from "../layout/Navbar"
-import { AddIcon, MinusIcon } from "@chakra-ui/icons"
+import { AddIcon, ArrowBackIcon, MinusIcon } from "@chakra-ui/icons"
 import { useDispatch, useSelector } from "react-redux"
 import { addProductToCart, itemCart } from "../../redux/features/cartSlice"
 import { Rupiah } from "../../lib/currency/Rupiah"
 
 const ProductDetail = () => {
-  const [produck, setProducts] = useState({
-    id: "",
-    product_name: "",
-    description: "",
-    price: 0,
-    weight: 0,
-    Category: "",
-  })
+  // const [produck, setProducts] = useState({
+  //   id: "",
+  //   product_name: "",
+  //   description: "",
+  //   price: 0,
+  //   weight: 0,
+  //   Category: "",
+  // })
+  const [products, setProducts] = useState([])
 
   // State Functionality
   const [productId, setProductId] = useState([])
@@ -59,20 +60,28 @@ const ProductDetail = () => {
   const [productStock, setProductStock] = useState([])
   const [cartQty, setCartQty] = useState(null)
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  // Redux Toolkit
   const authSelector = useSelector((state) => state.auth)
-  const location = useLocation()
   const dispatch = useDispatch()
-  const toast = useToast()
-  const params = useParams()
 
+  // React Router Functionality
+  const params = useParams()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // Toast Chakra UI
+  const toast = useToast()
+
+  // Modal Alert
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  // Fetching Product
   const fetchProduct = async () => {
     try {
       const response = await axiosInstance.get(`/products/${params.id}`)
 
       setProducts(response.data.data)
       setProductImg(response.data.data.ProductPictures)
-      // setProductStock(response.data.data.ProductStocks)
       setProductId(response.data.data.id)
 
       const cartStock = response.data.data.ProductStocks.map((val) => val.stock)
@@ -98,14 +107,16 @@ const ProductDetail = () => {
   const input = getInputProps()
   const qty = Number(input.value)
 
-  const fetchCart = async () => {
-    try {
-      const response = await axiosInstance.get("/carts/me")
-      dispatch(itemCart(response.data.data))
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  // Fetching User's Cart
+  // const fetchCart = async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/carts/me")
+  //     dispatch(itemCart(response.data.data))
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+  // Fetch Cart Data
   const fetchCartByProduct = async () => {
     try {
       const response = await axiosInstance.get(
@@ -122,6 +133,7 @@ const ProductDetail = () => {
     }
   }
 
+  // Add to Cart
   const addToCart1 = async () => {
     try {
       let addToCart1 = {
@@ -138,7 +150,7 @@ const ProductDetail = () => {
         duration: 1000,
       })
       fetchCartByProduct()
-      fetchCart()
+      // fetchCart()
     } catch (err) {
       console.log(err)
       toast({
@@ -156,11 +168,12 @@ const ProductDetail = () => {
       onOpen()
     }
   }
-
   const navigateLogin = () => {
     onClose()
   }
+  // ==========================
 
+  // Add to Cart but only change Quantity
   const updateAddProduct = async () => {
     try {
       let updateQty = {
@@ -174,12 +187,12 @@ const ProductDetail = () => {
       })
 
       fetchCartByProduct()
-      fetchCart()
+      // fetchCart()
     } catch (err) {
       console.log(err)
       const sisaProduk = productStock - cartQty
       toast({
-        title: `Barang sudah ada di keranjang tersisa ${sisaProduk}, hanya menambah Quantity ${cartQty}`,
+        title: `Sisa Stok ${sisaProduk}`,
         status: "error",
         duration: 1000,
         description: err.response.data.message,
@@ -194,26 +207,41 @@ const ProductDetail = () => {
   //   fetchProduct()
   // }, [qty, cartQty, produck])
 
+  const goBack = () => {
+    navigate(-1)
+  }
+
   useEffect(() => {
-    fetchCart()
+    // fetchCart()
     fetchCartByProduct()
     fetchProduct()
-  }, [qty, cartQty])
+  }, [qty, cartQty, products])
 
   return (
-    <Fragment>
+    <>
       {/* <Navbar /> */}
       <Container maxW="7xl">
+        <ArrowBackIcon
+          fontSize="4xl"
+          onClick={() => goBack()}
+          cursor="pointer"
+        />
         <SimpleGrid
           spacing={{ base: 8, md: 10 }}
           columns={{ base: 1, lg: 2 }}
           py={{ base: 18, md: 24 }}
         >
           <Flex>
-            <Carousel showStatus={false} showThumbs={false}>
+            <Carousel
+              showStatus={false}
+              showIndicators={true}
+              autoPlay={true}
+              infiniteLoop={true}
+              width="100%"
+              dynamicHeight={false}
+            >
               {productImg.map((val) => (
-                <Image
-                  // className="image-prod-detail"
+                <img
                   h={{ base: "100%", sm: "400px", lg: "500px" }}
                   src={`http://localhost:8000/public/${val.product_picture}`}
                   align="center"
@@ -232,10 +260,12 @@ const ProductDetail = () => {
                 fontWeight="400"
                 lineWeight="1.1"
               >
-                {produck.product_name}
+                {/* {produck.product_name} */}
+                {products.product_name}
               </Heading>
               <Text color="gray.900" fontWeight="300" fontSize="2xl">
-                {Rupiah(produck.price)}
+                {/* {Rupiah(produck.price)} */}
+                {Rupiah(products.price)}
               </Text>
             </Box>
             <Stack
@@ -245,7 +275,8 @@ const ProductDetail = () => {
             >
               <VStack>
                 <Text fontSize="lg" fontWeight="400">
-                  {produck.description ||
+                  {products.description ||
+                    // produck.description
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit Architecto facilis eos, odio unde fugiat repudiandae"}
                 </Text>
               </VStack>
@@ -270,18 +301,19 @@ const ProductDetail = () => {
                     <Text as="span" fontWeight="thin">
                       Berat Satuan:
                     </Text>{" "}
-                    {produck.weight} gram
+                    {/* {produck.weight} gram */}
+                    {products.weight} gram
                   </ListItem>
                   <ListItem>
                     <Text as="span" fontWeight="thin">
                       Kategori:
                     </Text>{" "}
-                    {produck.Category?.category || "Kategori"}
+                    {products.Category?.category || "Kategori"}
                   </ListItem>
 
                   <ListItem>
                     <Text as="span" fontWeight="thin">
-                      Stock:
+                      Stok:
                     </Text>{" "}
                     {productStock}
                   </ListItem>
@@ -319,7 +351,7 @@ const ProductDetail = () => {
               </InputGroup>
             </HStack>
             <Text as="span" fontWeight="thin">
-              Subtotal: {Rupiah(produck.price * qty)}
+              Subtotal: {Rupiah(products.price * qty)}
             </Text>{" "}
             {cartQty === null ? (
               <Button
@@ -383,7 +415,7 @@ const ProductDetail = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Fragment>
+    </>
   )
 }
 

@@ -294,7 +294,7 @@ const cartController = {
 
       if (addProductQty.quantity + quantity > totalProductStock) {
         return res.status(400).json({
-          message: "Product Stock is empty",
+          message: "Stok Barang Habis",
         })
       }
 

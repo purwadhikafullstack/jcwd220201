@@ -120,67 +120,6 @@ const UserOrder = () => {
                       )
                     })}
               </Tbody>
-              {/* <Tbody>
-                {loading
-                  ? null
-                  : data.map((val) => {
-                      if (val.status === "menunggu konfirmasi pembayaran") {
-                        return (
-                          <Tr h="auto">
-                            <Td cursor="pointer" _hover={{ color: "teal.400" }}>
-                              {val.name}
-                            </Td>
-                            <Td>
-                              <Text>{val.product_name}</Text>
-                            </Td>
-                            <Td>{val.quantity}</Td>
-                            <Td>{Rupiah(val.total_price)}</Td>
-                            <Td>{val.warehouse_name}</Td>
-                            <Td>{val.status}</Td>
-                            <Td>
-                              <Button>fraya</Button>
-                              <Button>fraya</Button>
-                            </Td>
-                          </Tr>
-                        )
-                      } else if (val.status === "diproses") {
-                        return (
-                          <Tr h="auto">
-                            <Td cursor="pointer" _hover={{ color: "teal.400" }}>
-                              {val.name}
-                            </Td>
-                            <Td>
-                              <Text>{val.product_name}</Text>
-                            </Td>
-                            <Td>{val.quantity}</Td>
-                            <Td>{Rupiah(val.total_price)}</Td>
-                            <Td>{val.warehouse_name}</Td>
-                            <Td>{val.status}</Td>
-
-                            <Td>
-                              <Button>ariel</Button>
-                              <Button>ariel</Button>
-                            </Td>
-                          </Tr>
-                        )
-                      } else {
-                        return (
-                          <Tr h="auto">
-                            <Td cursor="pointer" _hover={{ color: "teal.400" }}>
-                              {val.name}
-                            </Td>
-                            <Td>
-                              <Text>{val.product_name}</Text>
-                            </Td>
-                            <Td>{val.quantity}</Td>
-                            <Td>{Rupiah(val.total_price)}</Td>
-                            <Td>{val.warehouse_name}</Td>
-                            <Td>{val.status}</Td>
-                          </Tr>
-                        )
-                      }
-                    })}
-              </Tbody> */}
             </Table>
             {/* <ReactPaginate
               breakLabel="..."

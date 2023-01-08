@@ -40,6 +40,7 @@ import { useSearchParams, useLocation } from "react-router-dom"
 import ReactPaginate from "react-paginate"
 import Select from "react-select"
 
+const MotionGrid = motion(Grid)
 const MotionSimpleGrid = motion(SimpleGrid)
 const MotionBox = motion(Box)
 
@@ -128,11 +129,9 @@ const ProductList = () => {
   // const categoryOptions = categoryData.map((val) => {
   //   return { value: val.category, label: val.category }
   // })
-  // console.log("category", categoryOptions)
 
   const btnSearch = () => {
     setSearchValue(searchInput)
-    // setPage(1)
 
     // watch this
     const queryParams = {}
@@ -154,22 +153,6 @@ const ProductList = () => {
     setPage(page - 1)
   }
 
-  // const sortProduct = ({ target }) => {
-  //   const { value } = target
-
-  //   setSortBy(value.split(" ")[0])
-  //   setSortDir(value.split(" ")[1])
-
-  //   if (value === "harga maksimum") {
-  //     setSortBy("price")
-  //     setSortDir("DESC")
-  //   } else if (value === "harga minimum") {
-  //     setSortBy("price")
-  //     setSortDir("ASC")
-  //   } else if (value == "") {
-  //     setSortBy("")
-  //     setSortDir("")
-  //   }
   const sortProduct = (e) => {
     const value = e.value
 
@@ -217,10 +200,20 @@ const ProductList = () => {
     return { value: val.id, label: val.category }
   })
 
+  // const filterCategory = (e) => {
+  //   const value = e.value
+
+  //   setFilterProduct(value)
+  // }
   const filterCategory = (e) => {
     const value = e.value
 
     setFilterProduct(value)
+    const params = {}
+    if (searchParams.get("search")) {
+      params["search"] = searchParams.get("search")
+    }
+    setSearchParams(value)
   }
 
   const btnResetFilter = () => {
@@ -238,10 +231,12 @@ const ProductList = () => {
       if (
         passing[0] === "product_name" ||
         passing[0] === "harga maksimum" ||
-        passing[0] === "harga minimum"
+        passing[0] === "harga minimum" ||
+        passing[0] === "category"
       ) {
         setSortBy(passing[0])
         setSortDir(passing[1])
+        setFilterProduct(passing[0])
       }
     }
     fetchProducts()
@@ -252,16 +247,16 @@ const ProductList = () => {
   }, [])
 
   const renderProducts = () => {
-    return products.map((val) => (
-      // <Box>
-      <ProductCard
-        key={val.id.toString()}
-        product_name={val.product_name}
-        product_picture={`http://localhost:8000/public/${val.Product?.ProductPictures?.product_picture}`}
-        price={val.price}
-        id={val.id}
-      />
-      // </Box>
+    return products.map((val, i) => (
+      <MotionBox variants={cardVariant}>
+        <ProductCard
+          key={val.id.toString()}
+          product_name={val.product_name}
+          product_picture={`http://localhost:8000/public/${val.product_picture}`}
+          price={val.price}
+          id={val.id}
+        />
+      </MotionBox>
     ))
   }
 
@@ -282,7 +277,6 @@ const ProductList = () => {
       />
 
       {/* Product List */}
-
       <Box h={{ base: "0", md: "0", lg: "85vh" }}>
         <Box ml="1em" mr="1em">
           <Breadcrumb fontWeight="medium" fontSize="sm">
@@ -343,23 +337,33 @@ const ProductList = () => {
             </Grid>
           </Flex>
 
-          <Grid
+          {/* <Grid
             templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(5, 1fr)" }}
             mt="4"
             minChildWidth="250px"
-            // spacing="5em"
             gap="1em"
             minH="full"
             align="center"
+          > */}
+          <MotionGrid
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(5, 1fr)" }}
+            mt="4"
+            minChildWidth="250px"
+            gap="1em"
+            minH="full"
+            variants={parentVariant}
+            initial="initial"
+            animate="animate"
+            align="center"
           >
             {renderProducts()}
-          </Grid>
+          </MotionGrid>
+          {/* </Grid> */}
 
           {/* Next/Prev Page Product */}
-
           <Flex
             w="full"
-            justify="center"
+            justify="flex-end"
             gap="1em"
             mt="1em"
             borderRadius="none"
@@ -370,7 +374,7 @@ const ProductList = () => {
               </Button>
             )}
 
-            {/* Alert If Product Doesn't Exist */}
+            {/* Show Alert If Product Doesn't Exist */}
             {!products.length ? (
               <Alert
                 status="error"
@@ -427,27 +431,6 @@ const ProductList = () => {
           <Footer />
         </Box>
       </Box>
-
-      {/* Using Animate */}
-
-      {/* <Box ml="15em" mr="1em" mt="1em">
-          <MotionSimpleGrid
-          mt="4"
-          minChildWidth="250px"
-          spacing="1em"
-          minH="full"
-          variants={parentVariant}
-          initial="initial"
-          animate="animate"
-          align="center"
-          >
-          {data.map((product, i) => (
-            <MotionBox variants={cardVariant} key={i}>
-            <ProductCard product={product} />
-            </MotionBox>
-          ))}
-        </MotionSimpleGrid>
-        </Box> */}
     </>
   )
 }
