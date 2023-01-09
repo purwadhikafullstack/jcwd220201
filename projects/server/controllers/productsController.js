@@ -168,11 +168,13 @@ const productsController = {
     try {
       const { id } = req.params
 
-      const getProductsImage = await db.ProductPicture.findByPk(id)
+      const getProductsImage = await db.ProductPicture.findAll({
+        where: { ProductId: id },
+      })
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Get Product Picture Data",
-        data: getProductsImage,
+        data: getProductsImage[0]["dataValues"],
       })
     } catch (err) {
       console.log(err)

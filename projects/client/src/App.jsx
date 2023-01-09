@@ -79,6 +79,12 @@ const App = () => {
         >
           <Route index element={<MainContent />} />
           <Route index element={<Footer />} />
+
+          {/* Product Detail Page */}
+          <Route
+            path="/product-detail/:id/:product_name"
+            element={<ProductDetail />}
+          />
         </Route>
 
         {/* Cart Page */}
@@ -95,10 +101,11 @@ const App = () => {
         <Route path="/product" element={<ProductList />} />
 
         {/* Product Detail */}
-        <Route
+        {/* <Route
           path="/product-detail/:id/:product_name"
           element={<ProductDetail />}
-        />
+        /> */}
+
         <Route path="/404" element={<NotFound />} />
         <Route
           path="/profile"
@@ -199,7 +206,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/payment-list" element={<Order />} />
+
         <Route
           path="/admin/sales-report"
           element={
@@ -208,6 +215,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/payment"
           element={

@@ -35,7 +35,7 @@ const ForgotPassword = () => {
 
     onSubmit: async ({ email }) => {
       try {
-        const resp = await axiosInstance.post(`/auth/forgot-password`, {
+        const response = await axiosInstance.post(`/auth/forgot-password`, {
           email,
         })
 

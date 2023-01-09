@@ -12,7 +12,8 @@ router.post(
   upload({
     acceptedFileTypes: ["png", "jpeg", "jpg"],
     filePrefix: "FILE",
-  }).array("product_picture", 5),
+    maxSize: 1 * 1024 * 1024,
+  }).array("product_picture"),
   productAdminController.createProducts
 )
 router.post(
@@ -21,14 +22,15 @@ router.post(
   upload({
     acceptedFileTypes: ["png", "jpeg", "jpg"],
     filePrefix: "FILE",
+    maxSize: 1 * 1024 * 1024,
   }).single("product_picture"),
   productAdminController.createImages
 )
-router.get("/", productAdminController.getAllProduct)
+router.get("/", verifyToken, productAdminController.getAllProduct)
 router.get("/", categoriesController.getAllCategories)
-router.get("/image", productAdminController.getAllImage)
-router.get("/:id", productAdminController.getProductById)
-router.get("/image/:id", productAdminController.getImageById)
+router.get("/image", verifyToken, productAdminController.getAllImage)
+router.get("/:id", verifyToken, productAdminController.getProductById)
+router.get("/image/:id", verifyToken, productAdminController.getImageById)
 router.patch("/:id", verifyToken, productAdminController.updateProductsByAdmin)
 router.delete("/:id", verifyToken, productAdminController.deleteProduct)
 router.delete(

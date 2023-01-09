@@ -56,7 +56,7 @@ const productAdminController = {
         await db.ProductPicture.bulkCreate(newProductImg)
 
         const foundProductById = await db.Product.findByPk(createProduct.id, {
-          include: [db.ProductPicture],
+          include: [{ model: db.ProductPicture }],
         })
 
         return res.status(200).json({
@@ -102,7 +102,7 @@ const productAdminController = {
               [Op.or]: [
                 {
                   product_name: {
-                    [Op.like]: `%${product_name}`,
+                    [Op.like]: `%${product_name}%`,
                   },
                 },
               ],
@@ -124,7 +124,7 @@ const productAdminController = {
             [Op.or]: [
               {
                 product_name: {
-                  [Op.like]: `%${product_name}`,
+                  [Op.like]: `%${product_name}%`,
                 },
               },
             ],
@@ -163,17 +163,6 @@ const productAdminController = {
       if (findAdmin.RoleId === 3 || findAdmin.RoleId === 2) {
         return res.status(400).json({
           message: "Admin unauthorized",
-        })
-      }
-      const findProductByName = await db.Product.findOne({
-        where: {
-          product_name: req.body.product_name || "".toUpperCase(),
-        },
-      })
-
-      if (findProductByName) {
-        return res.status(400).json({
-          message: "Nama Produk telah ada",
         })
       }
 

@@ -36,7 +36,6 @@ const MainContent = () => {
   const [maxPage, setMaxPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const navigate = useNavigate()
-  console.log("cat", categories)
 
   const fetchProducts = async () => {
     const maxProductInPage = 5
@@ -160,7 +159,7 @@ const MainContent = () => {
           <Box flexShrink={0}>
             <Image
               borderRadius="lg"
-              width={{ md: 30, lg: "2xl" }}
+              width={{ md: 30, lg: "lg" }}
               h={{ base: "30vh" }}
               src="https://t3.ftcdn.net/jpg/01/67/14/56/240_F_167145659_vnGRSdZDS3n3VMrLxJ3VRV68ExCUrjed.jpg"
               alt="information1"
@@ -170,7 +169,7 @@ const MainContent = () => {
           <Box flexShrink={0}>
             <Image
               borderRadius="lg"
-              width={{ md: 30, lg: "2xl" }}
+              width={{ md: 30, lg: "lg" }}
               h={{ base: "30vh" }}
               src="https://t3.ftcdn.net/jpg/02/27/20/72/240_F_227207295_XnYyYPECxoQPcOTID1v3B5CFMjchJ0Ph.jpg"
               alt="information1"

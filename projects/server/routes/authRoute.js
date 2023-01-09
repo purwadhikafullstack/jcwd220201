@@ -12,6 +12,7 @@ router.patch(
   upload({
     acceptedFileTypes: ["png", "jpeg", "jpg"],
     filePrefix: "PROF",
+    maxSize: 1 * 1024 * 1024,
   }).single("profile_picture"),
   authController.editUserProfile
 )

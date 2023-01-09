@@ -31,6 +31,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
 } from "@chakra-ui/react"
 import * as Yup from "yup"
 import { useFormik } from "formik"
@@ -44,6 +45,9 @@ import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard"
 import Search from "../../../components/admin/stock/Search"
 import { Rupiah } from "../../../lib/currency/Rupiah"
 import EditStock from "../../../components/admin/stock/EditStock"
+import ReactPaginate from "react-paginate"
+import { Carousel } from "react-responsive-carousel"
+import { AiOutlineLeftCircle, AiOutlineRightCircle } from "react-icons/ai"
 
 const WarehouseStock = ({}) => {
   // Selector Redux
@@ -56,12 +60,15 @@ const WarehouseStock = ({}) => {
   // Produck Data & Category
   const [data, setData] = useState([])
   console.log("data", data)
-  // const [category, setCategory] = useState([])
+  const [sortBy, setSortBy] = useState("product_name")
+  const [sortDir, setSortDir] = useState("ASC")
+  const [maxPage, setMaxPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
+  const [filter, setFilter] = useState(0)
+  // const [currentSearch, setCurrentSearch] = useState("")
+  const [page, setPage] = useState(1)
 
-  // const [page, setPage] = useState(0)
-  // const [limit, setLimit] = useState(3)
-  // const [pages, setPages] = useState(0)
-  // const [rows, setRows] = useState(0)
+  // const [category, setCategory] = useState([])
 
   // Modal Edit Stock Props
   const [openModal, setOpenModal] = useState(false)
@@ -73,58 +80,64 @@ const WarehouseStock = ({}) => {
   const cancelRef = useRef()
 
   const fetchProductWarehouse = async () => {
+    const productPerPage = 10
     try {
       if (authSelector.RoleId === 2) {
         const response = await axiosInstance.get(
-          `admin/stock/all-product/${authSelector.WarehouseId}`
+          `/admin/stock/all-product/${authSelector.WarehouseId}`,
+          {
+            params: {
+              _page: page,
+              _limit: productPerPage,
+              // product_name: currentSearch,
+              // CategoryId: filter,
+              _sortBy: sortBy,
+              _sortDir: sortDir,
+            },
+          }
         )
-        console.log("res", response)
-        setData(response.data.data.ProductStock)
+        setTotalCount(response.data.dataCount)
+        setMaxPage(Math.ceil(response.data.dataCount / productPerPage))
+
+        if (page === 1) {
+          setData(response.data.data)
+        } else {
+          setData(response.data.data)
+        }
       }
 
-      const allWarehouse = await axiosInstance.get("admin/stock/all-warehouse")
-
-      const warehouseId = allWarehouse.data.data.Warehouse.filter((val) => {
+      const allWarehouse = await axiosInstance.get("/admin/stock/all-warehouse")
+      const warehouseId = allWarehouse.data.data.filter((val) => {
         return val.warehouse_name == params.id
       })
 
       const response = await axiosInstance.get(
-        `admin/stock/all-product/${warehouseId[0].id}`
+        `/admin/stock/all-product/${warehouseId[0].id}`,
+        {
+          params: {
+            _page: page,
+            _limit: productPerPage,
+            // product_name: currentSearch,
+            // CategoryId: filter,
+            _sortBy: sortBy,
+            _sortDir: sortDir,
+          },
+        }
       )
 
-      setData(response.data.data.ProductStock)
+      setTotalCount(response.data.dataCount)
+      setMaxPage(Math.ceil(response.data.dataCount / productPerPage))
+
+      if (page === 1) {
+        setData(response.data.data)
+      } else {
+        setData(response.data.data)
+      }
+      // setData(response.data.data.ProductStock)
     } catch (err) {
       console.log(err)
     }
   }
-
-  // const fetchProductWarehouse = async () => {
-  //   try {
-  //     if (authSelector.RoleId === 2) {
-  //       const response = await axiosInstance.get(
-  //         `admin/stock/all-product/${authSelector.WarehouseId}`
-  //       )
-  //       console.log("res", response)
-
-  //       setData(response.data.result)
-  //     }
-
-  //     const allWarehouse = await axiosInstance.get("admin/stock/all-warehouse")
-
-  //     const warehouseId = allWarehouse.data.result.filter((val) => {
-  //       return val.warehouse_name == params.id
-  //     })
-
-  //     const response = await axiosInstance.get(
-  //       `admin/stock/all-product/${warehouseId[0].id}`
-  //     )
-  //     console.log("res", response)
-
-  //     setData(response.data.result)
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
 
   const handleEdit = (stock, id) => {
     setOpenModal(true)
@@ -155,43 +168,63 @@ const WarehouseStock = ({}) => {
   // }
 
   const renderProduct = () => {
-    return data.map((val) =>
-      val.Product.ProductPictures.map((value) => {
-        return (
-          <Tr h="auto" key={val.id}>
-            <Td w="100px">
-              <Image
-                fit="fill"
-                src={`http://localhost:8000/public/${value.product_picture}`}
-                alt="gambar produk"
-              />
-            </Td>
-            <Td>{val.Product.product_name || "Tidak ada Data"}</Td>
-            <Td>{val.Product.Category.category || "Tidak ada Data"}</Td>
-            <Td>{Rupiah(val.Product.price) || "Tidak ada Data"}</Td>
-            <Td w="50px">{val.stock}</Td>
-            <Td justify="space-between">
+    return data.map((val) => {
+      return (
+        <Tr h="auto" key={val.id} boxShadow="base">
+          <Td w="100px">
+            <Carousel>
+              {val.Product.ProductPictures.map((value) => (
+                <Image
+                  fit="fill"
+                  src={`http://localhost:8000/public/${value.product_picture}`}
+                  alt="gambar produk"
+                />
+              ))}
+            </Carousel>
+          </Td>
+          <Td>{val.Product.product_name || "Tidak ada Data"}</Td>
+          <Td>{val.Product.Category.category || "Tidak ada Data"}</Td>
+          <Td>{Rupiah(val.Product.price) || "Tidak ada Data"}</Td>
+          <Td w="10rem">{val.stock || "Tidak ada Data"}</Td>
+          <Td justify="space-between">
+            <Tooltip label="Edit Stok" fontSize="md">
               <Button
                 alignContent="left"
                 colorScheme="messenger"
-                _hover={{ bgColor: "telegram" }}
+                _hover={{ bgColor: "telegram", transform: "translateZ(5px)" }}
                 onClick={() => handleEdit(val.stock, val.id)}
               >
                 <EditIcon />
               </Button>
-              <Button colorScheme="red" onClick={() => btnDelete(val.id)}>
+            </Tooltip>
+            <Tooltip label="Hapus Stok" fontSize="md">
+              <Button
+                _hover={{ bgColor: "telegram", transform: "translateX(5px)" }}
+                colorScheme="red"
+                onClick={() => btnDelete(val.id)}
+              >
                 <DeleteIcon />
               </Button>
-            </Td>
-          </Tr>
-        )
-      })
-    )
+            </Tooltip>
+          </Td>
+        </Tr>
+      )
+    })
+  }
+  const nextPage = () => {
+    setPage(page + 1)
+    // setIsLoading(false)
+  }
+
+  const previousPage = () => {
+    setPage(page - 1)
+    // setIsLoading(false)
   }
 
   useEffect(() => {
     fetchProductWarehouse()
-  }, [])
+  }, [page, sortBy, sortDir, filter])
+
   return (
     <>
       <Container bg="#e0e7eb" maxW="vw" p="0">
@@ -202,7 +235,7 @@ const WarehouseStock = ({}) => {
 
           <VStack h="full" w="full" overflowX="scroll">
             <Text>Product Stock Data : {params.id}</Text>
-            <Search />
+
             <Table>
               <Thead>
                 <Tr>
@@ -216,6 +249,32 @@ const WarehouseStock = ({}) => {
               </Thead>
               <Tbody>{renderProduct()}</Tbody>
             </Table>
+            <Box p="20px" fontSize={"16px"}>
+              <Box textAlign={"center"}>
+                <Button
+                  onClick={previousPage}
+                  disabled={page === 1 ? true : null}
+                  _hover={false}
+                  _active={false}
+                >
+                  <AiOutlineLeftCircle fontSize={"20px"} />
+                </Button>
+
+                <Box display={"inline"}>{page}</Box>
+
+                <Button
+                  onClick={nextPage}
+                  disabled={page >= maxPage ? true : null}
+                  _hover={false}
+                  _active={false}
+                >
+                  <AiOutlineRightCircle fontSize={"20px"} />
+                </Button>
+                <Box>
+                  Page: {page} of {maxPage}
+                </Box>
+              </Box>
+            </Box>
           </VStack>
         </Flex>
       </Container>

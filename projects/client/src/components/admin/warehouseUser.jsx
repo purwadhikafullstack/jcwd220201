@@ -1,4 +1,15 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Container,
@@ -9,8 +20,9 @@ import {
   Grid,
   GridItem,
   HStack,
+  Input,
+  InputGroup,
   Modal,
-  Select,
   Table,
   TableContainer,
   Tbody,
@@ -18,9 +30,11 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
   useToast,
+  VStack,
 } from "@chakra-ui/react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useState } from "react"
 import { axiosInstance } from "../../api"
 import { useFormik } from "formik"
@@ -28,9 +42,10 @@ import EditWarehouseUser from "./editWarehouseUser"
 import { RiDeleteBin2Line } from "react-icons/ri"
 import { FaRegEdit } from "react-icons/fa"
 import PageButton from "../../components/admin/pageButton.jsx"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import * as Yup from "yup"
+import Select from "react-select"
 
 const WarehouseUser = () => {
   const [users, setUsers] = useState([])
@@ -42,23 +57,39 @@ const WarehouseUser = () => {
   const [idEdit, setIdEdit] = useState("")
   const [page, setPage] = useState(1)
 
+  const [sortBy, setSortBy] = useState("UserId")
+  const [sortDir, setSortDir] = useState("DESC")
+  const [filter, setFilter] = useState("All")
+  const [currentSearch, setCurrentSearch] = useState("")
+
   const [limit, setLimit] = useState(5)
   const [totalCount, setTotalCount] = useState(0)
   const toast = useToast()
   const authSelector = useSelector((state) => state.auth)
   const navigate = useNavigate()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef()
+  const btnRef = useRef()
+  const [openAlert, setOpenAlert] = useState(false)
+  const [idDelete, setIdDelete] = useState(0)
+
   const fetchWareUser = async () => {
     try {
-      const respons = await axiosInstance.get(`/warehouse-user`, {
+      const response = await axiosInstance.get(`/warehouse-user`, {
         params: {
           _limit: limit,
           _page: page,
           _sortDir: "DESC",
+          _sortDir: sortDir,
+          _sortBy: sortBy,
+          WarehouseId: filter,
+          name: currentSearch,
         },
       })
 
-      setTotalCount(respons.data.dataCount)
-      setUsers(respons.data.data)
+      setTotalCount(response.data.dataCount)
+      setUsers(response.data.data)
 
       formik.handleReset()
     } catch (err) {
@@ -75,9 +106,9 @@ const WarehouseUser = () => {
 
   const getUser = async () => {
     try {
-      const resp = await axiosInstance.get(`/auth`)
+      const response = await axiosInstance.get(`/auth`)
 
-      setUserId(resp.data.data)
+      setUserId(response.data.data)
     } catch (err) {
       console.log(err)
     }
@@ -85,20 +116,24 @@ const WarehouseUser = () => {
 
   const getWarehouse = async () => {
     try {
-      const responWare = await axiosInstance.get(`/warehouses`)
+      const response = await axiosInstance.get(`/warehouses`)
 
-      setWarehouse(responWare.data.data)
+      setWarehouse(response.data.data)
     } catch (err) {
       console.log(err)
     }
   }
 
-  const deleteBtn = async (id) => {
+  const deleteBtn = async () => {
     try {
-      const resDelete = await axiosInstance.delete(`/warehouse-user/${id}`)
+      const response = await axiosInstance.delete(`/warehouse-user/${idDelete}`)
+
       fetchWareUser()
       getUser()
       getWarehouse()
+
+      setOpenAlert(false)
+
       toast({
         title: "User telah dihapus",
       })
@@ -107,6 +142,7 @@ const WarehouseUser = () => {
       toast({
         title: "User Gagal dihapus",
         status: "error",
+        description: err.response.data.message,
       })
     }
   }
@@ -118,39 +154,43 @@ const WarehouseUser = () => {
     setIdEdit(id)
   }
 
-  const renderUser = () => {
-    return users.map((val) => {
-      return (
-        <Tr key={val.id}>
-          <Td textAlign="center" border="1px solid black">
-            {val.UserId}
-          </Td>
-          <Td textAlign="center" border="1px solid black">
-            {val.WarehouseId}
-          </Td>
-          <Td textAlign="center" border="1px solid black" w="50px">
-            <Button
-              alignContent={"left"}
-              onClick={() => userEdit(val.UserId, val.WarehouseId, val.id)}
-              mx="4"
-              colorScheme={"teal"}
-            >
-              <FaRegEdit />
-            </Button>
-            <Button onClick={() => deleteBtn(val.id)} colorScheme="red" mx="4">
-              <RiDeleteBin2Line />
-            </Button>
-          </Td>
-        </Tr>
-      )
-    })
+  const sortUsertHandler = (event) => {
+    const value = event.value
+    setSortBy(value.split(" ")[0])
+    setSortDir(value.split(" ")[1])
+  }
+
+  const filterWarehouseHandler = (event) => {
+    const value = event.value
+    setFilter(value)
+  }
+
+  const formikSearch = useFormik({
+    initialValues: {
+      search: "",
+    },
+    onSubmit: ({ search }) => {
+      setCurrentSearch(search)
+    },
+  })
+
+  const searchHandler = ({ target }) => {
+    const { name, value } = target
+    formikSearch.setFieldValue(name, value)
+  }
+
+  const btnResetFilter = () => {
+    setCurrentSearch(false)
+    setSortBy(false)
+    setFilter(false)
+    window.location.reload(false)
   }
 
   useEffect(() => {
     fetchWareUser()
     getUser()
     getWarehouse()
-  }, [page])
+  }, [page, sortBy, sortDir, filter, currentSearch])
 
   const formik = useFormik({
     initialValues: {
@@ -183,8 +223,8 @@ const WarehouseUser = () => {
       } catch (err) {
         console.log(err)
         toast({
-          title: "User Id telah ada",
-          description: "Hanya warehouse admin yang dapat ditambahkan",
+          title: "User Gagal ditambahkan",
+          description: err.response.data.message,
           status: "error",
         })
       }
@@ -215,33 +255,118 @@ const WarehouseUser = () => {
     })
   }
 
-  const formChange = ({ target }) => {
-    const { name, value } = target
+  const userOption = userId.map((val) => {
+    return { value: val.id, label: val.name }
+  })
+  const warehouseOption = warehouse.map((val) => {
+    return { value: val.id, label: val.warehouse_name }
+  })
 
-    formik.setFieldValue(name, value)
+  const sortUser = [
+    { value: "UserId ASC", label: "A-Z" },
+    { value: "UserId DESC", label: "Z-A" },
+  ]
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      width: "min-content",
+      minWidth: "25vh",
+    }),
+  }
+
+  const handleOpenAlert = (id) => {
+    setOpenAlert(true)
+    setIdDelete(id)
   }
 
   return (
     <>
       <Flex h="100%" w="full" direction="column">
         <Flex w="full" justifyContent="center">
-          <HStack mt="3" wrap="wrap" justifyContent="center">
-            <Grid templateColumns="repeat(2, 1fr)" gap="4">
+          <VStack mt="3" wrap="wrap" justifyContent="center">
+            <Grid
+              gap="-4"
+              w={"-moz-min-content"}
+              templateColumns={"repeat(4, 1fr)"}
+              mt="8"
+              mb="4"
+              ml="10%"
+            >
+              <Select
+                onChange={filterWarehouseHandler}
+                fontSize={"15px"}
+                bgColor="white"
+                styles={customStyles}
+                placeholder="Filter By Warehouse"
+                options={warehouseOption}
+              ></Select>
+              <Select
+                onChange={(e) => {
+                  sortUsertHandler(e)
+                }}
+                fontSize={"15px"}
+                bgColor="white"
+                styles={customStyles}
+                placeholder="Sort By UserId"
+                options={sortUser}
+              ></Select>
+
+              <form onSubmit={formikSearch.handleSubmit}>
+                <FormControl>
+                  <InputGroup textAlign={"right"}>
+                    <Input
+                      type={"text"}
+                      placeholder="Search By Name"
+                      name="search"
+                      bgColor={"white"}
+                      h="4vh"
+                      onChange={searchHandler}
+                      borderRightRadius="0"
+                      value={formikSearch.values.search}
+                    />
+
+                    <Button
+                      borderLeftRadius={"0"}
+                      bgColor={"white"}
+                      type="submit"
+                      h="4vh"
+                      border="1px solid #e2e8f0"
+                      borderLeft={"0px"}
+                    >
+                      search
+                    </Button>
+                  </InputGroup>
+                </FormControl>
+              </form>
+
+              <Button
+                onClick={btnResetFilter}
+                p="3"
+                w="12vh"
+                h="4vh"
+                ml="6"
+                bgColor="white"
+                variant="solid"
+                _hover={{ borderBottom: "2px solid " }}
+              >
+                Reset Filter
+              </Button>
+            </Grid>
+            <Grid templateColumns="repeat(2, 1fr)" gap="10">
               <GridItem>
                 <FormControl maxW="100%" isInvalid={formik.errors.UserId}>
                   <FormLabel>User Id</FormLabel>
                   <Select
+                    styles={customStyles}
                     borderColor="black"
                     name="UserId"
-                    onChange={formChange}
-                  >
-                    <option value="">Select UserId</option>
-                    {userId.map((val) => (
-                      <option value={val.id}>
-                        {val.id}. {val.name}
-                      </option>
-                    ))}
-                  </Select>
+                    onChange={(e) => {
+                      formik.setFieldValue("UserId", e.value)
+                    }}
+                    value={{ label: formik.values.UserId }}
+                    options={userOption}
+                  ></Select>
                   <FormErrorMessage>{formik.errors.UserId}</FormErrorMessage>
                 </FormControl>
               </GridItem>
@@ -250,60 +375,103 @@ const WarehouseUser = () => {
                 <FormControl maxW="100%" isInvalid={formik.errors.WarehouseId}>
                   <FormLabel>Warehouse Id</FormLabel>
                   <Select
+                    styles={customStyles}
                     borderColor="black"
                     name="WarehouseId"
-                    onChange={formChange}
-                  >
-                    <option value="">Select Warehouse Id</option>
-                    {warehouse.map((val) => (
-                      <option value={val.id}>
-                        {val.id}. {val.warehouse_name}
-                      </option>
-                    ))}
-                  </Select>
+                    onChange={(e) => {
+                      formik.setFieldValue("WarehouseId", e.value)
+                    }}
+                    value={{ label: formik.values.WarehouseId }}
+                    options={warehouseOption}
+                  ></Select>
                   <FormErrorMessage>
                     {formik.errors.WarehouseId}
                   </FormErrorMessage>
                 </FormControl>
               </GridItem>
             </Grid>
-
-            <Box w="full" h="8%"></Box>
-
             <Button onClick={formik.handleSubmit} my="4" colorScheme="teal">
               Add Warehouse User
             </Button>
-          </HStack>
+          </VStack>
         </Flex>
-        <Box w="full" h="2.5%"></Box>
 
-        <Container maxW="container.sm" py="8" pb="5" px="1">
+        <Container maxW="container.lg" py="8" pb="5" px="1">
           <TableContainer border={"1px solid black"} mt={8} overflowY="unset">
-            <Table responsive="md" variant="simple">
-              <Thead position={"sticky"} top={-1} backgroundColor={"#718096"}>
+            <Table variant="striped" colorScheme="blue">
+              <Thead position={"sticky"} top={-1} bgColor="white">
                 <Tr border={"1px solid black"} maxW="50px">
-                  <Th
-                    border={"1px solid black"}
-                    textAlign={"center"}
-                    color="black"
-                    w="100px"
-                  >
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
                     UserId
                   </Th>
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
+                    Nama admin
+                  </Th>
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
+                    WarehouseId
+                  </Th>
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
+                    Nama Warehouse
+                  </Th>
                   <Th
                     border={"1px solid black"}
                     textAlign={"center"}
-                    color="black"
                     w="100px"
-                  >
-                    WarehouseId
-                  </Th>
+                  ></Th>
                 </Tr>
               </Thead>
-              <Tbody maxWidth="max-content"> {renderUser()}</Tbody>
+
+              <Tbody maxWidth="max-content" bgColor="white">
+                {users.map((val) => (
+                  <Tr>
+                    <Td textAlign="center">{val.UserId}</Td>
+                    <Td textAlign="center">{val.User.name}</Td>
+                    <Td textAlign="center">{val.WarehouseId}</Td>
+
+                    <Td textAlign="center">{val.Warehouse.warehouse_name}</Td>
+                    <Td textAlign="center" w="10px">
+                      <Button
+                        alignContent={"left"}
+                        onClick={() =>
+                          userEdit(val.UserId, val.WarehouseId, val.id)
+                        }
+                        mx="4"
+                        colorScheme={"teal"}
+                      >
+                        <FaRegEdit /> Edit
+                      </Button>
+                      <Button
+                        ref={btnRef}
+                        onClick={() => handleOpenAlert(val.id)}
+                        colorScheme="red"
+                        mx="4"
+                      >
+                        <RiDeleteBin2Line /> Hapus
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
             </Table>
           </TableContainer>
         </Container>
+        {!users.length ? (
+          <Alert
+            status="error"
+            variant="subtle"
+            flexDir="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            alignSelf="center"
+            h="200px"
+            w="70%"
+          >
+            <AlertIcon boxSize="20px" mr="0" />
+            <AlertTitle>Oops, user tidak ditemukan !</AlertTitle>
+            <AlertDescription>Coba kata kunci lain</AlertDescription>
+          </Alert>
+        ) : null}
 
         <HStack w="full" alignSelf="flex-end" justifyContent="center">
           {renderPageButton()}
@@ -311,8 +479,48 @@ const WarehouseUser = () => {
             Page {page}/{Math.ceil(totalCount / limit)}
           </Box>
         </HStack>
+
         <Box h="4%" w="full"></Box>
       </Flex>
+      <AlertDialog
+        isOpen={openAlert}
+        onClose={() => setOpenAlert(false)}
+        leastDestructiveRef={cancelRef}
+        motionPreset="slideInBottom"
+        isCentered
+        finalFocusRef={btnRef}
+      >
+        <AlertDialogOverlay
+          bg="none"
+          backdropFilter="auto"
+          backdropInvert="80%"
+          backdropBlur="2px"
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontStyle="bold">
+              Hapus Admin
+            </AlertDialogHeader>
+            <AlertDialogCloseButton />
+
+            <AlertDialogBody>
+              Apakah Yakin Ingin Menghapus Warehouse Admin?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button
+                mr="10px"
+                ref={cancelRef}
+                onClick={() => setOpenAlert(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={() => deleteBtn()} colorScheme="red">
+                Hapus
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
         <EditWarehouseUser

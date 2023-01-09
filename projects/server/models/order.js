@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       sent_at: {
         type: "TIMESTAMP",
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

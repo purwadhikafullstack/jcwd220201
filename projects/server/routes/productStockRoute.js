@@ -15,6 +15,8 @@ router.get(
   verifyToken,
   productStockController.getProductStockWarehouse
 )
+// Create Stock
+router.post("/create-stock", verifyToken, productStockController.createStock)
 // ProductStock Id
 router.patch(
   "/update_stock/:id",
