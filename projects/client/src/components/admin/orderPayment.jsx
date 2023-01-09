@@ -32,14 +32,13 @@ const OrderPayment = () => {
   const [reject, setReject] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
+  const [sending, setSending] = useState(false)
 
   const fetchOrder = async () => {
     try {
-      const resp = await axiosInstance.get(`/payment`)
+      const response = await axiosInstance.get(`/payment`)
 
-      setPayment(resp.data.data)
-
-      console.log(resp, "resp")
+      setPayment(response.data.data)
     } catch (err) {
       console.log(err)
     }
@@ -47,12 +46,14 @@ const OrderPayment = () => {
 
   const confirmOrder = async (id) => {
     try {
+      setSending(true)
       await axiosInstance.patch(`/payment/confirm/${id}`)
 
       fetchOrder()
       toast({
         title: "email dikirim",
       })
+      setSending(false)
     } catch (err) {
       console.log(err)
       toast({
@@ -63,9 +64,9 @@ const OrderPayment = () => {
   }
   const rejectOrder = async (id) => {
     try {
-      const resp = await axiosInstance.patch(`/payment/reject/${id}`)
+      const response = await axiosInstance.patch(`/payment/reject/${id}`)
 
-      setReject(resp.data.data)
+      setReject(response.data.data)
 
       fetchOrder()
       toast({
@@ -81,7 +82,6 @@ const OrderPayment = () => {
   }
 
   const renderOrder = () => {
-    // console.log(payment, "pay")
     return payment.map((val) => {
       return (
         <Tr key={val.id}>
@@ -94,6 +94,7 @@ const OrderPayment = () => {
             <Button
               alignContent={"left"}
               onClick={() => confirmOrder(val.id)}
+              disabled={sending}
               mx="3"
               colorScheme={"teal"}
             >
@@ -166,7 +167,7 @@ const OrderPayment = () => {
                   mt={8}
                   overflowY="unset"
                 >
-                  <Table responsive="md" variant="simple">
+                  <Table responseonsive="md" variant="simple">
                     <Thead position={"sticky"} top={-1}>
                       <Tr border={"1px solid black"} maxW="50px">
                         <Th

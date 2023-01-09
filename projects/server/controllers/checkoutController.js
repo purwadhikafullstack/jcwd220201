@@ -4,37 +4,38 @@ const {
   Courier,
   Order,
   OrderItem,
+  Product,
   ProductStock,
   StockRequest,
   StockRequestItem,
   Status,
   sequelize,
-} = require("../models");
-const { Op } = require("sequelize");
-const axios = require("axios");
-const moment = require("moment");
+} = require("../models")
+const { Op } = require("sequelize")
+const axios = require("axios")
+const moment = require("moment")
 
 // Own library imports
-const getWarehousesInfo = require("../lib/checkout/getWarehousesInfo");
-const compareWarehouseDistances = require("../lib/checkout/compareWarehouseDistances");
-const getDestinationInfo = require("../lib/checkout/getDestinationInfo");
+const getWarehousesInfo = require("../lib/checkout/getWarehousesInfo")
+const compareWarehouseDistances = require("../lib/checkout/compareWarehouseDistances")
+const getDestinationInfo = require("../lib/checkout/getDestinationInfo")
 
 // Configure axios default settings (RAJAONGKIR)
-axios.defaults.baseURL = "https://api.rajaongkir.com/starter";
-axios.defaults.headers.common["key"] = "a459ef892f867c9cc0f57401a1396524";
+axios.defaults.baseURL = "https://api.rajaongkir.com/starter"
+axios.defaults.headers.common["key"] = "a459ef892f867c9cc0f57401a1396524"
 axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
+  "application/x-www-form-urlencoded"
 
 const checkoutController = {
   getAddresses: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get user addresses
@@ -46,34 +47,34 @@ const checkoutController = {
           ["is_default", "DESC"],
           ["label", "ASC"],
         ],
-      });
+      })
 
-      const selectedAddress = addresses.find((address) => address.is_selected);
+      const selectedAddress = addresses.find((address) => address.is_selected)
 
       // Send successful response
       return res.status(200).json({
         message: "Daftar alamat berhasil diambil",
         data: { selectedAddress, addresses },
-      });
+      })
     } catch (err) {
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   selectAddress: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get address id
-      const { id } = req.body;
+      const { id } = req.body
 
       // Update selected address
       await sequelize.transaction(async (t) => {
@@ -85,8 +86,8 @@ const checkoutController = {
             },
             transaction: t,
           }
-        );
-      });
+        )
+      })
 
       await sequelize.transaction(async (t) => {
         await Address.update(
@@ -97,28 +98,28 @@ const checkoutController = {
             },
             transaction: t,
           }
-        );
-      });
+        )
+      })
 
       // Send successful response
       return res.status(200).json({
         message: "Alamat berhasil diubah",
-      });
+      })
     } catch (err) {
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   findNearestWarehouse: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get shipping address
@@ -126,25 +127,25 @@ const checkoutController = {
         where: {
           [Op.and]: [{ UserId }, { is_selected: true }],
         },
-      });
+      })
 
       // Get shipping address longitude and latitude
-      const [latitude, longitude] = shippingAddress.pinpoint.split(", ");
+      const [latitude, longitude] = shippingAddress.pinpoint.split(", ")
       const shippingAddressCoordinates = {
         latitude: Number(latitude),
         longitude: Number(longitude),
-      };
+      }
 
       // Get warehouse addresses
-      const warehousesInfo = await getWarehousesInfo();
+      const warehousesInfo = await getWarehousesInfo()
 
       // Sort warehouse by distance to shipping address
       const sortedWarehouse = compareWarehouseDistances(
         shippingAddressCoordinates,
         warehousesInfo
-      );
+      )
 
-      const [nearestWarehouse] = sortedWarehouse.splice(0, 1);
+      const [nearestWarehouse] = sortedWarehouse.splice(0, 1)
 
       // Send successful response
       return res.status(200).json({
@@ -153,50 +154,50 @@ const checkoutController = {
           nearestWarehouse,
           nearestBranches: sortedWarehouse,
         },
-      });
+      })
     } catch (err) {
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   getDestinationInfo: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get destination address
-      const { destinationAddress } = req.body;
+      const { destinationAddress } = req.body
 
       // Get destination info
-      const warehousesInfo = await getDestinationInfo(destinationAddress);
+      const warehousesInfo = await getDestinationInfo(destinationAddress)
 
       // Return successful response
       return res.status(200).json({
         message: "Informasi alamat pengiriman berhasil diambil",
         data: warehousesInfo,
-      });
+      })
     } catch (err) {
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   getCartItems: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get items in the cart
@@ -205,7 +206,7 @@ const checkoutController = {
           [Op.and]: [{ UserId }, { is_checked: true }],
         },
         include: [{ model: Product }],
-      });
+      })
 
       if (!cartItems.length) {
         cartItems = await Cart.findAll({
@@ -213,64 +214,64 @@ const checkoutController = {
             UserId,
           },
           include: [{ model: Product }],
-        });
+        })
       }
 
       if (!cartItems.length) {
         return res.status(400).json({
           message: "Keranjang kamu kosong.",
           description: "Yuk tambahkan barang favoritmu ke keranjang!",
-        });
+        })
       }
 
       // Return successful response
       return res.status(200).json({
         message: "Berhasil mengambil data keranjang",
         data: cartItems,
-      });
+      })
     } catch (err) {
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   getCouriers: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get couriers
-      const couriers = await Courier.findAll();
+      const couriers = await Courier.findAll()
 
       // Send successful response
       return res.status(200).json({
         message: "Berhasil mengambil data kurir",
         data: couriers,
-      });
+      })
     } catch (err) {
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   getShippingMethod: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
-      const { origin, destination, weight, courier } = req.body;
+      const { origin, destination, weight, courier } = req.body
 
       // Get shipping details
       const response = await axios.post("/cost", {
@@ -278,34 +279,34 @@ const checkoutController = {
         destination,
         weight,
         courier,
-      });
+      })
 
       const {
         rajaongkir: {
           results: [data],
         },
-      } = response.data;
+      } = response.data
 
       return res.status(200).json({
         message: "Berhasil mengambil metode pengiriman",
         data,
-      });
+      })
     } catch (err) {
       // console.error(err);
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
   createOrder: async (req, res) => {
     try {
       // Get user id
-      const { id: UserId } = req.user;
+      const { id: UserId } = req.user
 
       if (!UserId) {
         return res.status(401).json({
           message: "Terjadi kesalahan, silakan login terlebih dahulu",
-        });
+        })
       }
 
       // Get order details
@@ -319,42 +320,42 @@ const checkoutController = {
           sortedWarehouse,
         },
         cartItems,
-      } = req.body;
+      } = req.body
 
       // Get warehouses details
-      const { nearestWarehouse, nearestBranches } = sortedWarehouse;
+      const { nearestWarehouse, nearestBranches } = sortedWarehouse
 
       // Check overall product availability
       for (let item of cartItems) {
-        const { ProductId, quantity } = item;
+        const { ProductId, quantity } = item
 
         const stockDetails = await ProductStock.findAll({
           where: {
             ProductId,
           },
-        });
+        })
 
         const totalStock = stockDetails.reduce((accumulator, current) => {
-          return accumulator + current.stock;
-        }, 0);
+          return accumulator + current.stock
+        }, 0)
 
         // Cancel order if one of the product is not available
         if (totalStock < quantity) {
           return res.status(422).json({
             message: "Transaksi gagal",
             description: "Ada barang yang tidak tersedia di keranjang Anda",
-          });
+          })
         }
       }
 
       // Create new order
-      let orderId = null;
+      let orderId = null
 
       const { id: statusId } = await Status.findOne({
         where: {
           status: "menunggu pembayaran",
         },
-      });
+      })
 
       await sequelize.transaction(async (t) => {
         const newOrder = await Order.create(
@@ -372,19 +373,19 @@ const checkoutController = {
           {
             transaction: t,
           }
-        );
+        )
 
-        orderId = newOrder.id;
-      });
+        orderId = newOrder.id
+      })
 
       // Persist order items
-      const itemsToOrder = [];
+      const itemsToOrder = []
       for (let item of cartItems) {
         const {
           Product: { price },
           ProductId,
           quantity,
-        } = item;
+        } = item
 
         // Store cart item details
         itemsToOrder.push({
@@ -392,18 +393,18 @@ const checkoutController = {
           quantity,
           total_price: price * quantity,
           OrderId: orderId,
-        });
+        })
       }
 
       await sequelize.transaction(async (t) => {
         await OrderItem.bulkCreate(itemsToOrder, {
           transaction: t,
-        });
-      });
+        })
+      })
 
       // Check products availability in the nearest warehouse
       for (let item of cartItems) {
-        const { ProductId, quantity } = item;
+        const { ProductId, quantity } = item
 
         // Get available stock from the nearest warehouse
         const { stock } = await ProductStock.findOne({
@@ -414,14 +415,14 @@ const checkoutController = {
               { WarehouseId: nearestWarehouse.warehouseInfo.id },
             ],
           },
-        });
+        })
 
         // Make a request to nearest branches if additional stock is needed
-        const requestItemsForm = [];
+        const requestItemsForm = []
 
         if (stock < quantity) {
           // Calculate items needed
-          let itemsNeeded = !stock ? quantity : quantity - stock;
+          let itemsNeeded = !stock ? quantity : quantity - stock
 
           // Check stock availability from nearest branches
           for (let branch of nearestBranches) {
@@ -433,16 +434,16 @@ const checkoutController = {
                   { WarehouseId: branch.warehouseInfo.id },
                 ],
               },
-            });
+            })
 
-            const time = moment().format();
+            const time = moment().format()
 
             /*
               Continue checking from subsequent nearest branches if stock not available
               from the current nearest branch
             */
             if (!nearestBranchStock) {
-              continue;
+              continue
             }
 
             /*
@@ -459,15 +460,15 @@ const checkoutController = {
                   FromWarehouseId: nearestWarehouse.warehouseInfo.id,
                   ToWarehouseId: branch.warehouseInfo.id,
                 },
-              });
+              })
 
-              itemsNeeded -= nearestBranchStock;
+              itemsNeeded -= nearestBranchStock
 
               if (!itemsNeeded) {
-                break;
+                break
               }
 
-              continue;
+              continue
             }
 
             /*
@@ -484,9 +485,9 @@ const checkoutController = {
                   FromWarehouseId: nearestWarehouse.warehouseInfo.id,
                   ToWarehouseId: branch.warehouseInfo.id,
                 },
-              });
+              })
 
-              break;
+              break
             }
           }
 
@@ -495,22 +496,22 @@ const checkoutController = {
             await StockRequestItem.bulkCreate(requestItemsForm, {
               include: StockRequest,
               transaction: t,
-            });
-          });
+            })
+          })
         }
       }
 
       // Send successful message
       return res.status(200).json({
         message: "Pesanan berhasil dibuat",
-      });
+      })
     } catch (err) {
-      console.error(err);
+      console.error(err)
       return res.status(500).json({
         message: "Server error",
-      });
+      })
     }
   },
-};
+}
 
-module.exports = checkoutController;
+module.exports = checkoutController

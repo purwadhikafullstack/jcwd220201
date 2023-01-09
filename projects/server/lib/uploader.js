@@ -4,6 +4,7 @@ const upload = ({
   filePrefix = "FILE",
   fileName = Date.now(),
   acceptedFileTypes = [],
+  maxSize,
 }) => {
   const diskStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -29,7 +30,7 @@ const upload = ({
 
   return multer({
     storage: diskStorage,
-    limits: { fileSize: 1 * 1024 * 1024 },
+    limits: { fileSize: maxSize },
     fileFilter,
   })
 }

@@ -17,8 +17,8 @@ const authController = {
         where: {
           email,
         },
-        // Dont Delete this belongs to Adli's Task
-        include: [{ model: db.WarehousesUser }],
+
+        include: [{ model: db.WarehousesUser, attributes: ["WarehouseId"] }],
       })
       if (!findUserByEmail) {
         return res.status(400).json({
@@ -51,7 +51,7 @@ const authController = {
     } catch (err) {
       console.log(err)
       return res.status(500).json({
-        message: "Server Error",
+        message: err.message,
       })
     }
   },
@@ -144,7 +144,6 @@ const authController = {
         while: {
           id: req.params.id,
         },
-        include: [{ model: db.WarehousesUser }],
       })
 
       return res.status(200).json({

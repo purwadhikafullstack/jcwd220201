@@ -28,6 +28,7 @@ import {
   PopoverBody,
   Image,
   Divider,
+  useMediaQuery,
 } from "@chakra-ui/react"
 import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons"
 import { IoMdCart } from "react-icons/io"
@@ -63,6 +64,9 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)")
+  const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)")
+
   const keepUserLogin = async () => {
     try {
       const auth_token = localStorage.getItem("auth_token")
@@ -86,7 +90,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
   const btnLogout = () => {
     localStorage.removeItem("auth_token")
     dispatch(logout())
-    navigate("/")
+    navigate("/login")
   }
 
   const handleOnChange = (e) => {
@@ -173,14 +177,14 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
     keepUserLogin()
   }, [])
 
-  useEffect(() => {
-    fetchUserCart()
-  }, [])
-
-  // BUG
   // useEffect(() => {
   //   fetchUserCart()
-  // }, [cartProduct])
+  // }, [])
+
+  // BUG
+  useEffect(() => {
+    fetchUserCart()
+  }, [cartProduct])
 
   useEffect(() => {
     setSearchValue(searchQuery.get("search"))
@@ -209,12 +213,22 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
             alignItems={"center"}
           >
             <Box>
-              {/* <LinkRouterDom to="/">
-                <Heading as="h1" size="lg" letterSpacing={"tighter"}>
-                  WIRED!
-                </Heading>
-              </LinkRouterDom> */}
               <Logo />
+              {/* <Image
+                src="logo.png"
+                alt="logo"
+                width={
+                  isLargerThanMd
+                    ? "10rem"
+                    : isLargerThanSm
+                    ? "8.262rem"
+                    : "6.826rem"
+                }
+                maxW="100%"
+                py="1.25rem"
+                cursor="pointer"
+                onClick={() => navigate("/")}
+              /> */}
             </Box>
             <HStack
               w="full"

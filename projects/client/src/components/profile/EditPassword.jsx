@@ -55,7 +55,7 @@ const EditPassword = () => {
     },
     onSubmit: async ({ password, confirm_password }) => {
       try {
-        const userResponse = await axiosInstance.patch(
+        const response = await axiosInstance.patch(
           `auth/profile/password/${authSelector.id}`,
           {
             password,
@@ -63,7 +63,7 @@ const EditPassword = () => {
           }
         )
 
-        dispatch(login(userResponse.data.data))
+        dispatch(login(response.data.data))
         setEditMode(false)
         if (authSelector.RoleId === 1 || authSelector.RoleId === 2) {
           navigate("/admin/dashboard")

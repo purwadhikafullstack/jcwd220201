@@ -4,7 +4,6 @@ import {
   Container,
   FormControl,
   FormLabel,
-  Input,
   ModalBody,
   ModalCloseButton,
   ModalContent,
@@ -20,8 +19,6 @@ import { axiosInstance } from "../../api"
 const EditWarehouseUser = (props) => {
   const toast = useToast()
   const {
-    userIdEdit,
-    setUserIdEdit,
     warehouseEdit,
     setWarehouseEdit,
     fetchWareUser,
@@ -29,25 +26,20 @@ const EditWarehouseUser = (props) => {
     idEdit,
     setOpenModal,
     warehouse,
-    userId,
   } = props
 
   const formik = useFormik({
     initialValues: {
-      UserId: "",
       WarehouseId: "",
     },
 
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
-        const { UserId, WarehouseId } = values
-
         let editWareUser = {
-          UserId: userIdEdit,
           WarehouseId: warehouseEdit,
         }
 
-        const respons = await axiosInstance.patch(
+        const response = await axiosInstance.patch(
           `/warehouse-user/${idEdit}`,
           editWareUser
         )
@@ -58,7 +50,7 @@ const EditWarehouseUser = (props) => {
 
         toast({
           title: "WarehouseUser telah diedit",
-          description: respons.data.message,
+          description: response.data.message,
           status: "success",
         })
       } catch (err) {
@@ -66,6 +58,7 @@ const EditWarehouseUser = (props) => {
         toast({
           title: "Edit User Gagal",
           status: "error",
+          description: err.response.data.message,
         })
       }
     },
@@ -86,23 +79,6 @@ const EditWarehouseUser = (props) => {
               padding={"10px"}
               ringColor={"blue.500"}
             >
-              <FormControl>
-                <FormLabel>
-                  User Id
-                  <Select
-                    value={userIdEdit}
-                    onChange={(e) => setUserIdEdit(e.target.value)}
-                    name="UserId"
-                  >
-                    <option value="">Select UserId</option>
-                    {userId.map((val) => (
-                      <option value={val.id}>
-                        {val.id}. {val.name}
-                      </option>
-                    ))}
-                  </Select>
-                </FormLabel>
-              </FormControl>
               <FormControl>
                 <FormLabel>
                   Warehouse Id
