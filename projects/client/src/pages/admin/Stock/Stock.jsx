@@ -95,82 +95,16 @@ const Stock = () => {
   //   setPage(selected)
   // }
 
-  const formik = useFormik({
-    initialValues: {
-      stock: "",
-      ProductId: "",
-      WarehouseId: "",
-      id: "",
-    },
-    onSubmit: async (values) => {
-      try {
-        const { stock, ProductId, WarehouseId } = values
-        let createStock = { stock, ProductId, WarehouseId }
-
-        await axiosInstance.post("/admin/stock/create-stock", createStock)
-        formik.setFieldValue(stock, "")
-        formik.setFieldValue(ProductId, "")
-        formik.setFieldValue(WarehouseId, "")
-        formik.setSubmitting(false)
-
-        fetchProduct()
-        fetchAllWarehouse()
-
-        toast({
-          title: "Stok berhasil ditambahkan",
-          status: "success",
-        })
-      } catch (err) {
-        console.log(err)
-        toast({
-          title: "Stok gagal ditambahkan",
-          status: "error",
-          description:
-            "Produk telah ada , tidak bisa menambah produk yang sama",
-        })
-      }
-    },
-    validationSchema: Yup.object({
-      stock: Yup.number().required("Stok harus diisi"),
-      ProductId: Yup.number().required("Produk harus dipilih"),
-      WarehouseId: Yup.number().required("Warehouse harus dipilih"),
-    }),
-    validateOnChange: false,
-  })
-
-  // Product Options Functionality
-  const fetchProduct = async () => {
-    try {
-      const response = await axiosInstance.get("/product-admin")
-
-      setProduct(response.data.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  const productOptions = product.map((val) => {
-    return { value: val.id, label: val.product_name }
-  })
-  // ===============================================================
-
   const warehouseOptions = warehouse.map((val) => {
     return { value: val.id, label: val.warehouse_name }
   })
 
-  const formChange = ({ target }) => {
-    const { name, value } = target
-
-    formik.setFieldValue(name, value)
-  }
-
   const nextPage = () => {
     setPage(page + 1)
-    // setIsLoading(false)
   }
 
   const previousPage = () => {
     setPage(page - 1)
-    // setIsLoading(false)
   }
 
   const filterWarehouse = (event) => {
@@ -189,7 +123,6 @@ const Stock = () => {
 
   useEffect(() => {
     fetchAllWarehouse()
-    fetchProduct()
   }, [page, sortBy, sortDir, filter])
 
   return (
@@ -201,7 +134,7 @@ const Stock = () => {
           </VStack>
 
           <VStack h="90%" w="full" overflowX="scroll">
-            <Grid templateColumns="repeat(4, 1fr)" gap="10">
+            <Grid templateColumns="repeat(1, 1fr)" gap="10">
               <GridItem>
                 <FormLabel>Filter Warehouse</FormLabel>
                 <Select
@@ -211,65 +144,7 @@ const Stock = () => {
                   options={warehouseOptions}
                 />
               </GridItem>
-              <GridItem>
-                <FormControl isInvalid={formik.errors.stock}>
-                  <FormLabel>Input Stok</FormLabel>
-                  <Input
-                    bgColor="white"
-                    placeholder="Stok ..."
-                    type="number"
-                    name="stock"
-                    value={formik.values.stock}
-                    onChange={formChange}
-                  />
-                  <FormErrorMessage>{formik.errors.stock}</FormErrorMessage>
-                </FormControl>
-              </GridItem>
-              <GridItem>
-                <FormControl maxW="100%" isInvalid={formik.errors.ProductId}>
-                  <FormLabel>Pilih Produk</FormLabel>
-                  <Select
-                    styles={customStyles}
-                    name="ProductId"
-                    bgColor="white"
-                    fontSize="15px"
-                    placeholder="Pilih Produk ..."
-                    onChange={(e) => {
-                      formik.setFieldValue("ProductId", e.value)
-                    }}
-                    value={{ label: formik.values.ProductId }}
-                    options={productOptions}
-                  />
-                  <FormErrorMessage>{formik.errors.ProductId}</FormErrorMessage>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl maxW="100%" isInvalid={formik.errors.WarehouseId}>
-                  <FormLabel>Pilih Warehouse</FormLabel>
-                  <Select
-                    styles={customStyles}
-                    placeholder="Pilih Warehouse ..."
-                    name="WarehouseId"
-                    onChange={(e) => {
-                      formik.setFieldValue("WarehouseId", e.value)
-                    }}
-                    value={{ label: formik.values.WarehouseId }}
-                    options={warehouseOptions}
-                  />
-                  <FormErrorMessage>
-                    {formik.errors.WarehouseId}
-                  </FormErrorMessage>
-                </FormControl>
-              </GridItem>
             </Grid>
-            <Button
-              colorScheme="teal"
-              onClick={formik.handleSubmit}
-              _hover={{ boxShadow: "lg", transform: "translateY(5px)" }}
-            >
-              Tambah Stok
-            </Button>
 
             <Table>
               <Thead>

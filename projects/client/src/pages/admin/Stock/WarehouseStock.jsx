@@ -179,7 +179,7 @@ const WarehouseStock = ({}) => {
           <Td>{val.Product.product_name || "Tidak ada Data"}</Td>
           <Td>{val.Product.Category.category || "Tidak ada Data"}</Td>
           <Td>{Rupiah(val.Product.price) || "Tidak ada Data"}</Td>
-          <Td w="10rem">{val.stock || "Tidak ada Data"}</Td>
+          <Td w="10rem">{val.stock}</Td>
           <Td justify="space-between">
             <Tooltip label="Edit Stok" fontSize="md">
               <Button
