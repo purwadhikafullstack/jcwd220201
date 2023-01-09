@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { axiosInstance } from "../../../api"
 import Search from "../../../components/admin/stock/Search"
-import ApproveButton from "../../../components/admin/payment/ApproveButton"
 
 import {
   Box,
@@ -34,6 +33,8 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react"
+import CancelButton from "../../../components/admin/CancelButton"
+import SendButton from "../../../components/admin/SendButton"
 import { BiEdit } from "react-icons/bi"
 import { RiDeleteBin5Fill } from "react-icons/ri"
 import ReactPaginate from "react-paginate"
@@ -41,7 +42,6 @@ import { Link, useNavigate } from "react-router-dom"
 import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard"
 import { useSelector } from "react-redux"
 import { Rupiah } from "../../../lib/currency/Rupiah"
-import PaymentApprove from "../../../components/admin/payment/approvePayment"
 
 const UserOrder = () => {
   const authSelector = useSelector((state) => state.auth)
