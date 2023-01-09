@@ -22,28 +22,26 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 
 // Own library imports
+import { CheckoutContext } from "./CheckoutContextProvider";
 import useCheckInputError from "../../lib/address/hooks/useCheckInputError";
 import clearInput from "../../lib/address/clearInput";
 import CitiesInput from "./CitiesInput";
 import saveAddress from "../../lib/address/saveAddress";
+import fetchAddresses from "../../lib/checkout/fetchAddresses";
 
-const AddressForm = ({
-  fetchAddresses,
-  pageIndex,
-  isOpen,
-  onClose,
-  setAddresses,
-  setTotalPage,
-  setPageIndex,
-  setAddressManipulation,
-}) => {
+const AddressForm = ({ isOpen, onClose }) => {
   // Get user id
   const id = useSelector((state) => state.auth.id);
+
+  // Get checkout context
+  const {
+    address: { setShippingAddress, setAddresses, setDisplayNoAddressFound },
+  } = useContext(CheckoutContext);
 
   // Monitor user input
   const [recipientError, setRecipientError] = useState(false);
@@ -110,16 +108,12 @@ const AddressForm = ({
       const res = await saveAddress(address);
 
       // Update address list
-      if (!pageIndex) {
-        const response = await fetchAddresses();
-        const { addresses: newAddressList, totalPage } = response.data.data;
-        setAddresses(newAddressList);
-        setTotalPage(totalPage);
-      } else {
-        setPageIndex(0);
-      }
+      const response = await fetchAddresses();
 
-      setAddressManipulation(true);
+      const { selectedAddress, addresses } = response.data;
+      setShippingAddress(selectedAddress);
+      setAddresses(addresses);
+      setDisplayNoAddressFound(false);
 
       // Alert user of the result
       toast({

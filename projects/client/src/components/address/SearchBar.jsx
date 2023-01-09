@@ -62,7 +62,7 @@ const SearchBar = ({ addressManipulation, setQuery, setPageIndex }) => {
             width={["100%", "54.032%"]}
             height="100%"
             padding="0"
-            backgroundImage="assets/address/search-icon.svg"
+            backgroundImage="/assets/address/search-icon.svg"
             backgroundSize="1.5rem"
             backgroundRepeat="no-repeat"
             backgroundPosition="center"

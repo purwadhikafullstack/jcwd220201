@@ -6,7 +6,7 @@ const AddressCard = defineStyleConfig({
     alignItems: ["flex-start", "flex-start", "center", "center"],
     width: ["15.2295rem", "25.7412rem", "42.7617rem", "56.125rem"],
     height: ["13.4rem", "14.5rem", "12.25rem", "12.25rem"],
-    m: "1rem 0.25rem 0.25rem 0.25rem",
+    m: "0rem 0.25rem 1rem 0.25rem",
     p: "1rem 1.5rem",
     borderRadius: "0.5rem",
     boxShadow: "0px 1px 6px 0px rgba(49, 53, 59, 0.12)",

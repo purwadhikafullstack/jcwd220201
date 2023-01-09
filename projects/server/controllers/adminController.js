@@ -89,6 +89,7 @@ const adminController = {
 
       return res.status(200).json({
         message: "Pesanan dikirim",
+        status: "dikirim",
       });
     } catch (err) {
       console.error(err);
@@ -100,7 +101,7 @@ const adminController = {
   cancelOrder: async (req, res) => {
     try {
       // Get transaction details
-      const { id, WarehouseId } = req.body;
+      const { id, warehouseId } = req.body;
 
       // Get appropriate order statuses for update
       const [sent, cancelled] = await Status.findAll({
@@ -177,7 +178,7 @@ const adminController = {
               },
             },
             {
-              WarehouseId,
+              WarehouseId: warehouseId,
             },
           ],
         },
@@ -220,7 +221,7 @@ const adminController = {
             JournalTypeId: cancellationJournalType,
             OrderId: orderItems[index]["OrderId"],
             ProductId: currentProductStock.ProductId,
-            WarehouseId,
+            WarehouseId: warehouseId,
             Journal: {},
           };
         }
@@ -236,6 +237,7 @@ const adminController = {
       // Send successful response
       return res.status(200).json({
         message: "Pesanan dibatalkan",
+        status: "dibatalkan",
       });
     } catch (err) {
       return res.status(500).json({

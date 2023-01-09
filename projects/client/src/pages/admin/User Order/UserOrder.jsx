@@ -1,7 +1,7 @@
-import { useEffect } from "react"
-import { useState } from "react"
-import { axiosInstance } from "../../../api"
-import Search from "../../../components/admin/stock/Search"
+import { useEffect } from "react";
+import { useState } from "react";
+import { axiosInstance } from "../../../api";
+import Search from "../../../components/admin/stock/Search";
 
 import {
   Box,
@@ -31,41 +31,43 @@ import {
   Thead,
   Tr,
   VStack,
-} from "@chakra-ui/react"
-import { BiEdit } from "react-icons/bi"
-import { RiDeleteBin5Fill } from "react-icons/ri"
-import ReactPaginate from "react-paginate"
-import { Link, useNavigate } from "react-router-dom"
-import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard"
-import { useSelector } from "react-redux"
-import { Rupiah } from "../../../lib/currency/Rupiah"
+} from "@chakra-ui/react";
+import CancelButton from "../../../components/admin/CancelButton";
+import SendButton from "../../../components/admin/SendButton";
+import { BiEdit } from "react-icons/bi";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import ReactPaginate from "react-paginate";
+import { Link, useNavigate } from "react-router-dom";
+import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard";
+import { useSelector } from "react-redux";
+import { Rupiah } from "../../../lib/currency/Rupiah";
 
 const UserOrder = () => {
-  const authSelector = useSelector((state) => state.auth)
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(true)
+  const authSelector = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   // Render Warehouse
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
   const fetchAllOrder = async () => {
     try {
-      let url = `/order/all-user`
+      let url = `/order/all-user`;
       if (authSelector.WarehouseId) {
-        url += `?WarehouseId=${authSelector.WarehouseId}`
+        url += `?WarehouseId=${authSelector.WarehouseId}`;
       }
-      const response = await axiosInstance.get(url)
-
-      setData(response.data.data)
-      setLoading(false)
+      const response = await axiosInstance.get(url);
+      console.log(response);
+      setData(response.data.data);
+      setLoading(false);
     } catch (err) {
-      console.log(err.response)
+      console.log(err.response);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchAllOrder()
-  }, [])
+    fetchAllOrder();
+  }, []);
 
   return (
     <>
@@ -93,6 +95,7 @@ const UserOrder = () => {
                 {loading
                   ? null
                   : data.map((val) => {
+                      console.log(val);
                       return (
                         <Tr h="auto">
                           <Td cursor="pointer" _hover={{ color: "teal.400" }}>
@@ -112,12 +115,17 @@ const UserOrder = () => {
                             </Td>
                           ) : val.status === "diproses" ? (
                             <Td>
-                              <Button>ariel</Button>
-                              <Button>ariel</Button>
+                              <HStack>
+                                <SendButton id={val.id} />
+                                <CancelButton
+                                  id={val.id}
+                                  warehouseId={val.WarehouseId}
+                                />
+                              </HStack>
                             </Td>
                           ) : null}
                         </Tr>
-                      )
+                      );
                     })}
               </Tbody>
             </Table>
@@ -135,7 +143,7 @@ const UserOrder = () => {
         </Flex>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default UserOrder
+export default UserOrder;

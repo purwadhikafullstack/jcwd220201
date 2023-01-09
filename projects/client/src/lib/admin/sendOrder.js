@@ -2,7 +2,7 @@ import { axiosInstance } from "../../api";
 
 const sendOrder = async (id) => {
   try {
-    const response = await axiosInstance.get("/admin/send", {
+    const response = await axiosInstance.patch("/admin/send", {
       id,
     });
     return response;

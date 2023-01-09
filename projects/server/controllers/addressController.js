@@ -65,6 +65,38 @@ const addressController = {
       }
 
       // Persist user address in the Addresses table
+      const availableAddresses = await Address.findAll({
+        where: {
+          UserId: id,
+        },
+      });
+
+      if (!availableAddresses.length) {
+        await sequelize.transaction(async (t) => {
+          await Address.create(
+            {
+              UserId: id,
+              recipient,
+              phone,
+              label,
+              address,
+              city,
+              province,
+              postal_code: postalCode,
+              pinpoint,
+              is_default: true,
+              is_selected: true,
+            },
+            { transaction: t }
+          );
+        });
+
+        // Send success response
+        return res.status(201).json({
+          message: "Alamat berhasil ditambahkan",
+        });
+      }
+
       await sequelize.transaction(async (t) => {
         await Address.create(
           {
@@ -78,7 +110,7 @@ const addressController = {
             postal_code: postalCode,
             pinpoint,
             is_default: isDefault === "true",
-            is_selected: isDefault === "true" ? true : false,
+            is_selected: isDefault === "true",
           },
           { transaction: t }
         );
