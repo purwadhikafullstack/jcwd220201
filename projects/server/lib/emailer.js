@@ -1,8 +1,17 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
 
-const emailer = async ({ to, subject, text, html }) => {
+const emailer = async ({
+  to,
+  subject,
+  text,
+  html,
+  attachments,
+  filename,
+  path,
+  cid,
+}) => {
   if (!to) {
-    throw new Error("`to` parameter missing.");
+    throw new Error("`to` parameter missing.")
   }
 
   const transporter = nodemailer.createTransport({
@@ -11,21 +20,18 @@ const emailer = async ({ to, subject, text, html }) => {
       user: process.env.NODEMAILER_EMAIL,
       pass: process.env.NODEMAILER_PASS,
     },
-  });
+  })
 
   const info = await transporter.sendMail({
     to,
     subject,
     text,
     html,
-    attachments: [
-      {
-        filename: "logo.png",
-        path: __dirname + "/assets/logo.png",
-        cid: "logo",
-      },
-    ],
-  });
-};
+    attachments,
+    filename,
+    path,
+    cid,
+  })
+}
 
-module.exports = emailer;
+module.exports = emailer
