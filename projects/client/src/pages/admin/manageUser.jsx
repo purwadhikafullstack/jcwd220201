@@ -41,7 +41,9 @@ const ManageUser = () => {
 
         <VStack h="full" w="full" overflowX="scroll">
           <Flex h="20%" w="full" justifyContent="flex-end" direction="column">
-            <Box padding="4">Manage User</Box>
+            <Box padding="4" fontWeight="bold" fontSize="20px">
+              Manage User
+            </Box>
           </Flex>
 
           <HStack h="10%">

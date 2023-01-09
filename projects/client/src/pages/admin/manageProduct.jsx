@@ -44,7 +44,9 @@ const ManageProduct = () => {
 
         <VStack h="full" w="full" overflowX="scroll">
           <Flex h="20%" w="full" justifyContent="flex-end" direction="column">
-            <Box padding="4">Manage Product</Box>
+            <Box padding="4" fontWeight="bold" fontSize="20px">
+              Manage Product
+            </Box>
           </Flex>
 
           <HStack h="10%">

@@ -90,7 +90,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
   const btnLogout = () => {
     localStorage.removeItem("auth_token")
     dispatch(logout())
-    navigate("/")
+    navigate("/login")
   }
 
   const handleOnChange = (e) => {

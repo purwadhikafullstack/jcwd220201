@@ -162,7 +162,6 @@ const WarehouseUser = () => {
 
   const filterWarehouseHandler = (event) => {
     const value = event.value
-
     setFilter(value)
   }
 
@@ -224,7 +223,7 @@ const WarehouseUser = () => {
       } catch (err) {
         console.log(err)
         toast({
-          title: "User Gagal ditambhakan",
+          title: "User Gagal ditambahkan",
           description: err.response.data.message,
           status: "error",
         })
@@ -399,61 +398,38 @@ const WarehouseUser = () => {
 
         <Container maxW="container.lg" py="8" pb="5" px="1">
           <TableContainer border={"1px solid black"} mt={8} overflowY="unset">
-            <Table responseive="md" variant="simple">
-              <Thead position={"sticky"} top={-1} backgroundColor={"#718096"}>
+            <Table variant="striped" colorScheme="blue">
+              <Thead position={"sticky"} top={-1} bgColor="white">
                 <Tr border={"1px solid black"} maxW="50px">
-                  <Th
-                    border={"1px solid black"}
-                    textAlign={"center"}
-                    color="black"
-                    w="100px"
-                  >
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
                     UserId
                   </Th>
-                  <Th
-                    border={"1px solid black"}
-                    textAlign={"center"}
-                    color="black"
-                    w="100px"
-                  >
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
                     Nama admin
                   </Th>
-                  <Th
-                    border={"1px solid black"}
-                    textAlign={"center"}
-                    color="black"
-                    w="100px"
-                  >
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
                     WarehouseId
                   </Th>
+                  <Th border={"1px solid black"} textAlign={"center"} w="100px">
+                    Nama Warehouse
+                  </Th>
                   <Th
                     border={"1px solid black"}
                     textAlign={"center"}
-                    color="black"
                     w="100px"
-                  >
-                    Nama Warehouse
-                  </Th>
+                  ></Th>
                 </Tr>
               </Thead>
 
-              <Tbody maxWidth="max-content">
+              <Tbody maxWidth="max-content" bgColor="white">
                 {users.map((val) => (
                   <Tr>
-                    <Td textAlign="center" border="1px solid black">
-                      {val.UserId}
-                    </Td>
-                    <Td textAlign="center" border="1px solid black">
-                      {val.User.name}
-                    </Td>
-                    <Td textAlign="center" border="1px solid black">
-                      {val.WarehouseId}
-                    </Td>
+                    <Td textAlign="center">{val.UserId}</Td>
+                    <Td textAlign="center">{val.User.name}</Td>
+                    <Td textAlign="center">{val.WarehouseId}</Td>
 
-                    <Td textAlign="center" border="1px solid black">
-                      {val.Warehouse.warehouse_name}
-                    </Td>
-                    <Td textAlign="center" border="1px solid black" w="10px">
+                    <Td textAlign="center">{val.Warehouse.warehouse_name}</Td>
+                    <Td textAlign="center" w="10px">
                       <Button
                         alignContent={"left"}
                         onClick={() =>

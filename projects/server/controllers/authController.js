@@ -51,7 +51,7 @@ const authController = {
     } catch (err) {
       console.log(err)
       return res.status(500).json({
-        message: "Server Error",
+        message: err.message,
       })
     }
   },
@@ -144,7 +144,6 @@ const authController = {
         while: {
           id: req.params.id,
         },
-        include: [{ model: db.WarehousesUser }],
       })
 
       return res.status(200).json({

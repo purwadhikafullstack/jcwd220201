@@ -47,9 +47,6 @@ app.use("/api/address", addressRoute)
 // Checkout middleware
 app.use("/api/checkout", checkoutRoute)
 
-// Checkout middleware
-app.use("/api/checkout", checkoutRoute)
-
 const {
   warehousesRoute,
   citiesRoute,

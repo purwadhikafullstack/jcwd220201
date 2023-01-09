@@ -32,14 +32,13 @@ const OrderPayment = () => {
   const [reject, setReject] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
+  const [sending, setSending] = useState(false)
 
   const fetchOrder = async () => {
     try {
       const response = await axiosInstance.get(`/payment`)
 
       setPayment(response.data.data)
-
-      console.log(response, "response")
     } catch (err) {
       console.log(err)
     }
@@ -47,12 +46,14 @@ const OrderPayment = () => {
 
   const confirmOrder = async (id) => {
     try {
+      setSending(true)
       await axiosInstance.patch(`/payment/confirm/${id}`)
 
       fetchOrder()
       toast({
         title: "email dikirim",
       })
+      setSending(false)
     } catch (err) {
       console.log(err)
       toast({
@@ -81,7 +82,6 @@ const OrderPayment = () => {
   }
 
   const renderOrder = () => {
-    // console.log(payment, "pay")
     return payment.map((val) => {
       return (
         <Tr key={val.id}>
@@ -94,6 +94,7 @@ const OrderPayment = () => {
             <Button
               alignContent={"left"}
               onClick={() => confirmOrder(val.id)}
+              disabled={sending}
               mx="3"
               colorScheme={"teal"}
             >

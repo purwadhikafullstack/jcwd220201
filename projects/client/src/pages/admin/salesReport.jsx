@@ -1,12 +1,17 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
+  Button,
   Container,
   Flex,
   Grid,
   GridItem,
+  HStack,
   Input,
   InputGroup,
-  Select,
   Table,
   TableContainer,
   Tbody,
@@ -19,39 +24,64 @@ import {
 } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { useState } from "react"
+import { useSelector } from "react-redux"
 import { axiosInstance } from "../../api"
+import PageButton from "../../components/admin/pageButton"
 import SidebarAdmin from "../../components/admin/sidebarAdminDashboard"
-import Warehouse from "../../components/admin/warehouse"
+import { Rupiah } from "../../lib/currency/Rupiah"
+import Select from "react-select"
+import { useFormik } from "formik"
 
 const SalesReport = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(6)
   const [totalCount, setTotalCount] = useState(0)
-  const [sortBy, setSortBy] = useState("product_name")
-  const [filter, setFilter] = useState("All")
+  const [sortBy, setSortBy] = useState("")
+  const [sortDir, setSortDir] = useState("DESC")
+  const [filter, setFilter] = useState("")
   const [filterMonth, setFilterMonth] = useState("")
   const [filterWare, setFilterWare] = useState("")
   const [currentSearch, setCurrentSearch] = useState("")
   const [nameSearch, setNameSearch] = useState("")
-  const [catSearch, setCatSearch] = useState("")
   const [warehouse, setWarehouse] = useState([])
   const [categories, setCategories] = useState([])
   const [sales, setSales] = useState([])
 
+  const authSelector = useSelector((state) => state.auth)
+
   const fetchReport = async () => {
     try {
-      const response = await axiosInstance.get(`/sales/report`, {
-        params: {
-          _page: page,
-          _limit: limit,
-          _sortBy: sortBy,
-          CategoryId: filter,
-          payment_date: filterMonth,
-          product_name: nameSearch,
-          category: catSearch,
-        },
-      })
+      let response
+      if (authSelector.RoleId === 1) {
+        response = await axiosInstance.get(`/sales/report`, {
+          params: {
+            _page: page,
+            _limit: limit,
+            _sortBy: sortBy,
+            _sortDir: sortDir,
+            category: filter,
+            payment_date: filterMonth,
+            product_name: nameSearch,
+            WarehouseId: filterWare,
+          },
+        })
+      } else {
+        response = await axiosInstance.get(`/sales/report`, {
+          params: {
+            _page: page,
+            _limit: limit,
+            _sortBy: sortBy,
+            _sortDir: sortDir,
+            category: filter,
+            payment_date: filterMonth,
+            product_name: nameSearch,
+            WarehouseId: authSelector.WarehouseId,
+          },
+        })
+        setFilterWare(authSelector.WarehouseId)
+      }
 
+      setTotalCount(response.data.dataCount)
       setSales(response.data.data)
     } catch (err) {
       console.log(err)
@@ -78,23 +108,23 @@ const SalesReport = () => {
     }
   }
 
-  const filterWarehouseBtn = ({ target }) => {
-    const { value } = target
+  const filterWarehouseBtn = (event) => {
+    const value = event.value
+
     setFilterWare(value)
+    fetchReport()
   }
 
-  const filterCategoryBtn = ({ target }) => {
-    const { value } = target
+  const filterCategoryBtn = (event) => {
+    const value = event.value
+
     setFilter(value)
+    fetchReport()
   }
 
-  const filterMonthBtn = ({ target }) => {
-    const { value } = target
+  const filterMonthBtn = (event) => {
+    const value = event.value
     setFilterMonth(value)
-  }
-
-  const searchBtnHandler = (e) => {
-    setNameSearch(e.target.value)
   }
 
   const handleKeyEnter = (e) => {
@@ -103,34 +133,76 @@ const SalesReport = () => {
     }
   }
 
-  const sortHandler = ({ target }) => {
-    const { value } = target
-    setSortBy(value)
+  const formikSearch = useFormik({
+    initialValues: {
+      search: "",
+    },
+    onSubmit: ({ search }) => {
+      setNameSearch(search)
+    },
+  })
+
+  const searchHandler = ({ target }) => {
+    const { name, value } = target
+    formikSearch.setFieldValue(name, value)
   }
 
-  //   console.log(
-  //     "sal",
-  //     sales.map((val) => val.category)
-  //   )
+  const btnResetFilter = () => {
+    setCurrentSearch(false)
+    setSortBy(false)
+    setFilter(false)
+    window.location.reload(false)
+  }
 
-  // return renderSales = () => {
-  //   return sales.map((val) => {
-  //       return (
-  //         <Tr>
-  //             <Td>
+  const renderPageButton = () => {
+    const totalPage = Math.ceil(totalCount / limit)
 
-  //             </Td>
-  //         </Tr>
+    const pageArray = new Array(totalPage).fill(null).map((val, i) => ({
+      id: i + 1,
+    }))
 
-  //       )
-  //   })
-  // }
+    return pageArray.map((val) => {
+      return (
+        <PageButton
+          key={val.id.toString()}
+          id={val.id}
+          onClick={() => setPage(val.id)}
+        />
+      )
+    })
+  }
 
   useEffect(() => {
     fetchReport()
+  }, [filterMonth, filterWare, filter, page, sortBy, nameSearch])
+
+  useEffect(() => {
     fethWarehouse()
     getCategory()
-  }, [filterMonth, filterWare, filter, page, sortBy, nameSearch, catSearch])
+  }, [])
+
+  const warehouseOption = warehouse.map((val) => {
+    return { value: val.id, label: val.warehouse_name }
+  })
+
+  const catOption = categories.map((val) => {
+    return { value: val.category, label: val.category }
+  })
+
+  const monthsOption = [
+    { label: "Januari", value: "1" },
+    { label: "Februari", value: "2" },
+    { label: "Maret", value: "3" },
+    { label: "April", value: "4" },
+    { label: "Mei", value: "5" },
+    { label: "Juni", value: "6" },
+    { label: "Juli", value: "7" },
+    { label: "Augustus", value: "8" },
+    { label: "September", value: "9" },
+    { label: "Oktober", value: "10" },
+    { label: "November", value: "11" },
+    { label: "Desember", value: "12" },
+  ]
 
   return (
     <>
@@ -148,201 +220,222 @@ const SalesReport = () => {
                 fontWeight="bold"
                 fontSize="200x"
               >
-                Sales Report
+                <Text fontSize="40px"> Sales Report</Text>
               </Box>
             </Flex>
-            <Flex>
-              <Box mt="3vh">
-                <Grid
-                  p="5px"
-                  gap="5"
-                  w="full"
-                  gridTemplateColumns="repeat(5,1fr)"
+
+            <Flex h="80%" w="full" direction="column">
+              <Flex>
+                <Box mt="3vh">
+                  <Grid
+                    p="5px"
+                    gap="4"
+                    w="full"
+                    ml="12"
+                    gridTemplateColumns="repeat(5,1fr)"
+                  >
+                    {/* Month */}
+                    <GridItem
+                      w="full"
+                      justifySelf="center"
+                      border="1px solid #dfe1e3"
+                      borderRadius="8px"
+                    >
+                      <Select
+                        onChange={filterMonthBtn}
+                        options={monthsOption}
+                        fontSize={"15px"}
+                        bgColor="white"
+                        placeholder="Filter By Month"
+                      ></Select>
+                    </GridItem>
+
+                    {/* Category */}
+                    <GridItem
+                      w="full"
+                      justifySelf="center"
+                      border="1px solid #dfe1e3"
+                      borderRadius="8px"
+                    >
+                      <Select
+                        onChange={filterCategoryBtn}
+                        options={catOption}
+                        fontSize={"15px"}
+                        bgColor="white"
+                        placeholder="Filter By Category"
+                      ></Select>
+                    </GridItem>
+
+                    {/* Warehouse */}
+                    <GridItem
+                      w="full"
+                      justifySelf="center"
+                      border="1px solid #dfe1e3"
+                      borderRadius="8px"
+                    >
+                      <Select
+                        onChange={filterWarehouseBtn}
+                        fontSize={"15px"}
+                        bgColor="white"
+                        placeholder="Filter By Warehouse"
+                        options={warehouseOption}
+                      ></Select>
+                    </GridItem>
+
+                    {/* Search */}
+                    <form onSubmit={formikSearch.handleSubmit}>
+                      <GridItem
+                        w="full"
+                        justifySelf="center"
+                        border="1px solid #dfe1e3"
+                        borderRadius="8px"
+                      >
+                        <InputGroup>
+                          <Input
+                            type={"text"}
+                            placeholder="Search By Name"
+                            name="search"
+                            bgColor={"white"}
+                            h="4.1vh"
+                            onChange={searchHandler}
+                            borderRightRadius="0"
+                            value={formikSearch.values.search}
+                            // onChange={searchBtnHandler}
+                            onKeyDown={handleKeyEnter}
+                            // value={nameSearch}
+                          />
+                          <Button
+                            borderLeftRadius={"0"}
+                            bgColor={"white"}
+                            type="submit"
+                            border="1px solid #e2e8f0"
+                            borderLeft={"0px"}
+                          >
+                            search
+                          </Button>
+                        </InputGroup>
+                      </GridItem>
+                    </form>
+
+                    {/* Reset */}
+                    <Box ml="20%">
+                      <Button
+                        onClick={btnResetFilter}
+                        p="3"
+                        bgColor="white"
+                        variant="solid"
+                        _hover={{ borderBottom: "2px solid " }}
+                      >
+                        Reset Filter
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Box>
+              </Flex>
+
+              <Container maxW="container.xl">
+                <TableContainer
+                  border={"1px solid black"}
+                  mt={8}
+                  overflowY="unset"
                 >
-                  {/* Sort */}
-                  <GridItem
-                    w="full"
-                    justifySelf="center"
-                    border="1px solid #dfe1e3"
-                    borderRadius="8px"
-                    onChange={sortHandler}
-                  >
-                    <Select>
-                      <option value="">sort</option>
-                      <option value={"ASC"}>Ascending</option>
-                      <option value={"DESC"}>Descending</option>
-                    </Select>
-                  </GridItem>
+                  <Table variant="striped" colorScheme="blue">
+                    <Thead position={"sticky"} top={-1}>
+                      <Tr border={"1px solid black"} maxW="50px">
+                        <Th
+                          w="100px"
+                          border={"1px solid black"}
+                          textAlign={"center"}
+                        >
+                          <Text fontSize="12px">Warehouse name</Text>
+                        </Th>
 
-                  {/* Month */}
-                  <GridItem
-                    w="full"
-                    justifySelf="center"
-                    border="1px solid #dfe1e3"
-                    borderRadius="8px"
-                    onChange={filterMonthBtn}
-                  >
-                    <Select>
-                      <option value="">---By Month---</option>
-                      <option value={1}>January</option>
-                      <option value={2}>February</option>
-                      <option value={3}>March</option>
-                      <option value={4}>April</option>
-                      <option value={5}>May</option>
-                      <option value={6}>June</option>
-                      <option value={7}>July</option>
-                      <option value={8}>August</option>
-                      <option value={9}>September</option>
-                      <option value={10}>October</option>
-                      <option value={11}>November</option>
-                      <option value={12}>December</option>
-                    </Select>
-                  </GridItem>
+                        <Th
+                          w="100px"
+                          border={"1px solid black"}
+                          textAlign={"center"}
+                        >
+                          <Text fontSize="12px">Category</Text>
+                        </Th>
+                        <Th
+                          w="100px"
+                          border={"1px solid black"}
+                          textAlign={"center"}
+                        >
+                          <Text fontSize="12px">product_name</Text>
+                        </Th>
+                        <Th
+                          w="100px"
+                          border={"1px solid black"}
+                          textAlign={"center"}
+                        >
+                          <Text fontSize="12px">Total price</Text>
+                        </Th>
+                        <Th
+                          w="100px"
+                          border={"1px solid black"}
+                          textAlign={"center"}
+                        >
+                          <Text fontSize="12px">nama user</Text>
+                        </Th>
 
-                  {/* Category */}
-                  <GridItem
-                    w="full"
-                    justifySelf="center"
-                    border="1px solid #dfe1e3"
-                    borderRadius="8px"
-                    onChange={filterCategoryBtn}
-                  >
-                    <Select>
-                      <option value="">Select Category</option>
-                      {categories.map((val) => (
-                        <option value={val.id}>{val.category}</option>
-                      ))}
-                    </Select>
-                  </GridItem>
-
-                  {/* Warehouse */}
-                  <GridItem
-                    w="full"
-                    justifySelf="center"
-                    onChange={filterWarehouseBtn}
-                    border="1px solid #dfe1e3"
-                    borderRadius="8px"
-                  ></GridItem>
-
-                  <Select>
-                    <option value=""> Select By Warehouse</option>
-                    {sales.WarehouseId ===
-                    sales.map((val) => val.WarehouseId)[0]
-                      ? sales.map((val) => (
-                          <option value={val.WarehouseId}>
-                            {val.warehouse_name}
-                          </option>
-                        ))[0]
-                      : Warehouse.map((val) => (
-                          <option value={val.id}>{val.warehouse_name}</option>
-                        ))}
-                  </Select>
-
-                  {/* Search */}
-                  <GridItem
-                    w="full"
-                    justifySelf="center"
-                    border="1px solid #dfe1e3"
-                    borderRadius="8px"
-                  >
-                    <InputGroup>
-                      <Input
-                        onChange={searchBtnHandler}
-                        onKeyDown={handleKeyEnter}
-                        value={nameSearch}
-                      />
-                    </InputGroup>
-                  </GridItem>
-                </Grid>
-              </Box>
-
-              <TableContainer
-                border="1px solid #dfe1e3"
-                mt="3vh"
-                borderRadius="8px"
-              >
-                <Table variant="simple">
-                  <Thead>
-                    <Tr>
-                      <Th w="100px">
-                        <Text fontSize="10px">Payment_Date</Text>
-                      </Th>
-                      <Th w="100px">
-                        <Text fontSize="10px">ProductId</Text>
-                      </Th>
-                      <Th w="100px">
-                        <Text fontSize="10px">CategoryId</Text>
-                      </Th>
-                      <Th w="200px">
-                        <Text fontSize="10px">product_name</Text>
-                      </Th>
-
-                      <Th w="100px">
-                        <Text fontSize="10px">price</Text>
-                      </Th>
-                      <Th w="100px">
-                        <Text fontSize="10px">quantity</Text>
-                      </Th>
-                      <Th w="100px">
-                        <Text fontSize="10px">Total</Text>
-                      </Th>
-                      <Th w="100px">
-                        <Text fontSize="10px">Warehouse</Text>
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {sales.map((val) => (
-                      <Tr>
-                        <Td>
-                          {/* RAW QUERY */}
-                          <Text>
-                            {val.payment_date.split("T")[0]} /{" "}
-                            {val.payment_date.split("T")[1].split(".000Z")}
-                          </Text>
-                        </Td>
-                        <Td>
-                          <Text>{val.productId}</Text>
-                        </Td>
-                        <Td>
-                          <Text>{val.category}</Text>
-                        </Td>
-                        <Td maxW="200px">
-                          <Text overflow="hidden" textOverflow="ellipsis">
-                            {val.product_name}
-                          </Text>
-                        </Td>
-
-                        <Td>
-                          <Text>
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(val.price)}
-                          </Text>
-                        </Td>
-                        <Td>
-                          <Text>{val.quantity}</Text>
-                        </Td>
-
-                        <Td>
-                          <Text>
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              minimumFractionDigits: 0,
-                            }).format(val.total)}
-                          </Text>
-                        </Td>
-                        <Td>
-                          <Text>{val.warehouse_name}</Text>
-                        </Td>
+                        <Th
+                          w="100px"
+                          border={"1px solid black"}
+                          textAlign={"center"}
+                        >
+                          <Text fontSize="12px">Payment_Date</Text>
+                        </Th>
                       </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </TableContainer>
+                    </Thead>
+                    <Tbody bgColor="white">
+                      {sales?.map((val) => (
+                        <Tr key={val.id}>
+                          <Td textAlign={"center"}>{val.warehouse_name}</Td>
+                          <Td textAlign={"center"}>{val.category}</Td>
+                          <Td textAlign={"center"}>{val.product_name}</Td>
+                          <Td textAlign={"center"}>
+                            {Rupiah(val.total_price)}
+                          </Td>
+                          <Td textAlign={"center"}>{val.name}</Td>
+                          <Td textAlign={"center"}>{val.payment_date}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </Container>
+
+              {!sales.length ? (
+                <Alert
+                  status="error"
+                  variant="subtle"
+                  flexDir="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  textAlign="center"
+                  alignSelf="center"
+                  h="200px"
+                  mt="2"
+                  w="84%"
+                >
+                  <AlertIcon boxSize="20px" mr="0" />
+                  <AlertTitle>Oops, produk tidak ditemukan !</AlertTitle>
+                  <AlertDescription>Coba kata kunci lain</AlertDescription>
+                </Alert>
+              ) : null}
+
+              <HStack
+                mt="2"
+                w="full"
+                alignSelf="flex-end"
+                justifyContent="center"
+              >
+                {renderPageButton()}
+                <Box>
+                  Page {page}/{Math.ceil(totalCount / limit)}
+                </Box>
+              </HStack>
             </Flex>
           </VStack>
         </Flex>

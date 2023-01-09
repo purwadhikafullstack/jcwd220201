@@ -360,13 +360,11 @@ const WarehouseProduct = () => {
   }
 
   const handleImage = (e) => {
-    console.log(e.target.files, "123")
     if (e.target.files) {
       const fileArray = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
       )
       setPreview(fileArray)
-      console.log(fileArray, "file")
     }
   }
 
@@ -385,7 +383,6 @@ const WarehouseProduct = () => {
   ]
 
   const handleDisable = () => {
-    console.log(formik.values.product_name, "ini")
     let tempField = []
     if (formik.values.product_name !== "") {
       tempField.push(formik.values.product_name)
@@ -406,15 +403,12 @@ const WarehouseProduct = () => {
       tempField.push(formik.values.product_picture)
     }
 
-    console.log(formik.values)
-    console.log(tempField, "temp")
     if (tempField.length === 6) {
       setDisable(false)
     }
   }
 
   useEffect(() => {
-    console.log(disable, "disable")
     handleDisable()
   }, [
     formik.values.product_name,
@@ -529,6 +523,7 @@ const WarehouseProduct = () => {
                     value={formik.values.weight}
                     backgroundColor="white"
                   />
+                  <FormHelperText>Dalam Satuan Gram</FormHelperText>
                   <FormErrorMessage>{formik.errors.weight}</FormErrorMessage>
                 </FormControl>
               </GridItem>
@@ -556,7 +551,6 @@ const WarehouseProduct = () => {
                         event.target.files
                       )
                       handleImage(event)
-                      console.log(event.target.files, "eve")
                     }}
                   />
                   <FormHelperText>
