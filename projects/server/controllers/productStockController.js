@@ -137,8 +137,9 @@ const productStockController = {
   getProductStockWarehouse: async (req, res) => {
     try {
       const {
-        product_name = "",
+        stock = "",
         CategoryId = "",
+        product_name = "",
         _sortBy = "id",
         _sortDir = "ASC",
         _limit = 6,
@@ -154,8 +155,10 @@ const productStockController = {
         })
       }
       if (
+        _sortBy === "stock" ||
         _sortBy === "product_name" ||
         _sortBy === "CategoryId" ||
+        stock ||
         product_name ||
         CategoryId
       ) {
@@ -172,6 +175,7 @@ const productStockController = {
               },
             ],
             order: [[{ model: Product }, _sortBy, _sortDir]],
+            order: [["stock", _sortDir]],
             where: { WarehouseId: id },
           })
 
@@ -197,6 +201,7 @@ const productStockController = {
             },
           ],
           order: [[{ model: Product }, _sortBy, _sortDir]],
+          order: [["stock", _sortDir]],
           where: { WarehouseId: id },
         })
 
@@ -211,7 +216,7 @@ const productStockController = {
         limit: Number(_limit),
         offset: (_page - 1) * _limit,
         subQuery: false,
-        order: [[_sortBy, _sortDir]],
+        order: [["stock", _sortDir]],
         include: [
           {
             model: Product,

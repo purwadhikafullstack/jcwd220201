@@ -132,7 +132,7 @@ const SidebarAdmin = () => {
           {/* Role Admin */}
           {authSelector.RoleId === 1 ? (
             <NavLink
-              to="/admin/update-stock"
+              to="/admin/manage-stock"
               style={({ isActive }) => ({
                 backgroundColor: isActive ? "#005e9d" : "#008deb",
               })}
@@ -152,7 +152,7 @@ const SidebarAdmin = () => {
           {/* Role Warehouse Admin */}
           {authSelector.RoleId === 2 ? (
             <NavLink
-              to="/admin/update-stock"
+              to="/admin/manage-stock"
               style={({ isActive }) => ({
                 backgroundColor: isActive ? "#005e9d" : "#008deb",
               })}

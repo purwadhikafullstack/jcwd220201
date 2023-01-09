@@ -32,6 +32,9 @@ import {
   ModalHeader,
   ModalOverlay,
   Tooltip,
+  Grid,
+  GridItem,
+  Select as SelectChakra,
 } from "@chakra-ui/react"
 import * as Yup from "yup"
 import { useFormik } from "formik"
@@ -42,7 +45,7 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { axiosInstance } from "../../../api"
 import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard"
-import Search from "../../../components/admin/stock/Search"
+import Select from "react-select"
 import { Rupiah } from "../../../lib/currency/Rupiah"
 import EditStock from "../../../components/admin/stock/EditStock"
 import ReactPaginate from "react-paginate"
@@ -57,18 +60,16 @@ const WarehouseStock = ({}) => {
   // Alert Functionality
   const toast = useToast()
 
-  // Produck Data & Category
+  // Product Data on State
   const [data, setData] = useState([])
-  console.log("data", data)
+  const [categories, setCategories] = useState([])
+  const [page, setPage] = useState(1)
   const [sortBy, setSortBy] = useState("product_name")
   const [sortDir, setSortDir] = useState("ASC")
   const [maxPage, setMaxPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
-  const [filter, setFilter] = useState(0)
-  // const [currentSearch, setCurrentSearch] = useState("")
-  const [page, setPage] = useState(1)
-
-  // const [category, setCategory] = useState([])
+  const [filter, setFilter] = useState("All")
+  const [search, setSearch] = useState("")
 
   // Modal Edit Stock Props
   const [openModal, setOpenModal] = useState(false)
@@ -83,26 +84,26 @@ const WarehouseStock = ({}) => {
     const productPerPage = 10
     try {
       if (authSelector.RoleId === 2) {
-        const response = await axiosInstance.get(
+        const response1 = await axiosInstance.get(
           `/admin/stock/all-product/${authSelector.WarehouseId}`,
           {
             params: {
               _page: page,
               _limit: productPerPage,
               // product_name: currentSearch,
-              // CategoryId: filter,
+              CategoryId: filter,
               _sortBy: sortBy,
               _sortDir: sortDir,
             },
           }
         )
-        setTotalCount(response.data.dataCount)
-        setMaxPage(Math.ceil(response.data.dataCount / productPerPage))
+        setTotalCount(response1.data.dataCount)
+        setMaxPage(Math.ceil(response1.data.dataCount / productPerPage))
 
         if (page === 1) {
-          setData(response.data.data)
+          setData(response1.data.data)
         } else {
-          setData(response.data.data)
+          setData(response1.data.data)
         }
       }
 
@@ -111,29 +112,27 @@ const WarehouseStock = ({}) => {
         return val.warehouse_name == params.id
       })
 
-      const response = await axiosInstance.get(
+      const response2 = await axiosInstance.get(
         `/admin/stock/all-product/${warehouseId[0].id}`,
         {
           params: {
             _page: page,
             _limit: productPerPage,
-            // product_name: currentSearch,
-            // CategoryId: filter,
+            CategoryId: filter,
             _sortBy: sortBy,
             _sortDir: sortDir,
           },
         }
       )
 
-      setTotalCount(response.data.dataCount)
-      setMaxPage(Math.ceil(response.data.dataCount / productPerPage))
+      setTotalCount(response2.data.dataCount)
+      setMaxPage(Math.ceil(response2.data.dataCount / productPerPage))
 
       if (page === 1) {
-        setData(response.data.data)
+        setData(response2.data.data)
       } else {
-        setData(response.data.data)
+        setData(response2.data.data)
       }
-      // setData(response.data.data.ProductStock)
     } catch (err) {
       console.log(err)
     }
@@ -162,17 +161,12 @@ const WarehouseStock = ({}) => {
     }
   }
 
-  // const hapus = () => {
-  //   setDelConfirm(null)
-  //   btnDelete(delConfirm.id)
-  // }
-
   const renderProduct = () => {
     return data.map((val) => {
       return (
-        <Tr h="auto" key={val.id} boxShadow="base">
-          <Td w="100px">
-            <Carousel>
+        <Tr h="auto" key={val.id.toString()} boxShadow="base">
+          <Td w="0">
+            <Carousel showThumbs={false}>
               {val.Product.ProductPictures.map((value) => (
                 <Image
                   fit="fill"
@@ -211,6 +205,54 @@ const WarehouseStock = ({}) => {
       )
     })
   }
+
+  const btnReset = () => {
+    setFilter(false)
+    window.location.reload(false)
+  }
+  const fetchAllCategory = async () => {
+    try {
+      const responseCategory = await axiosInstance.get("/products/category")
+
+      setCategories(responseCategory.data.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const filterCategory = (e) => {
+    const value = e.value
+
+    setFilter(value)
+  }
+  const categoryOptions = categories.map((val) => {
+    return { value: val.id, label: val.category }
+  })
+
+  const sortProduct = (e) => {
+    const value = e.value
+
+    setSortBy(value.split(" ")[0])
+    setSortDir(value.split(" ")[1])
+
+    if (value === "stok") {
+      setSortBy("stock")
+      setSortDir("DESC")
+    } else if (value === "stok") {
+      setSortBy("stock")
+      setSortDir("ASC")
+    } else if (value == "") {
+      setSortBy("")
+      setSortDir("")
+    }
+  }
+
+  const sortOptions = [
+    { value: "product_name ASC", label: "A-Z" },
+    { value: "product_name DESC", label: "Z-A" },
+    { value: "stock DESC", label: "Stok Terbanyak" },
+    { value: "stock ASC", label: "Stok Terkecil" },
+  ]
   const nextPage = () => {
     setPage(page + 1)
     // setIsLoading(false)
@@ -221,8 +263,27 @@ const WarehouseStock = ({}) => {
     // setIsLoading(false)
   }
 
+  const formik = useFormik({
+    initialValues: {
+      search: "",
+    },
+    onSubmit: ({ search }) => {
+      setSearch(search)
+      setPage(1)
+    },
+  })
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      width: "min-content",
+      minWidth: "25vh",
+    }),
+  }
+
   useEffect(() => {
     fetchProductWarehouse()
+    fetchAllCategory()
   }, [page, sortBy, sortDir, filter])
 
   return (
@@ -235,6 +296,51 @@ const WarehouseStock = ({}) => {
 
           <VStack h="full" w="full" overflowX="scroll">
             <Text>Product Stock Data : {params.id}</Text>
+            <Grid templateColumns="repeat(3, 1fr)" gap="10">
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Filter Kategori</FormLabel>
+                  <Select
+                    placeholder="Pilih ..."
+                    options={categoryOptions}
+                    onChange={filterCategory}
+                    styles={{
+                      menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                      control: (base) => ({
+                        ...base,
+                        width: "min-content",
+                        minWidth: "25vh",
+                      }),
+                    }}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Urutkan</FormLabel>
+                  <Select
+                    placeholder="Pilih ..."
+                    styles={customStyles}
+                    options={sortOptions}
+                    onChange={(e) => {
+                      sortProduct(e)
+                    }}
+                  />
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl>
+                  <FormLabel>Reset</FormLabel>
+                  <Button
+                    onClick={btnReset}
+                    variant="unstyled"
+                    _hover={{ borderBottom: "2px solid " }}
+                  >
+                    Reset Filter
+                  </Button>
+                </FormControl>
+              </GridItem>
+            </Grid>
 
             <Table>
               <Thead>
@@ -249,18 +355,18 @@ const WarehouseStock = ({}) => {
               </Thead>
               <Tbody>{renderProduct()}</Tbody>
             </Table>
-            <Box p="20px" fontSize={"16px"}>
-              <Box textAlign={"center"}>
+            <Box p="20px" fontSize="16px">
+              <Box textAlign="center">
                 <Button
                   onClick={previousPage}
                   disabled={page === 1 ? true : null}
                   _hover={false}
                   _active={false}
                 >
-                  <AiOutlineLeftCircle fontSize={"20px"} />
+                  <AiOutlineLeftCircle fontSize="20px" />
                 </Button>
 
-                <Box display={"inline"}>{page}</Box>
+                <Box display="inline">{page}</Box>
 
                 <Button
                   onClick={nextPage}
@@ -268,7 +374,7 @@ const WarehouseStock = ({}) => {
                   _hover={false}
                   _active={false}
                 >
-                  <AiOutlineRightCircle fontSize={"20px"} />
+                  <AiOutlineRightCircle fontSize="20px" />
                 </Button>
                 <Box>
                   Page: {page} of {maxPage}
