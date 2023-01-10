@@ -189,7 +189,7 @@ const WarehouseProduct = () => {
           <Carousel width="20vh" autoPlay={true}>
             {val.ProductPictures.map((value) => (
               <Image
-                src={`http://localhost:8000/public/${value.product_picture}`}
+                src={`https://jcwd220201.purwadhikabootcamp.com/public/${value.product_picture}`}
               ></Image>
             ))}
           </Carousel>

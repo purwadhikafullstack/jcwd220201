@@ -170,7 +170,7 @@ const WarehouseStock = ({}) => {
               {val.Product.ProductPictures.map((value) => (
                 <Image
                   fit="fill"
-                  src={`http://localhost:8000/public/${value.product_picture}`}
+                  src={`https://jcwd220201.purwadhikabootcamp.com/public/${value.product_picture}`}
                   alt="gambar produk"
                 />
               ))}
