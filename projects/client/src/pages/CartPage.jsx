@@ -138,7 +138,7 @@ const CartPage = () => {
           product_name={val.Product.product_name}
           price={val.Product.price}
           quantity={val.quantity}
-          product_picture={`http://localhost:8000/public/${val.Product?.ProductPictures[0].product_picture}`}
+          product_picture={`https://jcwd220201.purwadhikabootcamp.com/public/${val.Product?.ProductPictures[0].product_picture}`}
           category={val.Category?.category}
           CategoryId={val.CategoryId}
           CartId={val.id}

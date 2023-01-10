@@ -157,11 +157,6 @@ const ProductList = () => {
     return { value: val.id, label: val.category }
   })
 
-  // const filterCategory = (e) => {
-  //   const value = e.value
-
-  //   setFilterProduct(value)
-  // }
   const filterCategory = (e) => {
     const value = e.value
 
@@ -209,7 +204,7 @@ const ProductList = () => {
         <ProductCard
           key={val.id.toString()}
           product_name={val.product_name}
-          product_picture={`http://localhost:8000/public/${val.product_picture}`}
+          product_picture={`https://jcwd220201.purwadhikabootcamp.com/public/${val.product_picture}`}
           price={val.price}
           id={val.id}
         />

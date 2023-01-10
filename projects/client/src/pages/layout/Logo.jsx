@@ -8,7 +8,6 @@ const Logo = () => {
 
   return (
     <Image
-      // src={require("logo.png")}
       src="logo.png"
       alt="logo"
       width={
