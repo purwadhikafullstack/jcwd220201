@@ -44,14 +44,6 @@ import { addProductToCart, itemCart } from "../../redux/features/cartSlice"
 import { Rupiah } from "../../lib/currency/Rupiah"
 
 const ProductDetail = () => {
-  // const [produck, setProducts] = useState({
-  //   id: "",
-  //   product_name: "",
-  //   description: "",
-  //   price: 0,
-  //   weight: 0,
-  //   Category: "",
-  // })
   const [products, setProducts] = useState([])
 
   // State Functionality
@@ -107,16 +99,6 @@ const ProductDetail = () => {
   const input = getInputProps()
   const qty = Number(input.value)
 
-  // Fetching User's Cart
-  // const fetchCart = async () => {
-  //   try {
-  //     const response = await axiosInstance.get("/carts/me")
-  //     dispatch(itemCart(response.data.data))
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
-  // Fetch Cart Data
   const fetchCartByProduct = async () => {
     try {
       const response = await axiosInstance.get(
@@ -200,19 +182,11 @@ const ProductDetail = () => {
     }
   }
 
-  // Depedency BUG
-  // useEffect(() => {
-  //   fetchCart()
-  //   fetchCartByProduct()
-  //   fetchProduct()
-  // }, [qty, cartQty, produck])
-
   const goBack = () => {
     navigate(-1)
   }
 
   useEffect(() => {
-    // fetchCart()
     fetchCartByProduct()
     fetchProduct()
   }, [qty, cartQty, products])
@@ -243,7 +217,7 @@ const ProductDetail = () => {
               {productImg.map((val) => (
                 <img
                   h={{ base: "100%", sm: "400px", lg: "500px" }}
-                  src={`http://localhost:8000/public/${val.product_picture}`}
+                  src={`https://jcwd220201.purwadhikabootcamp.com/public/${val.product_picture}`}
                   align="center"
                   rounded="md"
                   fit="cover"
@@ -260,11 +234,9 @@ const ProductDetail = () => {
                 fontWeight="400"
                 lineWeight="1.1"
               >
-                {/* {produck.product_name} */}
                 {products.product_name}
               </Heading>
               <Text color="gray.900" fontWeight="300" fontSize="2xl">
-                {/* {Rupiah(produck.price)} */}
                 {Rupiah(products.price)}
               </Text>
             </Box>
@@ -276,7 +248,6 @@ const ProductDetail = () => {
               <VStack>
                 <Text fontSize="lg" fontWeight="400">
                   {products.description ||
-                    // produck.description
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit Architecto facilis eos, odio unde fugiat repudiandae"}
                 </Text>
               </VStack>
@@ -301,7 +272,6 @@ const ProductDetail = () => {
                     <Text as="span" fontWeight="thin">
                       Berat Satuan:
                     </Text>{" "}
-                    {/* {produck.weight} gram */}
                     {products.weight} gram
                   </ListItem>
                   <ListItem>

@@ -1,13 +1,13 @@
-import { Box, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, HStack, Image, Text } from "@chakra-ui/react"
 
 // Own library imports
-import { IDR } from "../../lib/currency/Rupiah";
+import { IDR } from "../../lib/currency/Rupiah"
 
 const CartItem = ({ details, index, solitary = false }) => {
   const {
     quantity,
-    Product: { product_name: productName, description, price },
-  } = details;
+    Product: { product_name: productName, description, price, ProductPictures },
+  } = details
 
   return (
     <Box
@@ -32,7 +32,7 @@ const CartItem = ({ details, index, solitary = false }) => {
       <HStack spacing="1%" mt="1rem" height="4rem">
         <Box width="10%" height="100%">
           <Image
-            src="https://images.tokopedia.net/img/cache/100-square/VqbcmM/2022/9/14/781a518d-1a51-4121-b040-7a2e6666fc17.jpg.webp?ect=4g"
+            src={`https://jcwd220201.purwadhikabootcamp.com/public/${ProductPictures[0].product_picture}`}
             boxSize="3.75rem"
           />
         </Box>
@@ -64,7 +64,7 @@ const CartItem = ({ details, index, solitary = false }) => {
         <Text fontWeight="700">{`${IDR(price * quantity)}`}</Text>
       </HStack>
     </Box>
-  );
-};
+  )
+}
 
-export default CartItem;
+export default CartItem

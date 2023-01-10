@@ -77,7 +77,7 @@ const MainContent = () => {
       <ProductCard
         key={val.id.toString()}
         product_name={val.product_name}
-        product_picture={`http://localhost:8000/public/${val.Product?.ProductPictures?.product_picture}`}
+        product_picture={`https://jcwd220201.purwadhikabootcamp.com/public/${val.Product?.ProductPictures?.product_picture}`}
         price={val.price}
         id={val.id}
       />
@@ -127,12 +127,7 @@ const MainContent = () => {
           maxW="auto"
         >
           {categories.map((val) => (
-            <Card
-              boxShadow="lg"
-              // onClick={() => {
-              //   navigate(`/product/${id}`)
-              // }}
-            >
+            <Card boxShadow="lg">
               <CardHeader>
                 <Heading key={val.id} size="16px" fontWeight="700">
                   {val.category}

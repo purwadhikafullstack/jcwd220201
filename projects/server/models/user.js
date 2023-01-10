@@ -67,7 +67,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       is_verified: {
         type: DataTypes.TINYINT,
-        allowNull: true,
+        defaultValue: false,
+        allowNull: false,
       },
     },
     {

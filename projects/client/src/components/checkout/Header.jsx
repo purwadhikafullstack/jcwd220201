@@ -1,6 +1,8 @@
 import { Box, Image } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <Box
       borderBottom="1px solid rgb(243, 244, 245)"
@@ -9,9 +11,16 @@ const Header = () => {
       justifyContent="center"
       mx="auto"
       px="5.6875rem"
-      width="100%"
+      w="100%"
     >
-      <Image src="https://assets.tokopedia.net/assets-tokopedia-lite/v2/zeus/kratos/88199797.svg" />
+      <Image
+        cursor="pointer"
+        src="/assets/logo.png"
+        width={["7.172rem", "9.172rem", "12rem", "12rem"]}
+        height="3.6875rem"
+        objectFit="contain"
+        onClick={() => navigate("/")}
+      />
     </Box>
   );
 };

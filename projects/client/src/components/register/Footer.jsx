@@ -6,10 +6,8 @@ const Footer = () => {
 
   return (
     <Text
-      color="rgb(96, 96, 96)"
-      fontSize={
-        isLargerThanMd ? "0.812rem" : isLargerThanSm ? "0.67rem" : "0.553rem"
-      }
+      color="rgba(49, 53, 59, 0.68)"
+      fontSize={["0.553rem", "0.67rem", "0.812rem"]}
       mt="7.5rem"
       mb="0.125rem"
       lineHeight="1.375rem"
@@ -17,7 +15,7 @@ const Footer = () => {
       display="block"
       textAlign="center"
     >
-      &#169; 2009-2022,PT Wired
+      &copy; 2009 - 2023, PT Wired.
     </Text>
   );
 };

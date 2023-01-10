@@ -51,61 +51,6 @@ const productsController = {
         data: getAllProducts2.rows,
         dataCount: getAllProducts2.count,
       })
-      // TRIAL AND ERROR ========================================================
-      // const { CategoryId = "", _sortBy = "id", _sortDir = "ASC" } = req.query
-      // const page = parseInt(req.query.page) || 0
-      // const limit = parseInt(req.query.limit) || 1
-      // const search = req.query.search_query | ""
-      // const offset = limit * page
-      // if (CategoryId) {
-      //   if (!Number(CategoryId)) {
-      //     const result = await Product.findAll({
-      //       where: {
-      //         product_name: {
-      //           [Op.like]: "%" + search + "%",
-      //         },
-      //       },
-      //       include: [{ model: Category }],
-      //       offset: offset,
-      //       limit: limit,
-      //       order: [[_sortBy, _sortDir]],
-      //     })
-      //     return res.status(200).json({
-      //       message: "Get All Product",
-      //       result: result,
-      //     })
-      //   }
-      // }
-      // const totalRows = await Product.count({
-      //   where: {
-      //     product_name: {
-      //       [Op.like]: "%" + search + "%",
-      //     },
-      //     CategoryId,
-      //   },
-      //   include: [{ model: db.Category }],
-      // })
-      // const totalPage = Math.ceil(totalRows / limit)
-      // const result = await Product.findAll({
-      //   where: {
-      //     product_name: {
-      //       [Op.like]: "%" + search + "%",
-      //     },
-      //     CategoryId,
-      //   },
-      //   include: [{ model: db.Category }],
-      //   offset: offset,
-      //   limit: limit,
-      //   order: [[_sortBy, _sortDir]],
-      // })
-      // return res.status(200).json({
-      //   message: "Get All Product",
-      //   result: result,
-      //   page: page,
-      //   limit: limit,
-      //   totalRows: totalRows,
-      //   totalPage: totalPage,
-      // })
     } catch (err) {
       console.log(err)
       return res.status(500).json({

@@ -218,7 +218,7 @@ const EditProduct = (props) => {
                               <Flex>
                                 <Image
                                   boxSize="100px"
-                                  src={`http://localhost:8000/public/${item.product_picture}`}
+                                  src={`https://jcwd220201.purwadhikabootcamp.com/public/${item.product_picture}`}
                                 ></Image>
                                 <Button
                                   boxSize="30px"
@@ -239,7 +239,7 @@ const EditProduct = (props) => {
                               <Flex>
                                 <Image
                                   boxSize="100px"
-                                  src={`http://localhost:8000/public/${item.name}`}
+                                  src={`https://jcwd220201.purwadhikabootcamp.com/public/${item.name}`}
                                 ></Image>
                                 <Button
                                   boxSize="10"

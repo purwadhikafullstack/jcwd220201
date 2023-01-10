@@ -70,6 +70,11 @@
           width: 100% !important;
         }
       }
+
+      .logo {
+        object-fit: contain;
+      }
+
     </style>
   </head>
 
@@ -222,7 +227,7 @@
                         margin: 0;
                         padding: 24px 0px;
                         
-                      "><img src="https://assets.tokopedia.net/assets-tokopedia-lite/v2/zeus/kratos/581fca3a.png" alt="logo" width="148px" height="32px"></td>
+                      "><img class="logo" src="cid:logo" alt="logo" width="120px" height="48px"></td>
                     </tr>
                     <tr
                       style="
@@ -236,7 +241,7 @@
                       <td
                         class="content-block"
                         style="
-                          color: rgb(80, 0, 80);
+                          color: rgb(57, 61, 66);
                           font-family: 'Helvetica Neue', Helvetica, Arial,
                             sans-serif;
                           box-sizing: border-box;
@@ -247,7 +252,7 @@
                         "
                         valign="top"
                       >
-                        Halo {{ email }},
+                        Halo <span style="font-weight: 500;">{{ email }}</span>,
                       </td>
                     </tr>
                     <tr
@@ -262,7 +267,7 @@
                       <td
                         class="content-block"
                         style="
-                          color: rgb(80, 0, 80);
+                          color: rgb(57, 61, 66);
                           font-family: 'Helvetica Neue', Helvetica, Arial,
                             sans-serif;
                           box-sizing: border-box;
@@ -288,7 +293,7 @@
                       <td
                         class="content-block"
                         style="
-                          color: rgb(80, 0, 80);
+                          color: rgb(57, 61, 66);
                           font-family: 'Helvetica Neue', Helvetica, Arial,
                             sans-serif;
                           box-sizing: border-box;
@@ -300,8 +305,7 @@
                         "
                         valign="top"
                       >
-                        Sedikit lagi akunmu akan aktif. Cukup tekan tombol
-                        konfirmasi di bawah untuk mengaktifkan akunmu.
+                      Sedikit lagi akunmu akan aktif. Cukup masukkan kode verifikasi di bawah untuk mengaktifkan akunmu.
                       </td>
                     </tr>
                     <tr
@@ -330,7 +334,7 @@
                         valign="top"
                         align="center"
                       >
-                        <input
+                        <div
                           class="btn-primary"
                           itemprop="url"
                           style="
@@ -340,10 +344,9 @@
                             font-size: 24px;
                             color: rgba(49,53,59,0.96);
                             text-decoration: none;
-                            line-height: 2em;
+                            line-height: 2.4em;
                             font-weight: bold;
                             text-align: center;
-                            cursor: pointer;
                             display: inline-block;
                             border-radius: 8px;
                             text-transform: capitalize;
@@ -355,8 +358,9 @@
                             width: 34%;
                             height: 60px;
                           "
-                          value="{{otp}}"
-                        />
+                        >
+                          {{otp}}
+                        </div>
                       </td>
                     </tr>
                     <tr
@@ -371,7 +375,7 @@
                       <td
                         class="content-block"
                         style="
-                          color: rgb(80, 0, 80);
+                          color: rgb(57, 61, 66);
                           font-family: 'Helvetica Neue', Helvetica, Arial,
                             sans-serif;
                           box-sizing: border-box;
@@ -515,7 +519,7 @@
                     align="center"
                     valign="top"
                   >
-                    2009-2022, PT Wired
+                    2009-2023, PT Wired
                   </td>
                 </tr>
               </table>

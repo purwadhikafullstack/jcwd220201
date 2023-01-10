@@ -1,13 +1,13 @@
 import { Image, Text, Flex, useMediaQuery } from "@chakra-ui/react";
 
 const HeroArea = () => {
-  const [isLargerThanLg] = useMediaQuery("(min-width: 62em)");
+  const [isSmallerThanLg] = useMediaQuery("(max-width: 62em)");
   return (
     <Flex
       direction="column"
       align="center"
       pr="5rem"
-      display={isLargerThanLg ? "default" : "none"}
+      display={isSmallerThanLg ? "none" : "default"}
     >
       <Image
         src="assets/register-hero-1.png"

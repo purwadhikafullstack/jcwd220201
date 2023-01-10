@@ -15,7 +15,7 @@ const userOrderRoute = require("../routes/userOrderRoute")
 
 dotenv.config()
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT
 
 const app = express()
 app.use(

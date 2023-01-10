@@ -137,8 +137,9 @@ const productStockController = {
   getProductStockWarehouse: async (req, res) => {
     try {
       const {
-        product_name = "",
+        stock = "",
         CategoryId = "",
+        product_name = "",
         _sortBy = "id",
         _sortDir = "ASC",
         _limit = 6,
@@ -154,8 +155,10 @@ const productStockController = {
         })
       }
       if (
+        _sortBy === "stock" ||
         _sortBy === "product_name" ||
         _sortBy === "CategoryId" ||
+        stock ||
         product_name ||
         CategoryId
       ) {
@@ -172,6 +175,7 @@ const productStockController = {
               },
             ],
             order: [[{ model: Product }, _sortBy, _sortDir]],
+            order: [["stock", _sortDir]],
             where: { WarehouseId: id },
           })
 
@@ -197,6 +201,7 @@ const productStockController = {
             },
           ],
           order: [[{ model: Product }, _sortBy, _sortDir]],
+          order: [["stock", _sortDir]],
           where: { WarehouseId: id },
         })
 
@@ -211,7 +216,7 @@ const productStockController = {
         limit: Number(_limit),
         offset: (_page - 1) * _limit,
         subQuery: false,
-        order: [[_sortBy, _sortDir]],
+        order: [["stock", _sortDir]],
         include: [
           {
             model: Product,
@@ -241,75 +246,6 @@ const productStockController = {
     } catch (err) {
       console.log(err)
       return res.status(500).json({ mesage: err.message })
-    }
-  },
-  createStock: async (req, res) => {
-    try {
-      const { stock } = req.body
-      const { id } = req.params
-
-      const findAdminByRole = await User.findByPk(req.user.id)
-      if (findAdminByRole.RoleId !== 1) {
-        return res.status(400).json({
-          message:
-            "Hanya Admin yang bisa melihat Fitur ini, silahkan Login sebagai Admin",
-        })
-      }
-
-      const findWarehouse = await Warehouse.findByPk(req.body.WarehouseId)
-      if (!findWarehouse) {
-        return res.status(400).json({ message: "Warehouse Tidak Ditemukan" })
-      }
-
-      const findProduct = await Product.findByPk(req.body.ProductId)
-
-      if (!findProduct) {
-        return res.status(400).json({ message: "Produk Tidak Ditemukan" })
-      }
-
-      const validateProduct = await ProductStock.findOne({
-        where: {
-          [Op.and]: {
-            WarehouseId: req.body.WarehouseId,
-            ProductId: req.body.ProductId,
-          },
-        },
-      })
-
-      if (validateProduct) {
-        return res.status(400).json({
-          message: "Produk telah ada , tidak bisa menambah produk yang sama",
-        })
-      }
-      const createStock = await ProductStock.create({
-        stock,
-        ProductId: findProduct.id,
-        WarehouseId: findWarehouse.id,
-      })
-
-      const findStock = await ProductStock.findByPk(createStock.id)
-      const stock_after = findStock.dataValues.stock
-
-      const createJournal = await Journal.create(id)
-      const checkJournalType = await JournalType.findOne({
-        where: { name: "pembuatan stok" },
-      })
-      await JournalItem.create({
-        quantity: stock_after,
-        stock_after: findStock.dataValues.stock,
-        stock_before: 0,
-        JournalId: createJournal.id,
-        JournalTypeId: checkJournalType.id,
-        ProductId: findStock.ProductId,
-        WarehouseId: findStock.WarehouseId,
-      })
-
-      return res
-        .status(200)
-        .json({ message: "Stok Berhasil Dibuat", data: createStock })
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json({ message: err.message })
     }
   },
   updateProductStock: async (req, res) => {

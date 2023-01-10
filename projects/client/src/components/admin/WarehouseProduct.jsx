@@ -46,6 +46,7 @@ import PageButton from "./pageButton"
 import Select from "react-select"
 import { Carousel } from "react-responsive-carousel"
 import { Rupiah } from "../../lib/currency/Rupiah"
+import { useSearchParams } from "react-router-dom"
 
 const WarehouseProduct = () => {
   const [products, setproducts] = useState([])
@@ -188,7 +189,7 @@ const WarehouseProduct = () => {
           <Carousel width="20vh" autoPlay={true}>
             {val.ProductPictures.map((value) => (
               <Image
-                src={`http://localhost:8000/public/${value.product_picture}`}
+                src={`https://jcwd220201.purwadhikabootcamp.com/public/${value.product_picture}`}
               ></Image>
             ))}
           </Carousel>
@@ -622,6 +623,7 @@ const WarehouseProduct = () => {
                   placeholder="Search"
                   name="search"
                   bgColor={"white"}
+                  // onChange={(e) => setCurrentSearch(e.target.value)}
                   onChange={searchHandler}
                   borderRightRadius="0"
                   value={formikSearch.values.search}

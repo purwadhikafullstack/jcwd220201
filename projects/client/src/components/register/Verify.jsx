@@ -8,6 +8,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import Timer from "./Timer";
 import { MdOutlineMail } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
@@ -72,7 +73,7 @@ const Verify = ({ props: { UserContext } }) => {
         lineHeight="1.3125rem"
         overflowWrap="break-word"
       >
-        Kode verifikasi telah dikirim melalui e-mail ke {email}.
+        Kode verifikasi telah dikirim melalui e-mail ke {email}
       </Text>
       <HStack mb="2rem">
         <PinInput
@@ -93,25 +94,23 @@ const Verify = ({ props: { UserContext } }) => {
           <PinInputField />
         </PinInput>
       </HStack>
-      <Text color="rgb(82, 86, 94)" fontSize="0.75rem">
-        Tidak menerima kode?{" "}
-        <Link
-          color="teal"
-          fontWeight="600"
-          onClick={async () => {
-            setIsBeingSent(true);
-            await requestOtp(email);
-            toast({
-              title: "Kode OTP berhasil dikirimkan.",
-              status: "success",
-            });
-            setIsBeingSent(false);
-          }}
-          pointerEvents={isBeingSent ? "none" : "auto"}
-        >
-          Kirim ulang
-        </Link>
-      </Text>
+      {isBeingSent ? (
+        <Timer seconds={30} callback={setIsBeingSent} />
+      ) : (
+        <Text color="rgb(82, 86, 94)" fontSize="0.75rem">
+          Tidak menerima kode?{" "}
+          <Link
+            color="teal"
+            fontWeight="600"
+            onClick={async () => {
+              setIsBeingSent(true);
+              await requestOtp(email);
+            }}
+          >
+            Kirim ulang
+          </Link>
+        </Text>
+      )}
     </Flex>
   );
 };

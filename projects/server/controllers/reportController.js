@@ -27,17 +27,19 @@ const salesReport = {
       JOIN users as us ON us.id = ord.UserId `
 
       if (WarehouseId && CategoryId && payment_date && category) {
-        sql += `WHERE WarehouseId=${WarehouseId} AND CategoryId=${CategoryId} AND MONTH(ord.payment_date)=${payment_date} AND category=${category} `
+        sql += `WHERE WarehouseId=${WarehouseId} AND CategoryId=${CategoryId} AND MONTH(ord.payment_date)=${payment_date} AND ct.category LIKE "%${category}%" `
       } else if (WarehouseId && CategoryId) {
         sql += `WHERE WarehouseId=${WarehouseId} AND CategoryId=${CategoryId} `
       } else if (WarehouseId && payment_date) {
         sql += `WHERE WarehouseId=${WarehouseId} AND MONTH(ord.payment_date)=${payment_date} `
       } else if (WarehouseId && category) {
-        sql += `WHERE WarehouseId=${WarehouseId} AND category=${category} `
+        sql += `WHERE WarehouseId=${WarehouseId} AND ct.category LIKE "%${category}%" `
       } else if (CategoryId && payment_date) {
         sql += `WHERE CategoryId=${CategoryId} AND MONTH(ord.payment_date)=${payment_date} `
-      } else if (category && payment_date) {
-        sql += `WHERE category=${category} AND MONTH(ord.payment_date)=${payment_date} `
+      } else if (CategoryId && category) {
+        sql += `WHERE CategoryId=${CategoryId} AND ct.category LIKE "%${category}%" `
+      } else if (payment_date && category) {
+        sql += `WHERE MONTH(ord.payment_date)=${payment_date} AND ct.category LIKE "%${category}%" `
       } else if (CategoryId) {
         sql += `WHERE CategoryId=${CategoryId} `
       } else if (WarehouseId) {

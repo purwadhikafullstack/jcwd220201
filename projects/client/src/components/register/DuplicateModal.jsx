@@ -12,10 +12,6 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 const DuplicateModal = ({ props: { email, RegisterContext } }) => {
-  // Media query
-  const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
-  const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
-
   // Get register context
   const { isOpen, onClose, setIsLoading } = useContext(RegisterContext);
 
@@ -29,28 +25,18 @@ const DuplicateModal = ({ props: { email, RegisterContext } }) => {
         setIsLoading(false);
         onClose();
       }}
-      size={isLargerThanMd ? "md" : isLargerThanSm ? "sm" : "xs"}
+      size={["xs", "xs", "sm", "md"]}
       isCentered
     >
       <ModalOverlay />
-      <ModalContent p="2rem 2rem 1.5rem">
+      <ModalContent
+        p={["1rem 1rem 0.5rem", "1.5rem 1.5rem 1rem", "2rem 2rem 1.5rem"]}
+      >
         <ModalHeader
           textAlign="center"
-          fontSize={
-            isLargerThanMd
-              ? "1.714rem"
-              : isLargerThanSm
-              ? "1.116rem"
-              : "0.726rem"
-          }
+          fontSize={["0.726rem", "1.116rem", "1.3213rem", "1.714rem"]}
           fontWeight="700"
-          mb={
-            isLargerThanMd
-              ? "0.875rem"
-              : isLargerThanSm
-              ? "0.504rem"
-              : "0.290rem"
-          }
+          mb={["0.290rem", "0.504rem", "0.596rem", "0.875rem"]}
           p="0"
         >
           Email Sudah Terdaftar
@@ -58,21 +44,14 @@ const DuplicateModal = ({ props: { email, RegisterContext } }) => {
         <ModalBody
           color="rgb(108, 114, 124)"
           textAlign="center"
-          fontSize={
-            isLargerThanMd
-              ? "0.989rem"
-              : isLargerThanSm
-              ? "0.644rem"
-              : "0.419rem"
-          }
+          fontSize={["0.419rem", "0.644rem", "0.762rem", "0.989rem"]}
           lineHeight="1.5rem"
-          m={
-            isLargerThanMd
-              ? "0 1rem 1rem"
-              : isLargerThanSm
-              ? "0 1rem 0.577rem"
-              : "0 1rem 0.332rem"
-          }
+          m={[
+            "0 1rem 0.332rem",
+            "0 1rem 0.577rem",
+            "0 1rem 0.683rem",
+            "0 1rem 1rem",
+          ]}
           p="0"
         >
           Lanjut masuk dengan email ini {email}?
@@ -80,9 +59,7 @@ const DuplicateModal = ({ props: { email, RegisterContext } }) => {
         <ModalFooter
           display="flex"
           justifyContent="center"
-          py={
-            isLargerThanMd ? "1rem" : isLargerThanSm ? "0.577rem" : "0.332rem"
-          }
+          py={["0.332rem", "0.577rem", "0.683rem", "1rem"]}
         >
           <Button
             onClick={() => {
@@ -90,21 +67,11 @@ const DuplicateModal = ({ props: { email, RegisterContext } }) => {
               setIsLoading(false);
             }}
             mr="0.375rem"
-            width={
-              isLargerThanMd
-                ? "10.25rem"
-                : isLargerThanSm
-                ? "6.673rem"
-                : "4.341rem"
-            }
-            height={
-              isLargerThanMd ? "3rem" : isLargerThanSm ? "2.478rem" : "2.046rem"
-            }
+            width={["4.341rem", "6.673rem", "7.9rem", "10.25rem"]}
+            height={["1.746rem", "2.478rem", "2.739rem", "3rem"]}
             maxW="100%"
             border="1px solid"
-            fontSize={
-              isLargerThanMd ? "1rem" : isLargerThanSm ? "0.826rem" : "0.682rem"
-            }
+            fontSize={["0.482rem", "0.826rem", "0.913rem", "1rem"]}
             fontWeight="700"
             colorScheme="white"
             color="teal"
@@ -114,20 +81,10 @@ const DuplicateModal = ({ props: { email, RegisterContext } }) => {
             Ubah
           </Button>
           <Button
-            width={
-              isLargerThanMd
-                ? "10.25rem"
-                : isLargerThanSm
-                ? "6.673rem"
-                : "4.341rem"
-            }
-            height={
-              isLargerThanMd ? "3rem" : isLargerThanSm ? "2.478rem" : "2.046rem"
-            }
+            width={["4.341rem", "6.673rem", "7.9rem", "10.25rem"]}
+            height={["1.746rem", "2.478rem", "2.7391rem", "3rem"]}
             maxW="100%"
-            fontSize={
-              isLargerThanMd ? "1rem" : isLargerThanSm ? "0.826rem" : "0.682rem"
-            }
+            fontSize={["0.482rem", "0.826rem", "0.913rem", "1rem"]}
             fontWeight="700"
             colorScheme="teal"
             lineHeight="22px"

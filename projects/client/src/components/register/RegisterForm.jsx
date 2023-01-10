@@ -12,14 +12,8 @@ import {
   Button,
   useMediaQuery,
   useDisclosure,
-  // Modal,
-  // ModalOverlay,
-  // ModalContent,
-  // ModalHeader,
-  // ModalFooter,
-  // ModalBody,
 } from "@chakra-ui/react";
-import { useState, useEffect, useContext, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -30,10 +24,6 @@ import AvailableModal from "./AvailableModal";
 import DuplicateModal from "./DuplicateModal";
 
 const RegisterForm = ({ props: { UserContext } }) => {
-  // Media query
-  const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
-  const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
-
   // Create form context
   const RegisterContext = createContext();
 
@@ -69,30 +59,22 @@ const RegisterForm = ({ props: { UserContext } }) => {
   }, [formik.touched.email, formik.errors.email]);
 
   return (
-    <Box p="1rem">
+    <Box p="0 1rem">
       <Flex
         direction="column"
         align="center"
         justify="center"
         boxShadow="0px 0px 10px 0px rgba(0, 0, 0, 0.1)"
-        p={
-          isLargerThanMd
-            ? "1.5rem 2.5rem 2rem"
-            : isLargerThanSm
-            ? "1.303rem 2.173rem 1.738rem"
-            : "1.132rem 1.888rem 1.510rem"
-        }
+        p={[
+          "1.132rem 1.888rem 1.510rem",
+          "1.303rem 2.173rem 1.738rem",
+          "1.5rem 2.5rem 2rem",
+        ]}
         maxW="25rem"
       >
         <Text
           as="b"
-          fontSize={
-            isLargerThanMd
-              ? "1.571rem"
-              : isLargerThanSm
-              ? "1.23rem"
-              : "0.963rem"
-          }
+          fontSize={["0.963rem", "1.23rem", "1.571rem"]}
           color="rgba(0,0,0,0.7)"
           textAlign="center"
         >
@@ -100,20 +82,17 @@ const RegisterForm = ({ props: { UserContext } }) => {
         </Text>
         <Text
           color="rgba(0, 0, 0, 0.54)"
-          fontSize={
-            isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
-          }
+          fontSize={["0.613rem", "0.783rem", "1rem"]}
         >
           Sudah punya akun Wired?{" "}
           <Link
             href=""
-            fontSize={
-              isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
-            }
+            fontSize={["0.613rem", "0.783rem", "1rem"]}
             color="teal"
             onClick={() => {
               navigate("/login");
             }}
+            style={{ textDecoration: "none" }}
           >
             Masuk
           </Link>
@@ -121,13 +100,7 @@ const RegisterForm = ({ props: { UserContext } }) => {
         <Flex align="center" width="100%" py="2">
           <Divider flexBasis="23%" />
           <Text
-            fontSize={
-              isLargerThanMd
-                ? "0.8571428571428571rem"
-                : isLargerThanSm
-                ? "0.7rem"
-                : "0.571rem"
-            }
+            fontSize={["0.571rem", "0.7rem", "0.8571428571428571rem"]}
             color="rgb(108, 114, 124)"
             textAlign="center"
             flexBasis="54%"
@@ -140,13 +113,7 @@ const RegisterForm = ({ props: { UserContext } }) => {
         <FormControl mt="0.8rem" mb="0.5rem" isInvalid={isError}>
           <FormLabel
             color="rgba(0,0,0,0.54)"
-            fontSize={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.723rem"
-                : "0.597rem"
-            }
+            fontSize={["0.597rem", "0.723rem", "0.875rem"]}
             lineHeight="1.15"
           >
             Email
@@ -155,20 +122,8 @@ const RegisterForm = ({ props: { UserContext } }) => {
             type="email"
             id="email"
             {...formik.getFieldProps("email")}
-            fontSize={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.723rem"
-                : "0.597rem"
-            }
-            height={
-              isLargerThanMd
-                ? "2.5rem"
-                : isLargerThanSm
-                ? "2.065rem"
-                : "1.706rem"
-            }
+            fontSize={["0.597rem", "0.723rem", "0.875rem"]}
+            height={["1.706rem", "2.065rem", "2.5rem"]}
             focusBorderColor={
               isError ? "rgb(229, 62, 62)" : "rgb(62, 191, 184)"
             }
@@ -176,26 +131,14 @@ const RegisterForm = ({ props: { UserContext } }) => {
           />
           {isError ? (
             <FormErrorMessage
-              fontSize={
-                isLargerThanMd
-                  ? "0.75rem"
-                  : isLargerThanSm
-                  ? "0.62rem"
-                  : "0.512rem"
-              }
+              fontSize={["0.512rem", "0.62rem", "0.75rem"]}
               lineHeight="1.125"
             >
               {formik.errors.email}
             </FormErrorMessage>
           ) : (
             <FormHelperText
-              fontSize={
-                isLargerThanMd
-                  ? "0.75rem"
-                  : isLargerThanSm
-                  ? "0.62rem"
-                  : "0.512rem"
-              }
+              fontSize={["0.512rem", "0.62rem", "0.75rem"]}
               lineHeight="1.125"
               color="rgba(0, 0, 0, 0.54)"
             >
@@ -206,17 +149,13 @@ const RegisterForm = ({ props: { UserContext } }) => {
         <Button
           my="1rem"
           w="100%"
-          h={
-            isLargerThanMd ? "2.5rem" : isLargerThanSm ? "2.065rem" : "1.706rem"
-          }
+          h={["1.706rem", "2.065rem", "2.5rem"]}
           color={
             isError || !formik.values.email
               ? "rgb(108, 114, 124)"
               : "rgb(255, 255, 255)"
           }
-          fontSize={
-            isLargerThanMd ? "1rem" : isLargerThanSm ? "0.782rem" : "0.611rem"
-          }
+          fontSize={["0.611rem", "0.782rem", "1rem"]}
           fontWeight="700"
           cursor={isError || !formik.values.email ? "not-allowed" : "pointer"}
           colorScheme={isError || !formik.values.email ? "gray" : "teal"}
@@ -246,29 +185,19 @@ const RegisterForm = ({ props: { UserContext } }) => {
         </Button>
         <Text
           color="rgb(108, 114, 124)"
-          fontSize={
-            isLargerThanMd ? "0.75rem" : isLargerThanSm ? "0.62rem" : "0.512rem"
-          }
+          fontSize={["0.512rem", "0.62rem", "0.75rem"]}
           align="center"
         >
           Dengan mendaftar, saya menyetujui{" "}
         </Text>
         <Text
           color="rgb(108, 114, 124)"
-          fontSize={
-            isLargerThanMd ? "0.75rem" : isLargerThanSm ? "0.62rem" : "0.512rem"
-          }
+          fontSize={["0.512rem", "0.62rem", "0.75rem"]}
           align="center"
         >
           <Link
             href=""
-            fontSize={
-              isLargerThanMd
-                ? "0.75rem"
-                : isLargerThanSm
-                ? "0.62rem"
-                : "0.512rem"
-            }
+            fontSize={["0.512rem", "0.62rem", "0.75rem"]}
             color="teal"
           >
             Syarat dan Ketentuan
@@ -276,13 +205,7 @@ const RegisterForm = ({ props: { UserContext } }) => {
           serta{" "}
           <Link
             href=""
-            fontSize={
-              isLargerThanMd
-                ? "0.75rem"
-                : isLargerThanSm
-                ? "0.62rem"
-                : "0.512rem"
-            }
+            fontSize={["0.512rem", "0.62rem", "0.75rem"]}
             color="teal"
           >
             Kebijakan Privasi
