@@ -21,12 +21,6 @@ const getWarehousesInfo = require("../lib/checkout/getWarehousesInfo");
 const compareWarehouseDistances = require("../lib/checkout/compareWarehouseDistances");
 const getDestinationInfo = require("../lib/checkout/getDestinationInfo");
 
-// Configure axios default settings (RAJAONGKIR)
-axios.defaults.baseURL = "https://api.rajaongkir.com/starter";
-axios.defaults.headers.common["key"] = "a459ef892f867c9cc0f57401a1396524";
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
-
 const checkoutController = {
   getAddresses: async (req, res) => {
     try {
@@ -278,6 +272,12 @@ const checkoutController = {
       }
 
       const { origin, destination, weight, courier } = req.body;
+
+      // Configure axios default settings (RAJAONGKIR)
+      axios.defaults.baseURL = "https://api.rajaongkir.com/starter";
+      axios.defaults.headers.common["key"] = process.env.RAJAONGKIR_API_KEY;
+      axios.defaults.headers.post["Content-Type"] =
+        "application/x-www-form-urlencoded";
 
       // Get shipping details
       const response = await axios.post("/cost", {

@@ -1,5 +1,4 @@
 import { Box, HStack, Image, Text } from "@chakra-ui/react";
-import { useEffect } from "react";
 
 // Own library imports
 import { IDR } from "../../lib/currency/Rupiah";
@@ -9,10 +8,6 @@ const CartItem = ({ details, index, solitary = false }) => {
     quantity,
     Product: { product_name: productName, description, price, ProductPictures },
   } = details;
-
-  useEffect(() => {
-    console.log(ProductPictures[0].product_picture);
-  }, [ProductPictures]);
 
   return (
     <Box
