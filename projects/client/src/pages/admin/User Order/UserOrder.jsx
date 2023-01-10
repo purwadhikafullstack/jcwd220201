@@ -60,11 +60,11 @@ const UserOrder = () => {
         url += `?WarehouseId=${authSelector.WarehouseId}`
       }
       const response = await axiosInstance.get(url)
-      console.log(response)
+
       setData(response.data.data)
       setLoading(false)
     } catch (err) {
-      console.log(err.response)
+      console.log(err)
     }
   }
 

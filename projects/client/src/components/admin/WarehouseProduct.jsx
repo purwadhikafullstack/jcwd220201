@@ -162,11 +162,6 @@ const WarehouseProduct = () => {
     setIdEdit(id)
   }
 
-  console.log(
-    "map",
-    products.map((val) => val.images)
-  )
-
   const renderProduct = () => {
     return products.map((val) => {
       return (

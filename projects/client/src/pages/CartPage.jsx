@@ -89,7 +89,7 @@ const CartPage = () => {
   const totalHarga = async () => {
     try {
       const response = await axiosInstance.get("/carts/price/total")
-      console.log("response", response)
+
       dispatch(getSubTotal(response.data.data.totalPrice))
       dispatch(getTotalQty(response.data.data.totalQty))
       fetchCartItem()
