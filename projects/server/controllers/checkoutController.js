@@ -7,14 +7,11 @@ const {
   Product,
   ProductStock,
   ProductPicture,
-  StockRequest,
-  StockRequestItem,
   Status,
   sequelize,
 } = require("../models");
 const { Op } = require("sequelize");
 const axios = require("axios");
-const moment = require("moment");
 
 // Own library imports
 const getWarehousesInfo = require("../lib/checkout/getWarehousesInfo");

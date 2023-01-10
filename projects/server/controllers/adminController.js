@@ -222,16 +222,20 @@ const adminController = {
             OrderId: orderItems[index]["OrderId"],
             ProductId: currentProductStock.ProductId,
             WarehouseId: warehouseId,
-            Journal: {},
           };
         }
       );
 
       await sequelize.transaction(async (t) => {
-        await JournalItem.bulkCreate(journalItemsToUpdate, {
-          include: Journal,
-          transaction: t,
-        });
+        await Journal.create(
+          {
+            JournalItems: journalItemsToUpdate,
+          },
+          {
+            include: [JournalItem],
+            transaction: t,
+          }
+        );
       });
 
       // Send successful response
@@ -240,6 +244,7 @@ const adminController = {
         status: "dibatalkan",
       });
     } catch (err) {
+      console.error(err);
       return res.status(500).json({
         message: "Server error",
       });
