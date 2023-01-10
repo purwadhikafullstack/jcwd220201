@@ -38,6 +38,17 @@ const paymentController = {
           message: "Order is not found",
         })
       }
+      // const findStatus = await db.Order.findOne({
+      //   where: {
+      //     StatusId: req.body.StatusId,
+      //   },
+      // })
+
+      // if (findStatus !== 2) {
+      //   return res.status(400).json({
+      //     message: "confirm failed",
+      //   })
+      // }
 
       // Get shipping address
       const shippingAddress = await Address.findOne({
