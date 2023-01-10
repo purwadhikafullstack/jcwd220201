@@ -1,4 +1,14 @@
-import { Box, Button, Flex, Stack, useDisclosure } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Flex,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import AddressForm from "../components/address/AddressForm";
@@ -92,17 +102,54 @@ const Address = () => {
             </Button>
           </Stack>
           {loadAddress ? (
-            <Box pt="1rem">
-              {renderAddresses(
-                addresses,
-                pageIndex,
-                setDefaultAddress,
-                setAddresses,
-                setTotalPage,
-                setPageIndex,
-                setAddressManipulation
-              )}
-            </Box>
+            !addresses.length ? (
+              <Alert
+                backgroundColor="rgba(62, 191, 184, 0.22)"
+                borderRadius="0.5rem"
+                status="info"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                width={["15.2295rem", "25.7412rem", "42.7617rem", "56.125rem"]}
+                height={["10rem", "12.5rem"]}
+                mt="1.5rem"
+              >
+                <AlertIcon
+                  boxSize={["1.75rem", "2.1875rem", "2.5rem", "2.5rem"]}
+                  mr={0}
+                  color="teal"
+                />
+                <AlertTitle
+                  mt={4}
+                  mb={1}
+                  color="rgba(49, 53, 59, 0.96)"
+                  fontSize={["sm", "md", "lg", "lg"]}
+                >
+                  Oops! Alamat tidak ditemukan
+                </AlertTitle>
+                <AlertDescription
+                  maxWidth="sm"
+                  color="rgb(109, 117, 136)"
+                  fontSize={["xs", "sm", "sm", "sm"]}
+                >
+                  Segera tambahkan alamat lengkapmu.
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Box mt="1.5rem" mb="-1rem">
+                {renderAddresses(
+                  addresses,
+                  pageIndex,
+                  setDefaultAddress,
+                  setAddresses,
+                  setTotalPage,
+                  setPageIndex,
+                  setAddressManipulation
+                )}
+              </Box>
+            )
           ) : null}
           <AddressForm
             fetchAddresses={fetchAddresses}

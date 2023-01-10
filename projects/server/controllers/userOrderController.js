@@ -5,46 +5,7 @@ const OrderItem = db.OrderItem
 const User = db.User
 const Status = db.Status
 const userOrderController = {
-  //   getAllUserOrder: async (req, res) => {
-  //     try {
-  //       const findAdminByRole = await User.findByPk(req.user.id)
-
-  //       if (findAdminByRole.RoleId !== 1) {
-  //         return res.status(400).json({
-  //           message:
-  //             "Hanya Admin yang bisa melihat Fitur ini, silahkan Login sebagai Admin",
-  //         })
-  //       }
-  //       const page = parseInt(req.query.page) || 0
-  //       const limit = parseInt(req.query.limit) || 2
-  //       const search = req.query.search_query || ""
-  //       const offset = limit * page
-  //       const totalRows = await Order.count({
-  //         where: { payment_date: { [Op.like]: "%" + search + "%" } },
-  //         include: { model: OrderItem },
-  //       })
-  //       const totalPage = Math.ceil(totalRows / limit)
-  //       const result = await Order.findAll({
-  //         // Status
-  //         include: [{ model: Status }, { model: OrderItem }],
-  //         offset: offset,
-  //         limit: limit,
-  //         order: [["id", "DESC"]],
-  //       })
-
-  //       return res.status(200).json({
-  //         message: "All User Order ",
-  //         result: result,
-  //         page: page,
-  //         limit: limit,
-  //         totalPage: totalPage,
-  //       })
-  //     } catch (err) {
-  //       console.log(err)
-  //       return res.status(500).json({ message: err.message })
-  //     }
-  //   },
-  getAllUserOrder2: async (req, res) => {
+  getAllUserOrder: async (req, res) => {
     const { _limit = 10, _page = 1 } = req.query
     const WarehouseId = req.query.WarehouseId
     try {
@@ -76,7 +37,6 @@ const userOrderController = {
       return res.status(500).json({ message: err.message })
     }
   },
-  getWarehouseById: async (req, res) => {},
 
   cancelOrderUser: async (req, res) => {
     try {

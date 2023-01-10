@@ -41,9 +41,6 @@ const Footer = () => {
             spacing={8}
           >
             <Stack spacing={6}>
-              {/* <LinkRouterDom to="/">
-                  <Heading>WIRED!</Heading>
-                </LinkRouterDom> */}
               <Logo />
 
               <Text fontSize={"sm"}>

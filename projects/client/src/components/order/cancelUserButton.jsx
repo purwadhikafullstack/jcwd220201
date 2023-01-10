@@ -1,7 +1,8 @@
-import { Button } from "@chakra-ui/react"
-import cancelUserOrder from "./cancelOrderUser"
+import { Button, useToast } from "@chakra-ui/react"
+import CancelUserOrder from "./cancelOrderUser"
 
-const cancelUserButton = () => {
+const CancelUserButton = () => {
+  const toast = useToast()
   return (
     <Button
       colorScheme="teal"
@@ -19,4 +20,4 @@ const cancelUserButton = () => {
   )
 }
 
-export default cancelUserButton
+export default CancelUserButton

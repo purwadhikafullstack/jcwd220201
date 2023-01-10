@@ -171,9 +171,7 @@ const CartItem = ({
                 color={useColorModeValue("gray.600", "gray.400")}
                 fontSize="sm"
               >
-                {/* Kategori */}
                 {category}
-                {/* {CategoryId} */}
               </Text>
             </Stack>
           </Box>

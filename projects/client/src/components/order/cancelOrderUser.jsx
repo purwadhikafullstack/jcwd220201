@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { axiosInstance } from "../../api"
 
-const cancelUserOrder = async () => {
+const CancelUserOrder = async () => {
   const { id } = useParams()
   try {
     const response = await axiosInstance.patch(`/order/cancel/${id}`)
@@ -12,4 +12,4 @@ const cancelUserOrder = async () => {
   }
 }
 
-export default cancelUserOrder
+export default CancelUserOrder

@@ -132,7 +132,7 @@ const SidebarAdmin = () => {
           {/* Role Admin */}
           {authSelector.RoleId === 1 ? (
             <NavLink
-              to="/admin/update-stock"
+              to="/admin/manage-stock"
               style={({ isActive }) => ({
                 backgroundColor: isActive ? "#005e9d" : "#008deb",
               })}
@@ -152,7 +152,7 @@ const SidebarAdmin = () => {
           {/* Role Warehouse Admin */}
           {authSelector.RoleId === 2 ? (
             <NavLink
-              to="/admin/update-stock"
+              to="/admin/manage-stock"
               style={({ isActive }) => ({
                 backgroundColor: isActive ? "#005e9d" : "#008deb",
               })}
@@ -185,24 +185,6 @@ const SidebarAdmin = () => {
               _hover={{ bg: "#005e9d" }}
             >
               Manage User Order
-            </Button>
-          </NavLink>
-
-          <NavLink
-            to="/admin/payment"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? "#005e9d" : "#008deb",
-            })}
-          >
-            <Button
-              whiteSpace="initial"
-              w="100%"
-              pl="10%"
-              textAlign="left"
-              borderRadius="0px"
-              _hover={{ bg: "#005e9d" }}
-            >
-              Payment Order
             </Button>
           </NavLink>
         </ButtonGroup>

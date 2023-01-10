@@ -26,10 +26,6 @@ import { axiosInstance } from "../../api/index";
 import TogglePasswordIcon from "./TogglePasswordIcon";
 
 const FinishRegistrationForm = ({ props: { UserContext } }) => {
-  // Media query
-  const [isLargerThanSm] = useMediaQuery("(min-width: 20rem)");
-  const [isLargerThanMd] = useMediaQuery("(min-width: 30rem)");
-
   // Get user context
   const { email } = useContext(UserContext);
 
@@ -118,30 +114,16 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
         align="center"
         justify="center"
         boxShadow="0px 0px 10px 0px rgba(0, 0, 0, 0.1)"
-        p={
-          isLargerThanMd
-            ? "1.5rem 2.5rem 2rem"
-            : isLargerThanSm
-            ? "1.303rem 2.173rem 1.738rem"
-            : "1.132rem 1.888rem 1.510rem"
-        }
-        w={
-          isLargerThanMd
-            ? "20.367rem"
-            : isLargerThanSm
-            ? "17.704rem"
-            : "15.488rem"
-        }
+        p={[
+          "1.132rem 1.888rem 1.510rem",
+          "1.303rem 2.173rem 1.738rem",
+          "1.5rem 2.5rem 2rem",
+        ]}
+        w={["15.488rem", "17.704rem", "20.367rem"]}
       >
         <Text
           as="b"
-          fontSize={
-            isLargerThanMd
-              ? "1.571rem"
-              : isLargerThanSm
-              ? "1.23rem"
-              : "0.963rem"
-          }
+          fontSize={["0.963rem", "1.23rem", "1.571rem"]}
           color="rgba(0,0,0,0.7)"
           textAlign="center"
         >
@@ -149,22 +131,14 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
         </Text>
         <Text
           color="rgba(0, 0, 0, 0.54)"
-          fontSize={
-            isLargerThanMd ? "1rem" : isLargerThanSm ? "0.783rem" : "0.613rem"
-          }
+          fontSize={["0.613rem", "0.783rem", "1rem"]}
         >
           {email}
         </Text>
         <FormControl mt="1.25rem" mb="0.5rem" isInvalid={nameError}>
           <FormLabel
             color="rgba(0, 0, 0, 0.54)"
-            fontSize={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.723rem"
-                : "0.597rem"
-            }
+            fontSize={["0.597rem", "0.723rem", "0.875rem"]}
             lineHeight="1.15"
           >
             Nama Lengkap
@@ -173,20 +147,8 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
             type="text"
             id="name"
             {...formik.getFieldProps("name")}
-            fontSize={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.723rem"
-                : "0.597rem"
-            }
-            height={
-              isLargerThanMd
-                ? "2.5rem"
-                : isLargerThanSm
-                ? "2.065rem"
-                : "1.706rem"
-            }
+            fontSize={["0.597rem", "0.723rem", "0.875rem"]}
+            height={["1.706rem", "2.065rem", "2.5rem"]}
             focusBorderColor={
               nameError ? "rgb(229, 62, 62)" : "rgb(62, 191, 184)"
             }
@@ -194,13 +156,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
           />
           {nameError ? (
             <FormErrorMessage
-              fontSize={
-                isLargerThanMd
-                  ? "0.75rem"
-                  : isLargerThanSm
-                  ? "0.62rem"
-                  : "0.512rem"
-              }
+              fontSize={["0.512rem", "0.62rem", "0.75rem"]}
               lineHeight="1.125"
             >
               {formik.errors.name}
@@ -210,13 +166,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
         <FormControl mt="1rem" isInvalid={passwordError}>
           <FormLabel
             color="rgba(0, 0, 0, 0.54)"
-            fontSize={
-              isLargerThanMd
-                ? "0.875rem"
-                : isLargerThanSm
-                ? "0.723rem"
-                : "0.597rem"
-            }
+            fontSize={["0.597rem", "0.723rem", "0.875rem"]}
             lineHeight="1.15"
           >
             Kata Sandi
@@ -226,20 +176,8 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
               type={show ? "text" : "password"}
               id="password"
               {...formik.getFieldProps("password")}
-              fontSize={
-                isLargerThanMd
-                  ? "0.875rem"
-                  : isLargerThanSm
-                  ? "0.723rem"
-                  : "0.597rem"
-              }
-              height={
-                isLargerThanMd
-                  ? "2.5rem"
-                  : isLargerThanSm
-                  ? "2.065rem"
-                  : "1.706rem"
-              }
+              fontSize={["0.597rem", "0.723rem", "0.875rem"]}
+              height={["1.706rem", "2.065rem", "2.5rem"]}
               focusBorderColor={
                 passwordError ? "rgb(229, 62, 62)" : "rgb(62, 191, 184)"
               }
@@ -257,13 +195,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
           </InputGroup>
           {passwordError ? (
             <FormErrorMessage
-              fontSize={
-                isLargerThanMd
-                  ? "0.75rem"
-                  : isLargerThanSm
-                  ? "0.62rem"
-                  : "0.512rem"
-              }
+              fontSize={["0.512rem", "0.62rem", "0.75rem"]}
               lineHeight="1.125"
             >
               {formik.errors.password}
@@ -271,13 +203,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
           ) : (
             <FormHelperText
               color="rgba(49,53,59,0.68)"
-              fontSize={
-                isLargerThanMd
-                  ? "0.75rem"
-                  : isLargerThanSm
-                  ? "0.62rem"
-                  : "0.512rem"
-              }
+              fontSize={["0.512rem", "0.62rem", "0.75rem"]}
               lineHeight="1.125"
             >
               Minimum 8 karakter
@@ -293,9 +219,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
               ? "rgb(108, 114, 124)"
               : "rgb(255, 255, 255)"
           }
-          fontSize={
-            isLargerThanMd ? "1rem" : isLargerThanSm ? "0.782rem" : "0.611rem"
-          }
+          fontSize={["0.611rem", "0.782rem", "1rem"]}
           fontWeight="700"
           cursor={
             nameError ||
@@ -314,9 +238,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
               : "teal"
           }
           w="100%"
-          h={
-            isLargerThanMd ? "2.5rem" : isLargerThanSm ? "2.065rem" : "1.706rem"
-          }
+          h={["1.706rem", "2.065rem", "2.5rem"]}
           mt="2rem"
           isLoading={isLoading}
           onClick={formik.handleSubmit}
@@ -325,9 +247,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
         </Button>
         <Text
           color="rgb(108, 114, 124)"
-          fontSize={
-            isLargerThanMd ? "0.75rem" : isLargerThanSm ? "0.62rem" : "0.512rem"
-          }
+          fontSize={["0.512rem", "0.62rem", "0.75rem"]}
           align="center"
           mt="0.875rem"
         >
@@ -335,20 +255,12 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
         </Text>
         <Text
           color="rgb(108, 114, 124)"
-          fontSize={
-            isLargerThanMd ? "0.75rem" : isLargerThanSm ? "0.62rem" : "0.512rem"
-          }
+          fontSize={["0.512rem", "0.62rem", "0.75rem"]}
           align="center"
         >
           <Link
             href=""
-            fontSize={
-              isLargerThanMd
-                ? "0.75rem"
-                : isLargerThanSm
-                ? "0.62rem"
-                : "0.512rem"
-            }
+            fontSize={["0.512rem", "0.62rem", "0.75rem"]}
             color="teal"
           >
             Syarat dan Ketentuan
@@ -356,13 +268,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
           serta{" "}
           <Link
             href=""
-            fontSize={
-              isLargerThanMd
-                ? "0.75rem"
-                : isLargerThanSm
-                ? "0.62rem"
-                : "0.512rem"
-            }
+            fontSize={["0.512rem", "0.62rem", "0.75rem"]}
             color="teal"
           >
             Kebijakan Privasi

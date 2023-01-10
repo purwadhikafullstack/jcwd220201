@@ -89,6 +89,7 @@ const adminController = {
 
       return res.status(200).json({
         message: "Pesanan dikirim",
+        status: "dikirim",
       });
     } catch (err) {
       console.error(err);
@@ -100,7 +101,7 @@ const adminController = {
   cancelOrder: async (req, res) => {
     try {
       // Get transaction details
-      const { id, WarehouseId } = req.body;
+      const { id, warehouseId } = req.body;
 
       // Get appropriate order statuses for update
       const [sent, cancelled] = await Status.findAll({
@@ -177,7 +178,7 @@ const adminController = {
               },
             },
             {
-              WarehouseId,
+              WarehouseId: warehouseId,
             },
           ],
         },
@@ -220,24 +221,30 @@ const adminController = {
             JournalTypeId: cancellationJournalType,
             OrderId: orderItems[index]["OrderId"],
             ProductId: currentProductStock.ProductId,
-            WarehouseId,
-            Journal: {},
+            WarehouseId: warehouseId,
           };
         }
       );
 
       await sequelize.transaction(async (t) => {
-        await JournalItem.bulkCreate(journalItemsToUpdate, {
-          include: Journal,
-          transaction: t,
-        });
+        await Journal.create(
+          {
+            JournalItems: journalItemsToUpdate,
+          },
+          {
+            include: [JournalItem],
+            transaction: t,
+          }
+        );
       });
 
       // Send successful response
       return res.status(200).json({
         message: "Pesanan dibatalkan",
+        status: "dibatalkan",
       });
     } catch (err) {
+      console.error(err);
       return res.status(500).json({
         message: "Server error",
       });

@@ -138,7 +138,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 maxH="40"
                 borderRadius="lg"
                 width={{ md: 40 }}
-                src={`http://localhost:8000/public/${val.Product?.ProductPictures[0].product_picture}`}
+                src={`https://jcwd220201.purwadhikabootcamp.com/public/${val.Product?.ProductPictures[0].product_picture}`}
               />
             </Box>
             <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>
@@ -177,11 +177,6 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
     keepUserLogin()
   }, [])
 
-  // useEffect(() => {
-  //   fetchUserCart()
-  // }, [])
-
-  // BUG
   useEffect(() => {
     fetchUserCart()
   }, [cartProduct])
@@ -214,21 +209,6 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
           >
             <Box>
               <Logo />
-              {/* <Image
-                src="logo.png"
-                alt="logo"
-                width={
-                  isLargerThanMd
-                    ? "10rem"
-                    : isLargerThanSm
-                    ? "8.262rem"
-                    : "6.826rem"
-                }
-                maxW="100%"
-                py="1.25rem"
-                cursor="pointer"
-                onClick={() => navigate("/")}
-              /> */}
             </Box>
             <HStack
               w="full"
@@ -240,9 +220,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
             >
               <InputGroup maxW="93%">
                 <Input
-                  // float="right"
                   borderRadius="8px"
-                  // border="1px solid #CCCCCC"
                   placeholder="Cari di WIRED!"
                   _placeholder={{ fontSize: "14px" }}
                   bgColor="white"
@@ -264,7 +242,6 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 display="flex"
                 my="auto"
                 borderRight="1px solid #e0e0e0"
-                // pr="50"
                 color="#6c727c"
               >
                 <Popover trigger="hover">
@@ -430,12 +407,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 </InputRightElement>
               </InputGroup>
               {/* Cart on Mobile View */}
-              <Box
-                display="flex"
-                my="auto"
-                // pr="50"
-                color="#6c727c"
-              >
+              <Box display="flex" my="auto" color="#6c727c">
                 <Popover trigger="hover">
                   <PopoverTrigger>
                     <LinkRouterDom to="/cart">
@@ -475,7 +447,6 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                   </PopoverContent>
                 </Popover>
               </Box>
-
               {authSelector.name ? null : (
                 <ButtonGroup gap="2" display={{ base: "flex", md: "none" }}>
                   <LinkRouterDom to="/login">

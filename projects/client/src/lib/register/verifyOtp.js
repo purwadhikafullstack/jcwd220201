@@ -2,7 +2,7 @@ import { axiosInstance } from "../../api/index";
 
 const verifyOtp = async (email, otp, toast, submit) => {
   try {
-    await axiosInstance.post("/api/register/verify", {
+    const response = await axiosInstance.post("/api/register/verify", {
       email,
       otp,
     });
@@ -10,7 +10,7 @@ const verifyOtp = async (email, otp, toast, submit) => {
     submit();
   } catch (err) {
     toast({
-      title: "Kode yang kamu masukkan salah.",
+      title: err.response.data.message,
       status: "error",
     });
   }

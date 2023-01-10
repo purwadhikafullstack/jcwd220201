@@ -1,7 +1,7 @@
-import { useEffect } from "react"
-import { useState } from "react"
-import { axiosInstance } from "../../../api"
-import Search from "../../../components/admin/stock/Search"
+import { useEffect } from "react";
+import { useState } from "react";
+import { axiosInstance } from "../../../api";
+import Search from "../../../components/admin/stock/Search";
 
 import {
   Box,
@@ -31,41 +31,80 @@ import {
   Thead,
   Tr,
   VStack,
-} from "@chakra-ui/react"
-import { BiEdit } from "react-icons/bi"
-import { RiDeleteBin5Fill } from "react-icons/ri"
-import ReactPaginate from "react-paginate"
-import { Link, useNavigate } from "react-router-dom"
-import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard"
-import { useSelector } from "react-redux"
-import { Rupiah } from "../../../lib/currency/Rupiah"
+  useToast,
+} from "@chakra-ui/react";
+import CancelButton from "../../../components/admin/CancelButton";
+import SendButton from "../../../components/admin/SendButton";
+import { BiEdit } from "react-icons/bi";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import ReactPaginate from "react-paginate";
+import { Link, useNavigate } from "react-router-dom";
+import SidebarAdmin from "../../../components/admin/sidebarAdminDashboard";
+import { useSelector } from "react-redux";
+import { Rupiah } from "../../../lib/currency/Rupiah";
 
 const UserOrder = () => {
-  const authSelector = useSelector((state) => state.auth)
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(true)
+  const authSelector = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   // Render Warehouse
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
+
+  const toast = useToast();
 
   const fetchAllOrder = async () => {
     try {
-      let url = `/order/all-user`
+      let url = `/order/all-user`;
       if (authSelector.WarehouseId) {
-        url += `?WarehouseId=${authSelector.WarehouseId}`
+        url += `?WarehouseId=${authSelector.WarehouseId}`;
       }
-      const response = await axiosInstance.get(url)
+      const response = await axiosInstance.get(url);
 
-      setData(response.data.data)
-      setLoading(false)
+      setData(response.data.data);
+      setLoading(false);
     } catch (err) {
-      console.log(err.response)
+      console.log(err);
     }
-  }
+  };
+
+  const confirmOrder = async (id) => {
+    try {
+      await axiosInstance.patch(`/payment/confirm/${id}`);
+
+      fetchAllOrder();
+      toast({
+        title: "email dikirim",
+      });
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: "konfirmasi pembayaran gagal",
+        status: "error",
+      });
+    }
+  };
+
+  const rejectOrder = async (id) => {
+    try {
+      const response = await axiosInstance.patch(`/payment/reject/${id}`);
+
+      fetchAllOrder();
+      toast({
+        title: "email reject dikirim",
+      });
+    } catch (err) {
+      console.log(err);
+      toast({
+        title: "reject pembayaran gagal",
+        status: "error",
+      });
+    }
+  };
 
   useEffect(() => {
-    fetchAllOrder()
-  }, [])
+    fetchAllOrder();
+  }, []);
 
   return (
     <>
@@ -107,17 +146,36 @@ const UserOrder = () => {
                           <Td textTransform="capitalize">{val.status}</Td>
                           {val.status === "menunggu konfirmasi pembayaran" ? (
                             <Td>
-                              <Button>fraya</Button>
-                              <Button>fraya</Button>
+                              <Button
+                                alignContent={"left"}
+                                onClick={() => confirmOrder(val.id)}
+                                mx="3"
+                                colorScheme={"telegram"}
+                              >
+                                Konfirmasi
+                              </Button>
+                              <Button
+                                alignContent={"left"}
+                                onClick={() => rejectOrder(val.id)}
+                                mx="3"
+                                colorScheme={"red"}
+                              >
+                                Batalkan
+                              </Button>
                             </Td>
                           ) : val.status === "diproses" ? (
                             <Td>
-                              <Button>ariel</Button>
-                              <Button>ariel</Button>
+                              <HStack>
+                                <SendButton id={val.id} />
+                                <CancelButton
+                                  id={val.id}
+                                  warehouseId={val.WarehouseId}
+                                />
+                              </HStack>
                             </Td>
                           ) : null}
                         </Tr>
-                      )
+                      );
                     })}
               </Tbody>
             </Table>
@@ -135,7 +193,7 @@ const UserOrder = () => {
         </Flex>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default UserOrder
+export default UserOrder;

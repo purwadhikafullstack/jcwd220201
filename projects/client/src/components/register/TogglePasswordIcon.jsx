@@ -10,6 +10,7 @@ const TogglePasswordIcon = ({ callback }) => {
       <Image
         src="assets/toggle-password.svg"
         alt="toggle"
+        cursor="pointer"
         onClick={callback}
         width={
           isLargerThanMd ? "1.25rem" : isLargerThanSm ? "1.032rem" : "0.852rem"

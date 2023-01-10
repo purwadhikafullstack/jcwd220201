@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 // Own component imports
 import FinishRegistrationForm from "../components/register/FinishRegistrationForm";

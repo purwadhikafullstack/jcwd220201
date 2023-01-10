@@ -6,24 +6,19 @@ const Footer = () => {
       borderTop="1px solid rgb(243, 244, 245)"
       height="6.375rem"
       justifyContent="center"
+      alignItems="center"
       maxHeight="6.375rem"
       mt="2.875rem"
       py="1.875rem"
     >
-      <HStack>
-        <Image
-          src="https://ecs7.tokopedia.net/assets-unify/img/ic-toped.jpg"
-          boxSize="10"
-        />
-        <Text
-          color="rgba(49, 53, 59, 0.68)"
-          fontSize="0.8125rem"
-          fontWeight="700"
-          lineHeight="1.125rem"
-        >
-          &copy; 2009 - 2022
-        </Text>
-      </HStack>
+      <Text
+        color="rgba(49, 53, 59, 0.68)"
+        fontSize={["0.523rem", "0.653rem", "0.812rem", "0.812rem"]}
+        fontWeight="700"
+        lineHeight="1.125rem"
+      >
+        &copy; 2009 - 2023, PT Wired.
+      </Text>
     </Flex>
   );
 };

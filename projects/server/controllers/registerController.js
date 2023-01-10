@@ -59,7 +59,7 @@ const registerController = {
       const existingUser = await User.findOne({
         where: {
           email,
-          is_verified: null,
+          is_verified: false,
         },
       });
 
@@ -139,7 +139,7 @@ const registerController = {
       const user = await User.findOne({
         where: {
           email,
-          is_verified: null,
+          is_verified: false,
         },
         attributes: ["id"],
       });
@@ -152,9 +152,11 @@ const registerController = {
       });
 
       // Persist sent OTP
+      const currentDate = moment().format();
+
       await sequelize.transaction(async (t) => {
         await Otp.update(
-          { otp },
+          { otp, issued_at: currentDate },
           {
             where: {
               UserId: user.id,
@@ -193,7 +195,7 @@ const registerController = {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({
-          message: "Kode yang kamu masukkan salah",
+          message: "Kode yang kamu masukkan salah.",
           errors: errors.array(),
         });
       }
@@ -217,7 +219,6 @@ const registerController = {
       // Get time difference
       const currentDate = moment();
       const issuedDate = moment(issuedOtp.issued_at);
-      console.log(issuedDate);
       const timeDiff = moment
         .duration(currentDate.diff(issuedDate))
         .as("minutes");
@@ -230,7 +231,7 @@ const registerController = {
         });
       } else if (timeDiff > maxDuration) {
         return res.status(401).json({
-          message: "Kode yang kamu masukkan tidak berlaku.",
+          message: "Kode yang kamu masukkan sudah tidak berlaku.",
         });
       }
 

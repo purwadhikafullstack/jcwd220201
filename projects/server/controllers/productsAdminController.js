@@ -55,8 +55,22 @@ const productAdminController = {
 
         await db.ProductPicture.bulkCreate(newProductImg)
 
+        const warehousesData = await db.Warehouse.findAll({
+          raw: true,
+          attributes: ["id"],
+        })
+
+        const warehousesStock = warehousesData.map((val) => {
+          return {
+            stock: 0,
+            ProductId: productId,
+            WarehouseId: val.id,
+          }
+        })
+        await db.ProductStock.bulkCreate(warehousesStock)
+
         const foundProductById = await db.Product.findByPk(createProduct.id, {
-          include: [{ model: db.ProductPicture }],
+          include: [{ model: db.ProductPicture }, { model: db.ProductStock }],
         })
 
         return res.status(200).json({

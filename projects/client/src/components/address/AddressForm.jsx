@@ -31,7 +31,6 @@ import useCheckInputError from "../../lib/address/hooks/useCheckInputError";
 import clearInput from "../../lib/address/clearInput";
 import CitiesInput from "./CitiesInput";
 import saveAddress from "../../lib/address/saveAddress";
-import { useEffect } from "react";
 
 const AddressForm = ({
   fetchAddresses,
@@ -52,6 +51,7 @@ const AddressForm = ({
   const [labelError, setLabelError] = useState(false);
   const [cityError, setCityError] = useState(false);
   const [addressError, setAddressError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Alert functionality
   const toast = useToast();
@@ -102,6 +102,9 @@ const AddressForm = ({
       isDefault: Yup.boolean(),
     }),
     onSubmit: async () => {
+      // Display loading animation
+      setIsLoading(true);
+
       // Save new address
       const address = { id, newAddress: formik.values };
       const res = await saveAddress(address);
@@ -127,12 +130,13 @@ const AddressForm = ({
       // Clear user input after saving
       clearInput(formik.values, formik.touched, formik.setFieldValue);
 
+      // Stop loading animation
+      setIsLoading(false);
+
       // Close form
       onClose();
     },
   });
-
-  useEffect(() => console.log(formik.values), [formik.values]);
 
   // Invalid input error handling
   const recipientErrorTrigger =
@@ -415,6 +419,7 @@ const AddressForm = ({
               fontWeight="bold"
               fontSize={["0.75rem", "0.875rem", "1rem", "1rem"]}
               height={["2.5rem", "2.75rem", "3rem", "3rem"]}
+              isLoading={isLoading}
               lineHeight="1.375rem"
               onClick={formik.handleSubmit}
               px="1rem"

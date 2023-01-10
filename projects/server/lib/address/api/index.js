@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const axiosInstance = axios.create({
-  baseURL: "https://api.opencagedata.com",
+  baseURL: "https://jcwd220201.purwadhikabootcamp.com",
 });
 
 module.exports = axiosInstance;

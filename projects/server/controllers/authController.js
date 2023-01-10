@@ -59,7 +59,7 @@ const authController = {
   editUserProfile: async (req, res) => {
     try {
       if (req.file) {
-        req.body.profile_picture = `http://localhost:8000/public/${req.file.filename}`
+        req.body.profile_picture = `${process.env.SERVER_URL}/public/${req.file.filename}`
       }
 
       await User.update(
@@ -193,7 +193,7 @@ const authController = {
         id: findUser.id,
       })
 
-      const resetLink = `http://localhost:3000/recover-password/${token}`
+      const resetLink = `${process.env.DOMAIN_NAME}/recover-password/${token}`
 
       const file = fs.readFileSync(
         "./templates/password/reset_password.html",

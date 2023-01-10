@@ -4,9 +4,8 @@ const userOrderController = require("../controllers/userOrderController")
 const { verifyToken } = require("../middlewares/authMiddleware")
 
 // Get All User - Login With Admin
-router.get("/all-user", userOrderController.getAllUserOrder2)
-// Warehouse Id - Login by Warehouse Admin
-router.get("/all-user/:id", userOrderController.getWarehouseById)
+router.get("/all-user", userOrderController.getAllUserOrder)
+
 // For User CancelOrder
 router.patch("/cancel/:id", userOrderController.cancelOrderUser)
 

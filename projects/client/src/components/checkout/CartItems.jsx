@@ -10,11 +10,7 @@ const CartItems = () => {
     items: { cartItems },
   } = useContext(CheckoutContext);
 
-  if (!cartItems) {
-    return;
-  }
-
-  return <Box>{renderCartItems(cartItems)}</Box>;
+  return cartItems ? <Box>{renderCartItems(cartItems)}</Box> : null;
 };
 
 export default CartItems;
