@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
 
 const emailer = async ({
   to,
@@ -11,7 +11,7 @@ const emailer = async ({
   cid,
 }) => {
   if (!to) {
-    throw new Error("`to` parameter missing.");
+    throw new Error("`to` parameter missing.")
   }
 
   const transporter = nodemailer.createTransport({
@@ -20,7 +20,7 @@ const emailer = async ({
       user: process.env.NODEMAILER_EMAIL,
       pass: process.env.NODEMAILER_PASS,
     },
-  });
+  })
 
   const info = await transporter.sendMail({
     to,
@@ -34,7 +34,7 @@ const emailer = async ({
         cid: "logo",
       },
     ],
-  });
-};
+  })
+}
 
-module.exports = emailer;
+module.exports = emailer
