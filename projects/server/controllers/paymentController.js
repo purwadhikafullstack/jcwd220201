@@ -20,7 +20,6 @@ const compareWarehouseDistances = require("../lib/checkout/compareWarehouseDista
 
 const handlebars = require("handlebars");
 const { Op } = require("sequelize");
-const path = require("path");
 const paymentController = {
   confirmPayment: async (req, res) => {
     try {
