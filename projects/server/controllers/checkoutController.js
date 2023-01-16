@@ -405,6 +405,15 @@ const checkoutController = {
         });
       });
 
+      // Clear cart items
+      await sequelize.transaction(async (t) => {
+        await Cart.destroy({
+          where: {
+            UserId,
+          },
+        });
+      });
+
       // Send successful message
       return res.status(200).json({
         message: "Pesanan berhasil dibuat",
