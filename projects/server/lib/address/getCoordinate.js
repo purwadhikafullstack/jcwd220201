@@ -21,12 +21,10 @@ const getCoordinate = async (postalCode) => {
   OpenCage API call
   */
 
-  const OPENCAGE_API_KEY = "398f0b2f4afc42dd88d68b9446c4857c";
-
   let {
     data: { results },
   } = await axiosInstance.get(
-    `/geocode/v1/json?key=${OPENCAGE_API_KEY}&q=${encodedLocation}&countrycode=id&no_annotations=1`
+    `/geocode/v1/json?key=${process.env.OPENCAGE_API_KEY}&q=${encodedLocation}&countrycode=id&no_annotations=1`
   );
 
   // Filter results
