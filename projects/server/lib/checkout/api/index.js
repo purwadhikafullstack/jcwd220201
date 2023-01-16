@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const axiosInstance = axios.create({
-  baseURL: "https://jcwd220201.purwadhikabootcamp.com",
+  baseURL: process.env.SERVER_URL,
 });
 
 module.exports = { axiosInstance };
