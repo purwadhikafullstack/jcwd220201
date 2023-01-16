@@ -77,7 +77,7 @@ const MainContent = () => {
       <ProductCard
         key={val.id.toString()}
         product_name={val.product_name}
-        product_picture={`https://jcwd220201.purwadhikabootcamp.com/public/${val.Product?.ProductPictures?.product_picture}`}
+        product_picture={`${process.env.REACT_APP_API_BASE_URL}/${val.Product?.ProductPictures?.product_picture}`}
         price={val.price}
         id={val.id}
       />

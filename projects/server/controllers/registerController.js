@@ -1,14 +1,14 @@
 const { validationResult, Result } = require("express-validator");
 const handlebars = require("handlebars");
 const fs = require("fs");
-const path = require("path");
 const bcrypt = require("bcrypt");
 const otpGenerator = require("otp-generator");
 const moment = require("moment");
-
+const path = require("path");
 // Own library imports
 const { User, Otp, Role, sequelize } = require("../models");
 const emailer = require("../lib/emailer");
+const { dirname } = require("path");
 
 const registerController = {
   duplicateCheck: async (req, res) => {
@@ -55,7 +55,7 @@ const registerController = {
       }
       // Create user data
       const { email } = req.body;
-
+      console.log(email);
       let user = null;
       const existingUser = await User.findOne({
         where: {
@@ -111,7 +111,7 @@ const registerController = {
       const file = fs.readFileSync(
         path.resolve(
           __dirname,
-          "../templates/verification/email_verification.html"
+          "../../templates/verification/email_verification.html"
         ),
         "utf-8"
       );
@@ -171,13 +171,13 @@ const registerController = {
       });
 
       // Send new verification email
-      const file = fs.readFileSync(
+      const filePath = path.join(
         path.resolve(
           __dirname,
-          "../templates/verification/email_verification.html"
-        ),
-        "utf-8"
+          "../../templates/verification/email_verification.html"
+        )
       );
+      const file = await fs.promises.readFile(filePath, { encoding: "utf-8" });
       const template = handlebars.compile(file);
       const verificationEmail = template({ email, otp });
       await emailer({

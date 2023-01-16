@@ -3,7 +3,7 @@ import { logout } from "../redux/features/authSlice";
 import { store } from "../redux/store";
 
 const axiosInstance = axios.create({
-  baseURL: "https://jcwd220201.purwadhikabootcamp.com",
+  baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use((req) => {

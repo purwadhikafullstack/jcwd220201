@@ -204,7 +204,7 @@ const ProductList = () => {
         <ProductCard
           key={val.id.toString()}
           product_name={val.product_name}
-          product_picture={`https://jcwd220201.purwadhikabootcamp.com/public/${val.product_picture}`}
+          product_picture={`${process.env.REACT_APP_API_BASE_URL}/${val.product_picture}`}
           price={val.price}
           id={val.id}
         />
