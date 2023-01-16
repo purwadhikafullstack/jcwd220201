@@ -2,7 +2,7 @@ import { axiosInstance } from "../../api/index";
 
 const checkDuplicate = async (email) => {
   try {
-    const response = await axiosInstance.post("/api/register/duplicate", {
+    const response = await axiosInstance.post("/register/duplicate", {
       email,
     });
     return response;

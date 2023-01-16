@@ -2,7 +2,7 @@ import { axiosInstance } from "../../api/index";
 
 const requestOtp = async (email) => {
   try {
-    const response = await axiosInstance.post("/api/register/otp", {
+    const response = await axiosInstance.post("/register/otp", {
       email,
     });
     return response;
