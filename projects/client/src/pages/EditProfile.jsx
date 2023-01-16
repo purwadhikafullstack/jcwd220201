@@ -84,7 +84,8 @@ const EditProfile = () => {
         if (date_of_birth && date_of_birth !== authSelector.date_of_birth) {
           userData.append("date_of_birth", date_of_birth)
         }
-
+        console.log(userData)
+        console.log(profile_picture)
         const response = await axiosInstance.patch("auth/profile", userData)
 
         dispatch(login(response.data.data))
