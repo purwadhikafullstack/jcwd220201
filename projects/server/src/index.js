@@ -56,7 +56,6 @@ const {
   categoriesRoute,
   adminUserRoute,
 } = require("../routes");
-const path = require("path");
 
 app.use("api/warehouses", warehousesRoute);
 app.use("api/cities", citiesRoute);
