@@ -70,7 +70,7 @@ const ProductCard = ({ id, product_name, price }) => {
             <Image
               objectFit="fill"
               alt="pict of product"
-              src={`https://jcwd220201.purwadhikabootcamp.com/public/${productImg.product_picture}`}
+              src={`${process.env.REACT_APP_API_BASE_URL}/${productImg.product_picture}`}
             />
           </Box>
           <Box p="1">

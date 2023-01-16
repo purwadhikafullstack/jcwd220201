@@ -32,7 +32,7 @@ const CartItem = ({ details, index, solitary = false }) => {
       <HStack spacing="1%" mt="1rem" height="4rem">
         <Box width="10%" height="100%">
           <Image
-            src={`https://jcwd220201.purwadhikabootcamp.com/public/${ProductPictures[0].product_picture}`}
+            src={`${process.env.REACT_APP_API_BASE_URL}/${ProductPictures[0].product_picture}`}
             boxSize="3.75rem"
           />
         </Box>

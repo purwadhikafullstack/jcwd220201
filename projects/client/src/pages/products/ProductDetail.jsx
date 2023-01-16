@@ -217,7 +217,7 @@ const ProductDetail = () => {
               {productImg.map((val) => (
                 <img
                   h={{ base: "100%", sm: "400px", lg: "500px" }}
-                  src={`https://jcwd220201.purwadhikabootcamp.com/public/${val.product_picture}`}
+                  src={`${process.env.REACT_APP_API_BASE_URL}/${val.product_picture}`}
                   align="center"
                   rounded="md"
                   fit="cover"

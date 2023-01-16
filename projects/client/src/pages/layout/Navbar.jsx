@@ -138,7 +138,7 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 maxH="40"
                 borderRadius="lg"
                 width={{ md: 40 }}
-                src={`https://jcwd220201.purwadhikabootcamp.com/public/${val.Product?.ProductPictures[0].product_picture}`}
+                src={`${process.env.REACT_APP_API_BASE_URL}/${val.Product?.ProductPictures[0].product_picture}`}
               />
             </Box>
             <Box mt={{ base: 4, md: 0 }} ml={{ md: 6 }}>

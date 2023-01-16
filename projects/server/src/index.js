@@ -28,6 +28,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use("/api", express.static(path.join(__dirname, ".././public")));
 
 //#region API ROUTES
 //
@@ -57,23 +58,21 @@ const {
 } = require("../routes");
 const path = require("path");
 
-app.use("/public", express.static("public"));
-
-app.use("/warehouses", warehousesRoute);
-app.use("/cities", citiesRoute);
-app.use("/provinces", provincesRoute);
-app.use("/auth", authRoute);
-app.use("/admin", adminRoute);
-app.use("/products", productsRoute);
-app.use("/categories", categoriesRoute);
-app.use("/carts", cartRoute);
-app.use("/product-admin", productsAdminRoute);
-app.use("/warehouse-user", warehouseUserRoute);
-app.use("/sales", reportProductRoute);
-app.use("/admin/stock", productStockRoute);
-app.use("/payment", paymentRoute);
-app.use("/order/", userOrderRoute);
-app.use("/admin-user", adminUserRoute);
+app.use("api/warehouses", warehousesRoute);
+app.use("api/cities", citiesRoute);
+app.use("api/provinces", provincesRoute);
+app.use("api/auth", authRoute);
+app.use("api/admin", adminRoute);
+app.use("api/products", productsRoute);
+app.use("api/categories", categoriesRoute);
+app.use("api/carts", cartRoute);
+app.use("api/product-admin", productsAdminRoute);
+app.use("api/warehouse-user", warehouseUserRoute);
+app.use("api/sales", reportProductRoute);
+app.use("api/admin/stock", productStockRoute);
+app.use("api/payment", paymentRoute);
+app.use("api/order/", userOrderRoute);
+app.use("api/admin-user", adminUserRoute);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
