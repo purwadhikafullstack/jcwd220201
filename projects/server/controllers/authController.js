@@ -196,7 +196,7 @@ const authController = {
       const resetLink = `${process.env.DOMAIN_NAME}/recover-password/${token}`;
 
       const file = fs.readFileSync(
-        path.resolve(__dirname, "../../templates/password/reset_password.html"),
+        path.resolve(__dirname, ".././templates/password/reset_password.html"),
         "utf-8"
       );
       const template = handlebars.compile(file);

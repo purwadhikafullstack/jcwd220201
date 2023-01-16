@@ -3,7 +3,7 @@ import { axiosInstance } from "../../api";
 const getDestinationInfo = async (destinationAddress) => {
   try {
     const response = await axiosInstance.post(
-      `/api/checkout/shipping_address`,
+      `/checkout/shipping_address`,
       {
         destinationAddress,
       }

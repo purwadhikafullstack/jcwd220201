@@ -67,7 +67,7 @@ const FinishRegistrationForm = ({ props: { UserContext } }) => {
         setIsLoading(true);
 
         // Update user credentials
-        const response = await axiosInstance.post(`/api/register/account`, {
+        const response = await axiosInstance.post(`/register/account`, {
           name,
           email,
           password,

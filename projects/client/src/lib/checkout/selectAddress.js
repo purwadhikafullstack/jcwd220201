@@ -2,7 +2,7 @@ import { axiosInstance } from "../../api";
 
 const selectAddress = async (id) => {
   try {
-    const response = await axiosInstance.patch(`/api/checkout/address`, {
+    const response = await axiosInstance.patch(`/checkout/address`, {
       id,
     });
     return response;
