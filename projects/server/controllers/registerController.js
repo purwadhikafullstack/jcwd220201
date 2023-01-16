@@ -1,6 +1,7 @@
 const { validationResult, Result } = require("express-validator");
 const handlebars = require("handlebars");
 const fs = require("fs");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const otpGenerator = require("otp-generator");
 const moment = require("moment");
@@ -108,7 +109,10 @@ const registerController = {
 
       // Send verification email
       const file = fs.readFileSync(
-        "./templates/verification/email_verification.html",
+        path.resolve(
+          __dirname,
+          "../templates/verification/email_verification.html"
+        ),
         "utf-8"
       );
       const template = handlebars.compile(file);

@@ -1,15 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const emailer = async ({
-  to,
-  subject,
-  text,
-  html,
-  attachments,
-  filename,
-  path,
-  cid,
-}) => {
+const emailer = async ({ to, subject, text, html }) => {
   if (!to) {
     throw new Error("`to` parameter missing.");
   }
@@ -19,6 +10,9 @@ const emailer = async ({
     auth: {
       user: process.env.NODEMAILER_EMAIL,
       pass: process.env.NODEMAILER_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 

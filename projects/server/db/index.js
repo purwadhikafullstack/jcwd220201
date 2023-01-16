@@ -1,26 +1,27 @@
-const fs = require("fs")
+const fs = require("fs");
+const path = require("path");
 
 const readProvinceDB = () => {
   const provinceDBFile = fs
-    .readFileSync(`${process.cwd()}/db/Province_Data.json`)
-    .toString()
+    .readFileSync(path.resolve(__dirname, "../db/Province_Data.JSON"))
+    .toString();
 
-  const provinceDBObject = JSON.parse(provinceDBFile)
+  const provinceDBObject = JSON.parse(provinceDBFile);
 
-  return provinceDBObject
-}
+  return provinceDBObject;
+};
 
 const readCityDB = () => {
   const cityDBFile = fs
     .readFileSync(`${process.cwd()}/db/City_Data.json`)
-    .toString()
+    .toString();
 
-  const cityDBObject = JSON.parse(cityDBFile)
+  const cityDBObject = JSON.parse(cityDBFile);
 
-  return cityDBObject
-}
+  return cityDBObject;
+};
 
 module.exports = {
   readCityDB,
   readProvinceDB,
-}
+};
