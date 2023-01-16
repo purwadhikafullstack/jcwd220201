@@ -13,7 +13,7 @@ const readProvinceDB = () => {
 
 const readCityDB = () => {
   const cityDBFile = fs
-    .readFileSync(`${process.cwd()}/db/City_Data.json`)
+    .readFileSync(path.resolve(__dirname, "../db/City_Data.JSON"))
     .toString();
 
   const cityDBObject = JSON.parse(cityDBFile);

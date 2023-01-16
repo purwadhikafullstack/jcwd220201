@@ -172,7 +172,10 @@ const registerController = {
 
       // Send new verification email
       const file = fs.readFileSync(
-        "./templates/verification/email_verification.html",
+        path.resolve(
+          __dirname,
+          "../templates/verification/email_verification.html"
+        ),
         "utf-8"
       );
       const template = handlebars.compile(file);
