@@ -2,7 +2,7 @@ import { axiosInstance } from "../../api";
 
 const createNewOrder = async (orderData, cartItems) => {
   try {
-    const response = await axiosInstance.post(`/api/checkout/order`, {
+    const response = await axiosInstance.post(`/checkout/order`, {
       orderData,
       cartItems,
     });

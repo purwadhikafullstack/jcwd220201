@@ -111,7 +111,7 @@ const registerController = {
       const file = fs.readFileSync(
         path.resolve(
           __dirname,
-          "../../templates/verification/email_verification.html"
+          ".././templates/verification/email_verification.html"
         ),
         "utf-8"
       );
@@ -174,7 +174,7 @@ const registerController = {
       const filePath = path.join(
         path.resolve(
           __dirname,
-          "../../templates/verification/email_verification.html"
+          ".././templates/verification/email_verification.html"
         )
       );
       const file = await fs.promises.readFile(filePath, { encoding: "utf-8" });

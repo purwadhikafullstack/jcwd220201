@@ -235,7 +235,7 @@ const paymentController = {
       const transactionLink = `${process.env.DOMAIN_NAME}/transaction-list`;
 
       const rawHTML = fs.readFileSync(
-        path.resolve(__dirname, "../../templates/payment/approve.html"),
+        path.resolve(__dirname, ".././templates/payment/approve.html"),
         "utf-8"
       );
 
@@ -257,7 +257,7 @@ const paymentController = {
         attachments: [
           {
             filename: "logo.png",
-            path: path.resolve(__dirname, "../../templates/images/logo.png"),
+            path: path.resolve(__dirname, ".././templates/images/logo.png"),
             cid: "logo",
           },
         ],
@@ -316,7 +316,7 @@ const paymentController = {
       const link = `process.env.DOMAIN_NAME/payment/wired/${findOrderId.id}`;
 
       const template = fs.readFileSync(
-        path.resolve(__dirname, "../../templates/payment/reject.html"),
+        path.resolve(__dirname, ".././templates/payment/reject.html"),
         "utf-8"
       );
 
@@ -335,7 +335,7 @@ const paymentController = {
         attachments: [
           {
             filename: "logo.png",
-            path: path.resolve(__dirname, "../../templates/images/logo.png"),
+            path: path.resolve(__dirname, ".././templates/images/logo.png"),
             cid: "logo",
           },
         ],
