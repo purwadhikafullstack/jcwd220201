@@ -58,7 +58,7 @@ const RecoverPassword = () => {
         setPass(response.data.data)
         toast({
           title:
-            "Password successfully changed, use your new password to login",
+            "Password berhasil di reset, silahkan login menggunakan password baru",
           status: "success",
         })
         navigate("/login")

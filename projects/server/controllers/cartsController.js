@@ -327,8 +327,8 @@ const cartController = {
       const { id } = req.user
 
       const getSubTotal = await db.sequelize.query(
-        `select sum(p.price * c.quantity) as totalPrice, sum(c.quantity) as totalQty from carts c
-          join products p
+        `select sum(p.price * c.quantity) as totalPrice, sum(c.quantity) as totalQty from Carts c
+          join Products p
           on c.ProductId = p.id
           where is_checked = ${true} && UserId = ${id}`
       )
