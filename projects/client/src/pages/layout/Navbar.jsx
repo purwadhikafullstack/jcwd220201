@@ -367,16 +367,16 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 <MenuItem>Pesanan</MenuItem>
                 <MenuDivider />
                 <MenuItem>
-                  <Button
-                    w="full"
-                    variant="unstyled"
-                    textAlign="left"
-                    fontWeight="semibold"
-                  >
-                    <LinkRouterDom onClick={() => btnLogout()}>
+                  <LinkRouterDom onClick={() => btnLogout()}>
+                    <Button
+                      w="full"
+                      variant="unstyled"
+                      textAlign="left"
+                      fontWeight="semibold"
+                    >
                       Logout
-                    </LinkRouterDom>
-                  </Button>
+                    </Button>
+                  </LinkRouterDom>
                 </MenuItem>
               </MenuList>
             </Menu>
