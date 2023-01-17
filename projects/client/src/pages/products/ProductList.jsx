@@ -231,20 +231,6 @@ const ProductList = () => {
       {/* Product List */}
       <Box h={{ base: "0", md: "0", lg: "85vh" }}>
         <Box ml="1em" mr="1em">
-          <Breadcrumb fontWeight="medium" fontSize="sm">
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-
-            <BreadcrumbItem isCurrentPage={true}>
-              <BreadcrumbLink href="/product">Produk</BreadcrumbLink>
-            </BreadcrumbItem>
-
-            <BreadcrumbItem>
-              <BreadcrumbLink href="#">Kategori</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
-
           <Flex>
             <Grid templateColumns="repeat(4, 1fr)" gap="32px" pb="50px">
               <GridItem>

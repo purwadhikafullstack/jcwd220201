@@ -114,7 +114,7 @@ const WarehouseProduct = () => {
 
   const getCategories = async () => {
     try {
-      const response = await axiosInstance.get(`/categories`)
+      const response = await axiosInstance.get(`/products/category`)
 
       setCategories(response.data.data)
     } catch (err) {
