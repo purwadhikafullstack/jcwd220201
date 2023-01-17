@@ -100,7 +100,7 @@ const SalesReport = () => {
 
   const getCategory = async () => {
     try {
-      const response = await axiosInstance.get(`/categories`)
+      const response = await axiosInstance.get(`/category`)
 
       setCategories(response.data.data)
     } catch (err) {
