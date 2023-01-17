@@ -244,7 +244,7 @@ const productAdminController = {
       })
     }
 
-    const filePath = path.resolve(__dirname, ".././public")
+    const filePath = path.resolve(__dirname, ".././public") + "/"
 
     const fileName = await db.ProductPicture.findAll({
       where: {
@@ -280,7 +280,7 @@ const productAdminController = {
         message: "Admin unauthorized",
       })
     }
-    const filePath = path.resolve(__dirname, ".././public")
+    const filePath = path.resolve(__dirname, ".././public") + "/"
 
     const fileName = await db.ProductPicture.findOne({
       where: {
