@@ -90,7 +90,7 @@ const SalesReport = () => {
 
   const fethWarehouse = async () => {
     try {
-      const response = await axiosInstance.get(`/warehouses`)
+      const response = await axiosInstance.get(`/warehouse-user/warehouse`)
 
       setWarehouse(response.data.data)
     } catch (err) {
