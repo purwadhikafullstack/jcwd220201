@@ -44,11 +44,6 @@ const Stock = () => {
   const navigate = useNavigate()
   const toast = useToast()
 
-  // React Paginate
-  // const [page, setPage] = useState(0)
-  // const [limit, setLimit] = useState(1)
-  // const [pages, setPages] = useState(0)
-  // const [rows, setRows] = useState(0)
   const [product, setProduct] = useState([])
 
   // Render Warehouse
@@ -89,34 +84,12 @@ const Stock = () => {
     navigate(`/admin/manage-stock/${warehouse_name}`)
   }
 
-  // const changePage = ({ selected }) => {
-  //   setPage(selected)
-  // }
-
-  const warehouseOptions = warehouse.map((val) => {
-    return { value: val.id, label: val.warehouse_name }
-  })
-
   const nextPage = () => {
     setPage(page + 1)
   }
 
   const previousPage = () => {
     setPage(page - 1)
-  }
-
-  const filterWarehouse = (event) => {
-    const value = event.value
-
-    setFilter(value)
-  }
-
-  const customStyles = {
-    control: (base) => ({
-      ...base,
-      width: "min-content",
-      minWidth: "25vh",
-    }),
   }
 
   useEffect(() => {
@@ -134,13 +107,7 @@ const Stock = () => {
           <VStack h="90%" w="full" overflowX="scroll">
             <Grid templateColumns="repeat(1, 1fr)" gap="10">
               <GridItem>
-                <FormLabel>Filter Warehouse</FormLabel>
-                <Select
-                  styles={customStyles}
-                  onChange={filterWarehouse}
-                  placeholder="Pilih ..."
-                  options={warehouseOptions}
-                />
+                <FormLabel>Data Gudang</FormLabel>
               </GridItem>
             </Grid>
 

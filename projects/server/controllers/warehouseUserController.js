@@ -203,7 +203,7 @@ const warehouseUserController = {
   },
   getAllWarehouses: async (req, res) => {
     try {
-      const { _limit = 6, _page = 1, _sortDir = "ASC" } = req.query
+      const { _limit = 10, _page = 1, _sortDir = "ASC" } = req.query
 
       const findAllWarehouse = await Warehouse.findAndCountAll({
         limit: Number(_limit),

@@ -9,7 +9,7 @@ const router = express.Router()
 router.post("/", verifyToken, warehouseUserController.createUserHouse)
 router.get("/", verifyToken, warehouseUserController.getAllWareUser)
 router.get("/", verifyToken, authController.getAllUser)
-router.get("/", verifyToken, warehousesController.getAllWarehouses)
+router.get("/warehouse", verifyToken, warehouseUserController.getAllWarehouses)
 router.patch("/:id", verifyToken, warehouseUserController.updateWareUserById)
 router.delete("/:id", verifyToken, warehouseUserController.deleteWareUserById)
 

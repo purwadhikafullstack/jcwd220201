@@ -90,7 +90,7 @@ const SalesReport = () => {
 
   const fethWarehouse = async () => {
     try {
-      const response = await axiosInstance.get(`/warehouses`)
+      const response = await axiosInstance.get(`/warehouse-user/warehouse`)
 
       setWarehouse(response.data.data)
     } catch (err) {
@@ -100,7 +100,7 @@ const SalesReport = () => {
 
   const getCategory = async () => {
     try {
-      const response = await axiosInstance.get(`/categories`)
+      const response = await axiosInstance.get("/products/category")
 
       setCategories(response.data.data)
     } catch (err) {
