@@ -366,8 +366,8 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                 </LinkRouterDom>
                 <MenuItem>Pesanan</MenuItem>
                 <MenuDivider />
-                <MenuItem>
-                  <LinkRouterDom onClick={() => btnLogout()}>
+                <LinkRouterDom onClick={() => btnLogout()}>
+                  <MenuItem>
                     <Button
                       w="full"
                       variant="unstyled"
@@ -376,8 +376,8 @@ const Navbar = ({ onChange, onClick, onKeyDown }) => {
                     >
                       Logout
                     </Button>
-                  </LinkRouterDom>
-                </MenuItem>
+                  </MenuItem>
+                </LinkRouterDom>
               </MenuList>
             </Menu>
           </Flex>
