@@ -3,6 +3,7 @@ const db = require("../models")
 ProductPicture = db.ProductPicture
 const fs = require("fs")
 const { Op } = require("sequelize")
+const path = require("path")
 
 const productAdminController = {
   createProducts: async (req, res) => {
@@ -243,7 +244,7 @@ const productAdminController = {
       })
     }
 
-    const path = "public/"
+    const filePath = path.resolve(__dirname, ".././public")
 
     const fileName = await db.ProductPicture.findAll({
       where: {
@@ -258,7 +259,7 @@ const productAdminController = {
         },
       })
       for (let i = 0; i < fileName.length; i++) {
-        fs.unlinkSync(path + fileName[i].product_picture)
+        fs.unlinkSync(filePath + fileName[i].product_picture)
       }
 
       return res.status(200).json({
@@ -279,7 +280,7 @@ const productAdminController = {
         message: "Admin unauthorized",
       })
     }
-    const path = "public/"
+    const filePath = path.resolve(__dirname, ".././public")
 
     const fileName = await db.ProductPicture.findOne({
       where: {
@@ -294,7 +295,7 @@ const productAdminController = {
         },
       })
 
-      fs.unlinkSync(path + fileName.product_picture)
+      fs.unlinkSync(filePath + fileName.product_picture)
 
       return res.status(200).json({
         message: "Foto produk berhasil dihapus",

@@ -19,12 +19,12 @@ const salesReport = {
     try {
       const { _sortBy = "" } = req.query
       let sql = `SELECT  ord.WarehouseId, pr.CategoryId, pr.id AS productId, ct.category, pr.product_name, us.name, ord.total_price, wr.warehouse_name, ord.payment_date
-      FROM orderitems AS ord_items
-      JOIN orders AS ord ON ord.id = ord_items.OrderId
-      JOIN products AS pr ON pr.id = ord_items.ProductId
-      JOIN categories AS ct ON ct.id = pr.CategoryId
-      JOIN warehouse as wr ON wr.id = ord.WarehouseId
-      JOIN users as us ON us.id = ord.UserId `
+      FROM OrderItems AS ord_items
+      JOIN Orders AS ord ON ord.id = ord_items.OrderId
+      JOIN Products AS pr ON pr.id = ord_items.ProductId
+      JOIN Categories AS ct ON ct.id = pr.CategoryId
+      JOIN Warehouse as wr ON wr.id = ord.WarehouseId
+      JOIN Users as us ON us.id = ord.UserId `
 
       if (WarehouseId && CategoryId && payment_date && category) {
         sql += `WHERE WarehouseId=${WarehouseId} AND CategoryId=${CategoryId} AND MONTH(ord.payment_date)=${payment_date} AND ct.category LIKE "%${category}%" `
